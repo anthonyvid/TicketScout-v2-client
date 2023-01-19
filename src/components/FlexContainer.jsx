@@ -12,6 +12,7 @@ const FlexContainer = ({
 	style,
 	row,
 	col,
+	gap,
 	justifyContentStart,
 	justifyContentCenter,
 	justifyContentEnd,
@@ -70,6 +71,7 @@ const FlexContainer = ({
 				flexDirection: direction,
 				justifyContent: justifyContent,
 				alignItems: alignItems,
+				gap: gap,
 			}}
 			maxWidth={maxWidth}
 			disableGutters={disableGutters}
@@ -104,6 +106,7 @@ FlexContainer.defaultProps = {
 	row: false,
 	col: false,
 	page: false,
+	gap: "10px",
 };
 
 FlexContainer.propTypes = {
@@ -124,6 +127,7 @@ FlexContainer.propTypes = {
 	alignItemsBaseline: PropTypes.bool,
 	alignItemsStretch: PropTypes.bool,
 	page: PropTypes.bool,
+	gap: PropTypes.string,
 };
 
 export default FlexContainer;

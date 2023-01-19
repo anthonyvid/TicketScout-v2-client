@@ -1,12 +1,14 @@
 const footerStyles = (theme) => ({
 	footerContainer: {
 		height: "100px",
-		borderTop: "1px solid lightgrey",
+		borderTop: `1px solid ${theme.palette.neutral.light}`,
 		marginTop: "auto",
+		padding: "0 60px",
+		color: theme.palette.neutral.main,
 	},
-	x: {
-		border: "1px solid red",
-		width: "100px",
+	linkWrap: {
+		display: "flex",
+		gap: "20px",
 	},
 });
 

@@ -1,8 +1,8 @@
 const flexContainerStyles = (theme) => ({
-	background: { backgroundColor: "white" },
+	background: { backgroundColor: "white", width: "100%" },
 	container: {
-		width: "100%",
 		height: "100vh",
+		border: "1px solid red",
 	},
 	autoHeight: {
 		height: "auto",

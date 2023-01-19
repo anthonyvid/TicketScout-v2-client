@@ -12,6 +12,12 @@ const Footer = () => {
 			style={classes.footerContainer}
 		>
 			<p>&copy; 2023 Company Name</p>
+			<div className={classes.linkWrap}>
+				<p>Terms</p>
+				<p>Privacy</p>
+				<p>Security</p>
+				<p>Contact</p>
+			</div>
 		</FlexContainer>
 	);
 };

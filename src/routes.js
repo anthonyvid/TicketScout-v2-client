@@ -8,8 +8,8 @@ import PrivateRoutes from "./utils/PrivateRoutes.js";
 
 const publicRoutes = [
 	{ component: <Home />, path: "/" },
-	{ component: <Login />, path: "/login" },
-	{ component: <Register />, path: "/register" },
+	{ component: <Login />, path: "/account/login" },
+	{ component: <Register />, path: "/account/register" },
 ];
 const privateRoutes = [{ component: <Dashboard />, path: "/dashboard" }];
 
