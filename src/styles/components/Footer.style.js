@@ -1,7 +1,7 @@
 const footerStyles = (theme) => ({
 	footerContainer: {
 		height: "100px",
-		borderTop: `1px solid ${theme.palette.neutral.light}`,
+		borderTop: `1px solid ${theme.palette.neutral.medium}`,
 		marginTop: "auto",
 		padding: "0 60px",
 		color: theme.palette.neutral.main,

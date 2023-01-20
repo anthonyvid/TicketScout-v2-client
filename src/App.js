@@ -4,6 +4,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme.js";
 import Routes from "./routes.js";
+import { ToastContainer } from "react-toastify";
 
 function App() {
 	const mode = useSelector((state) => state.mode);
@@ -12,6 +13,7 @@ function App() {
 	return (
 		<div className="App">
 			<ThemeProvider theme={theme}>
+				<ToastContainer />
 				<CssBaseline />
 				<Routes />
 			</ThemeProvider>

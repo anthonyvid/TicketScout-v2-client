@@ -11,7 +11,7 @@ const publicRoutes = [
 	{ component: <Login />, path: "/account/login" },
 	{ component: <Register />, path: "/account/register" },
 ];
-const privateRoutes = [{ component: <Dashboard />, path: "/dashboard" }];
+const privateRoutes = [{ component: <Dashboard />, path: `/:organization/dashboard` }];
 
 const AppRoutes = () => {
 	return (

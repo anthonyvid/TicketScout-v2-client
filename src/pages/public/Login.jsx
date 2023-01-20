@@ -1,66 +1,65 @@
-import Footer from "components/Footer.jsx";
-import FlexContainer from "components/FlexContainer.jsx";
-import useClasses from "hooks/useClasses.js";
-import loginStyles from "styles/pages/Login.style.js";
-import {
-	Button,
-	FormLabel,
-	Grid,
-	InputLabel,
-	TextField,
-	Typography,
-} from "@mui/material";
-import Logo from "assets/svg/logo.js";
-import { Controller, useForm } from "react-hook-form";
-import TextInput from "components/TextInput.jsx";
+import { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect } from "react";
+
+// Services
+import { login } from "services/account.service.js";
+
+// Utils/Hooks/Reducers
+import { createNotification } from "utils/notification.js";
+import useClasses from "hooks/useClasses.js";
+import { setLogin } from "reducers/auth/index.js";
+
+// Components
+import Footer from "components/Footer.jsx";
+import FlexContainer from "components/FlexContainer.jsx";
+import LinkButton from "components/LinkButton.jsx";
+import TextInput from "components/TextInput.jsx";
+
+// Mui Components
+import { Button, Grid, Typography } from "@mui/material";
+
+// Icons
+import Logo from "assets/svg/logo.js";
+
+// Constants
+import { statusCodes } from "constants/statusCodes.constants.js";
+
+// Styles
+import loginStyles from "styles/pages/Login.style.js";
+import Header from "components/Header.jsx";
 
 const Login = () => {
 	const classes = useClasses(loginStyles);
-
-	yup.addMethod(yup.string, "strongPassword", strongPasswordMethod);
-
-	function strongPasswordMethod() {
-		return this.test("strongPasswordTest", (value) => {
-			const { path, createError } = this;
-			switch (Boolean(value)) {
-				case !/^(?=.*[a-z])/.test(value):
-					return createError({
-						path,
-						message: "password must include lowercase letter",
-					});
-				case !/^(?=.*[A-Z])/.test(value):
-					return createError({
-						path,
-						message: "password must include uppercase letter",
-					});
-				case !/^(?=.*[0-9])/.test(value):
-					return createError({
-						path,
-						message: "password must include digit",
-					});
-				case !/^(?=.*[!@#\$%\^&\*])/.test(value):
-					return createError({
-						path,
-						message: "password must include special character",
-					});
-				default:
-					return true;
-			}
-		});
-	}
+	const [inProgress, setInProgress] = useState(false);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	let { token, user } = useSelector((state) => state);
 
 	const schema = yup.object().shape({
 		email: yup.string().email().required(),
-		password: yup.string().min(5).max(64).required().strongPassword(),
+		password: yup
+			.string()
+			.min(5)
+			.max(64)
+			.required()
+			.matches(/^(?=.*[a-z])/, "password must include lowercase letter")
+			.matches(/^(?=.*[A-Z])/, "password must include uppercase letter")
+			.matches(/^(?=.*[0-9])/, "password must include digit")
+			.matches(
+				/^(?=.*[!@#\$%\^&\*])/,
+				"password must include special character"
+			),
 	});
 
 	const {
 		control,
 		handleSubmit,
 		reset,
+		setFocus,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
@@ -70,32 +69,47 @@ const Login = () => {
 		resolver: yupResolver(schema),
 	});
 
-	useEffect(() => console.log(errors), [errors]);
+	const sendLoginRequest = useCallback(
+		async (data) => {
+			if (inProgress) return;
 
-	const onSubmit = (data) => {
-		console.log({ data });
-		reset();
-	};
+			setInProgress(true);
+			try {
+				const response = await login(data);
+
+				if (response.status !== statusCodes.OK) {
+					const errMsg = response.data.msg;
+					const key = response.data.key;
+					createNotification("error", errMsg);
+					console.error(errMsg);
+					setFocus("email");
+					if (key === "no_account") reset();
+
+					return;
+				}
+
+				reset();
+				dispatch(
+					setLogin({
+						// user: loggedIn.user,
+						// token: loggedIn.token,
+					})
+				);
+				navigate(`/${user}/dashboard`);
+			} catch (error) {
+				console.error(error);
+			} finally {
+				setInProgress(false);
+			}
+		},
+		[inProgress]
+	);
 
 	return (
 		<FlexContainer page justifyContentCenter alignItemsCenter col>
-			<FlexContainer style={classes.loginContainer}>
-				<Grid className={classes.header} item xs={12}>
-					<Logo width={50} height={50} />
-					<div className={classes.registerWrap}>
-						<p>New to TicketScout?</p>
-						<Button
-							className={classes.registerButton}
-							variant="contained"
-							color="background"
-						>
-							Register
-						</Button>
-					</div>
-				</Grid>
-			</FlexContainer>
+			<Header showRegister showLogo={true} />
 			<form
-				onSubmit={handleSubmit(onSubmit)}
+				onSubmit={handleSubmit(sendLoginRequest)}
 				className={classes.loginFormWrap}
 			>
 				<FlexContainer
@@ -104,7 +118,7 @@ const Login = () => {
 					alignItemsCenter
 					col
 				>
-					<div className={classes.welcomeMsg}>
+					<div>
 						<Typography variant="h2">
 							<strong>Account Log In</strong>
 						</Typography>
@@ -138,8 +152,12 @@ const Login = () => {
 						errors={errors}
 						rules={{ required: true }}
 					/>
-
-					<Button variant="contained" fullWidth type="submit">
+					<Button
+						variant="contained"
+						fullWidth
+						type="submit"
+						className={classes.submitBtn}
+					>
 						Submit
 					</Button>
 				</FlexContainer>

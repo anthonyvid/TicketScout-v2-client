@@ -4,12 +4,14 @@ import {
 	InputLabel,
 	TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Controller } from "react-hook-form";
 import PropTypes from "prop-types";
 import useClasses from "hooks/useClasses.js";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import KeyboardCapslockIcon from "@mui/icons-material/KeyboardCapslock";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const PLACEHOLDER = {
 	EMAIL: "john@email.com",
@@ -41,7 +43,6 @@ const TextInput = ({
 	label,
 	staticLabel,
 	name,
-	errorText,
 	autoFocus,
 	fullWidth,
 	rules,
@@ -50,6 +51,7 @@ const TextInput = ({
 }) => {
 	const classes = useClasses(textInputStyles);
 	const [showPassword, setShowPassword] = useState(false);
+	const [capsOn, setCapsOn] = useState(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	if (type === "email") {
 		placeholder = PLACEHOLDER.EMAIL;
@@ -57,12 +59,23 @@ const TextInput = ({
 		placeholder = PLACEHOLDER.PASSWORD;
 	}
 
+	const checkForCaps = useCallback(
+		(e) => {
+			if (e.getModifierState("CapsLock")) {
+				setCapsOn(true);
+			} else {
+				setCapsOn(false);
+			}
+		},
+		[capsOn]
+	);
+
 	return (
 		<div className={classes.textInputWrap}>
 			<div className={classes.labelWrap}>
 				{staticLabel && <InputLabel>{label}</InputLabel>}
 				{altLabel && (
-					<Link to="/account/reset-password">
+					<Link tabIndex="-1" to="/account/reset-password">
 						<InputLabel>Forgot Password?</InputLabel>
 					</Link>
 				)}
@@ -77,25 +90,44 @@ const TextInput = ({
 						value={value}
 						placeholder={placeholder}
 						type={peekPassword && showPassword ? "text" : type}
+						onKeyUp={(e) => type === "password" && checkForCaps(e)}
+						onKeyDown={(e) =>
+							type === "password" && checkForCaps(e)
+						}
 						autoFocus={autoFocus}
 						fullWidth={fullWidth}
 						label={staticLabel ? null : label}
 						error={errors[name] !== undefined}
 						InputProps={{
-							endAdornment: peekPassword && (
-								<InputAdornment position="end">
-									<IconButton
-										aria-label="toggle password visibility"
-										onClick={handleClickShowPassword}
-										edge="end"
-									>
-										{showPassword ? (
-											<VisibilityOff />
-										) : (
-											<Visibility />
-										)}
-									</IconButton>
-								</InputAdornment>
+							endAdornment: (
+								<>
+									{type === "password" && (
+										<InputAdornment position="end">
+											{capsOn ? (
+												<KeyboardCapslockIcon />
+											) : (
+												""
+											)}
+										</InputAdornment>
+									)}
+									{peekPassword && (
+										<InputAdornment position="start">
+											<IconButton
+												aria-label="toggle password visibility"
+												onClick={
+													handleClickShowPassword
+												}
+												edge="end"
+											>
+												{showPassword ? (
+													<VisibilityOff />
+												) : (
+													<Visibility />
+												)}
+											</IconButton>
+										</InputAdornment>
+									)}
+								</>
 							),
 						}}
 					/>

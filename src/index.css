@@ -8,3 +8,26 @@ body,
 	width: 100%;
 	font-family: "Nunito", sans-serif;
 }
+
+a {
+	text-decoration: none;
+}
+
+a:active {
+	color: inherit;
+}
+
+a:hover,
+a:hover > *:first-child {
+	cursor: pointer !important;
+	text-decoration: underline;
+}
+
+a > *:first-child {
+	color: #317adc;
+}
+
+.css-vnkopk-MuiStepLabel-iconContainer.MuiStepLabelalternativeLabel {
+	width: 60px;
+	height: 60px;
+}

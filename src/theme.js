@@ -1,41 +1,65 @@
 // color design tokens export
 export const colorTokens = {
-	red: {
-		100: "#d32f2f",
+	status: {
+		error: "#d32f2f",
+		error2: "#ff514e",
+		warning: "#ffb13b",
+		success: "#55cb8a",
 	},
 	white: "#FFFFFF",
 	black: "000000",
 	grey: {
-		10: "#f4f4f4",
-		20: "#F6F6F6",
-		50: "#F0F0F0",
-		100: "#E0E0E0",
-		200: "#C2C2C2",
-		300: "#A3A3A3",
-		400: "#858585",
-		500: "#666666",
-		600: "#4D4D4D",
-		700: "#333333",
-		800: "#1A1A1A",
-		900: "#0A0A0A",
+		50: "#ffffff",
+		100: "#fafafa",
+		200: "#f5f5f5",
+		300: "#f0f0f0",
+		400: "#dedede",
+		500: "#c2c2c2",
+		600: "#979797",
+		700: "#818181",
+		800: "#606060",
+		900: "#3c3c3c",
 	},
 	primary: {
-		50: "#E6FBFF",
-		100: "#CCF7FE",
-		200: "#99EEFD",
-		300: "#66E6FC",
-		400: "#33DDFB",
-		500: "#00D5FA",
-		600: "#00A0BC",
-		700: "#006B7D",
-		800: "#00353F",
-		900: "#001519",
+		50: "#e8ebf6",
+		100: "#c3cde8",
+		200: "#9cadd9",
+		300: "#758dc9",
+		400: "#5573be",
+		500: "#315bb4",
+		600: "#2a53aa",
+		700: "#1f489e",
+		800: "#163f92",
+		900: "#032d7c",
 	},
 };
 
 // mui theme settings
 export const themeSettings = (mode) => {
 	return {
+		components: {
+			MuiButton: {
+				variants: [
+					{
+						props: { variant: "light" },
+						style: {
+							textTransform: "none",
+							fontSize: 14,
+							color:
+								mode !== "dark"
+									? colorTokens.grey[800]
+									: colorTokens.grey[400], // dark mode color
+							borderRadius: "9px",
+							border: `2px solid ${
+								mode !== "dark"
+									? colorTokens.grey[400]
+									: colorTokens.grey[800] // dark mode color
+							}`,
+						},
+					},
+				],
+			},
+		},
 		palette: {
 			mode: mode,
 			...(mode === "dark"
@@ -45,7 +69,7 @@ export const themeSettings = (mode) => {
 							dark: colorTokens.primary[200],
 							main: colorTokens.primary[500],
 							light: colorTokens.primary[800],
-							error: colorTokens.red[100],
+							error: colorTokens.status.error,
 						},
 						neutral: {
 							dark: colorTokens.grey[100],
@@ -65,17 +89,17 @@ export const themeSettings = (mode) => {
 							dark: colorTokens.primary[700],
 							main: colorTokens.primary[500],
 							light: colorTokens.primary[50],
-							error: colorTokens.red[100],
+							error: colorTokens.status.error,
 						},
 						neutral: {
-							dark: colorTokens.grey[700],
-							main: colorTokens.grey[500],
-							mediumMain: colorTokens.grey[400],
-							medium: colorTokens.grey[300],
-							light: colorTokens.grey[50],
+							dark: colorTokens.grey[900],
+							main: colorTokens.grey[700],
+							mediumMain: colorTokens.grey[500],
+							medium: colorTokens.grey[400],
+							light: colorTokens.grey[300],
 						},
 						background: {
-							default: colorTokens.grey[10],
+							default: colorTokens.grey[50],
 							alt: colorTokens.grey[0],
 						},
 				  }),
