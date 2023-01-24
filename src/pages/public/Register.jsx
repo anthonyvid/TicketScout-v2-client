@@ -25,17 +25,23 @@ import { useNavigate } from "react-router-dom";
 import TextInput from "components/TextInput.jsx";
 import Footer from "components/Footer.jsx";
 import { Box } from "@mui/system";
-import styled from "@emotion/styled";
-const steps = [
-	"Select campaign settings",
-	"Create an ad group",
-	"Create an ad",
-];
+
+import RegisterStepper from "components/RegisterStepper.jsx";
+
+const page1 = () => {
+	return <>Page1</>;
+};
+const page2 = () => {
+	return <>Page1</>;
+};
+const page3 = () => {
+	return <>Page1</>;
+};
 
 const Register = () => {
 	const classes = useClasses(registerStyles);
 	const [inProgress, setInProgress] = useState(false);
-	const [activeStep, setActiveStep] = useState(0);
+	const [activeStep, setActiveStep] = useState(1);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	let { token, user } = useSelector((state) => state);
@@ -43,8 +49,6 @@ const Register = () => {
 	const handleNext = () => setActiveStep(activeStep + 1);
 	const handleBack = () =>
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-	const handleStep = (step) => () => setActiveStep(step);
 
 	const schema = yup.object().shape({
 		email: yup.string().email().required(),
@@ -80,24 +84,7 @@ const Register = () => {
 	return (
 		<FlexContainer page justifyContentCenter alignItemsCenter col>
 			<Header showLogin />
-			<Stepper
-				nonLinear
-				activeStep={activeStep}
-				className={classes.stepper}
-				alternativeLabel
-			>
-				{steps.map((label, index) => (
-					<Step key={label}>
-						<StepButton
-							iconContainerStyle={{ width: 36 }}
-							color="inherit"
-							onClick={handleStep(index)}
-						>
-							{label}
-						</StepButton>
-					</Step>
-				))}
-			</Stepper>
+			<RegisterStepper activeStep={activeStep} />
 			<form
 				onSubmit={handleSubmit(sendRegisterRequest)}
 				className={classes.registerFormWrap}
@@ -128,7 +115,7 @@ const Register = () => {
 						>
 							<Button
 								color="inherit"
-								disabled={activeStep === 0}
+								disabled={activeStep === 1}
 								onClick={handleBack}
 								sx={{ mr: 1 }}
 							>
@@ -136,7 +123,7 @@ const Register = () => {
 							</Button>
 							<Box sx={{ flex: "1 1 auto" }} />
 							<Button
-								disabled={activeStep === 2}
+								disabled={activeStep === 3}
 								onClick={handleNext}
 								sx={{ mr: 1 }}
 							>
