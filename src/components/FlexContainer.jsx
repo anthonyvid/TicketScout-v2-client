@@ -9,7 +9,7 @@ const FlexContainer = ({
 	maxWidth,
 	disableGutters,
 	children,
-	style,
+	styles,
 	row,
 	col,
 	gap,
@@ -25,6 +25,7 @@ const FlexContainer = ({
 	alignItemsStretch,
 	page,
 	autoHeight,
+	maxHeight,
 }) => {
 	const classes = useClasses(flexContainerStyles);
 
@@ -79,8 +80,9 @@ const FlexContainer = ({
 			className={cx(
 				{ [classes.background]: true },
 				{ [classes.container]: page && !autoHeight },
-				{ [classes.autoHeight]: autoHeight },
-				{ [style]: style !== null }
+				{ [classes.autoHeight]: autoHeight && !maxHeight },
+				{ [classes.maxHeight]: maxHeight && !autoHeight },
+				{ [styles]: styles !== null }
 			)}
 		>
 			{children}
@@ -91,8 +93,9 @@ const FlexContainer = ({
 FlexContainer.defaultProps = {
 	maxWidth: "false",
 	autoHeight: false,
+	maxHeight: false,
 	disableGutters: true,
-	style: null,
+	styles: null,
 	justifyContentStart: false,
 	justifyContentCenter: false,
 	justifyContentEnd: false,
@@ -127,6 +130,7 @@ FlexContainer.propTypes = {
 	alignItemsBaseline: PropTypes.bool,
 	alignItemsStretch: PropTypes.bool,
 	page: PropTypes.bool,
+	maxHeight: PropTypes.bool,
 	gap: PropTypes.string,
 };
 

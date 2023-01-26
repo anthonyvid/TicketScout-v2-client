@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 // Icons
 
@@ -27,21 +28,16 @@ import Footer from "components/Footer.jsx";
 import { Box } from "@mui/system";
 
 import RegisterStepper from "components/RegisterStepper.jsx";
+import { cx } from "@emotion/css";
 
-const page1 = () => {
-	return <>Page1</>;
-};
-const page2 = () => {
-	return <>Page1</>;
-};
-const page3 = () => {
-	return <>Page1</>;
-};
+const employeeSteps = ["Enter Code", "Personal Info", "Code", "submit"];
+const storeSteps = ["Personal store Info", "Team Info", "Code", "submit"];
 
 const Register = () => {
 	const classes = useClasses(registerStyles);
 	const [inProgress, setInProgress] = useState(false);
 	const [activeStep, setActiveStep] = useState(1);
+	const [accountType, setAccountType] = useState(0);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	let { token, user } = useSelector((state) => state);
@@ -66,6 +62,55 @@ const Register = () => {
 			),
 	});
 
+	const getEmployeeSteps = () => {
+		switch (activeStep) {
+			case 1:
+				return defaultStep();
+			case 2:
+				return employeeStep1();
+			case 3:
+				return employeeStep2();
+			default:
+				return defaultStep();
+		}
+	};
+
+	const getStoreSteps = () => {
+		switch (activeStep) {
+			case 1:
+				return defaultStep();
+			case 2:
+				return storeStep1();
+			case 3:
+				return storeStep2();
+			default:
+				return defaultStep();
+		}
+	};
+
+	const defaultStep = () => {
+		return <FlexContainer col maxHeight>
+            <h1>Let's Get Started</h1>
+            <p>Choose the type of account you are creating</p>
+        </FlexContainer>;
+	};
+
+	const employeeStep1 = () => {
+		return <>Emp1</>;
+	};
+
+	const employeeStep2 = () => {
+		return <>Emp2</>;
+	};
+
+	const storeStep1 = () => {
+		return <>Store1</>;
+	};
+
+	const storeStep2 = () => {
+		return <>Store2</>;
+	};
+
 	const sendRegisterRequest = () => {};
 
 	const {
@@ -83,56 +128,62 @@ const Register = () => {
 	});
 	return (
 		<FlexContainer page justifyContentCenter alignItemsCenter col>
-			<Header showLogin />
-			<RegisterStepper activeStep={activeStep} />
-			<form
-				onSubmit={handleSubmit(sendRegisterRequest)}
-				className={classes.registerFormWrap}
+			<Header showLogo={false} showLogin />
+			<FlexContainer
+				gap="15px"
+				justifyContentCenter
+				alignItemsCenter
+				col
+				maxHeight
+				styles={classes.relative}
 			>
-				<FlexContainer
-					gap="15px"
-					justifyContentCenter
-					alignItemsCenter
-					col
+				<form
+					onSubmit={handleSubmit(sendRegisterRequest)}
+					className={classes.registerFormWrap}
 				>
-					<div className={classes.welcomeMsg}>
-						<Typography variant="h2">
-							<strong>
-								How are you planning to use TicketScout?
-							</strong>
-						</Typography>
-						<Typography variant="h6">
-							{/* Welcome! Lets get started. */}
-						</Typography>
+					<div
+						className={cx(classes.stepperWrap, {
+							[classes.hidden]: activeStep === 1,
+						})}
+					>
+						<RegisterStepper
+							activeStep={activeStep}
+							steps={
+								accountType === 0 ? employeeSteps : storeSteps
+							}
+						/>
 					</div>
-					<div>
-						<Box
-							sx={{
-								display: "flex",
-								flexDirection: "row",
-								pt: 2,
-							}}
+					<div className={classes.pageWrap}>
+						{accountType === 0
+							? getEmployeeSteps(activeStep)
+							: getStoreSteps(activeStep)}
+					</div>
+					<div className={classes.buttonWrap}>
+						<Button
+							startIcon={<ArrowBackIcon />}
+							className={classes.backBtn}
+							disabled={activeStep === 1}
+							onClick={handleBack}
+							variant="text"
 						>
-							<Button
-								color="inherit"
-								disabled={activeStep === 1}
-								onClick={handleBack}
-								sx={{ mr: 1 }}
-							>
-								Back
-							</Button>
-							<Box sx={{ flex: "1 1 auto" }} />
-							<Button
-								disabled={activeStep === 3}
-								onClick={handleNext}
-								sx={{ mr: 1 }}
-							>
-								Next
-							</Button>
-						</Box>
+							Back
+						</Button>
+						<Button
+							className={classes.nextBtn}
+							disabled={
+								activeStep ===
+								(accountType === 0
+									? employeeSteps.length
+									: storeSteps.length)
+							}
+							onClick={handleNext}
+							variant="contained"
+						>
+							Next Step
+						</Button>
 					</div>
-				</FlexContainer>
-			</form>
+				</form>
+			</FlexContainer>
 			<Footer />
 		</FlexContainer>
 	);

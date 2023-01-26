@@ -6,6 +6,9 @@ const flexContainerStyles = (theme) => ({
 	autoHeight: {
 		height: "auto",
 	},
+	maxHeight: {
+		height: "100%",
+	},
 });
 
 export default flexContainerStyles;

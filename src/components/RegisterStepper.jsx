@@ -1,28 +1,17 @@
 import React from "react";
 
-const greyedOut = "#eaeaea";
+import registerStepperStyles from "styles/components/RegisterStepper.style.js";
+import useClasses from "hooks/useClasses.js";
+import { cx } from "@emotion/css";
 
-const steps = [
-	"1. Select campaign settings",
-	"2. Create an ad group",
-	"3. Create an ad",
-];
-
-const RegisterStepper = ({ activeStep }) => {
+const RegisterStepper = ({ activeStep, steps }) => {
+	const classes = useClasses(registerStepperStyles);
+	console.log(steps);
 	return (
-		<div
-			style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				width: "100%",
-				gap: "10px",
-				fontWeight: "bold",
-			}}
-		>
-			{steps.map((step) => {
-				const width = 70 / steps.length;
-				const currentStep = step.split(".")[0];
+		<div className={classes.parent}>
+			{steps.map((step, i) => {
+				const width = 80 / steps.length;
+				const currentStep = i + 1;
 
 				const isGreyedOut = currentStep > activeStep;
 
@@ -30,32 +19,31 @@ const RegisterStepper = ({ activeStep }) => {
 					<div
 						key={currentStep}
 						style={{
-							display: "flex",
-							flexDirection: "column",
-							gap: "10px",
-							height: "100%",
 							width: `${width}%`,
 						}}
+						className={classes.step}
 					>
 						<div
-							style={{
-								width: "100%",
-								height: "45%",
-								color: isGreyedOut ? greyedOut : "blue",
-							}}
+							className={cx(
+								{ [classes.stepBox]: true },
+								{ [classes.greyedOutText]: isGreyedOut },
+								{ [classes.greyedOutBox]: isGreyedOut },
+								{ [classes.activeText]: !isGreyedOut },
+								{
+									[classes.activeBox]: !isGreyedOut,
+								}
+							)}
+						>
+							<p>{currentStep}</p>
+						</div>
+						<p
+							className={cx(
+								{ [classes.greyedOutText]: isGreyedOut },
+								{ [classes.activeText]: !isGreyedOut }
+							)}
 						>
 							{step}
-						</div>
-						<div
-							style={{
-								width: "100%",
-								height: "55%",
-								backgroundColor: isGreyedOut
-									? greyedOut
-									: "blue",
-								borderRadius: "1px",
-							}}
-						></div>
+						</p>
 					</div>
 				);
 			})}

@@ -19,7 +19,7 @@ import headerStyles from "styles/components/Header.style.js";
 const Header = ({ showLogo, showMenu, showRegister, showLogin }) => {
 	const classes = useClasses(headerStyles);
 	return (
-		<FlexContainer style={classes.headerContainer}>
+		<FlexContainer styles={classes.headerContainer}>
 			<Grid className={classes.header} item xs={12}>
 				<div>{showLogo && <Logo width={50} height={50} />}</div>
 

@@ -11,7 +11,7 @@ const Footer = () => {
 		<FlexContainer
 			alignItemsCenter
 			justifyContentBetween
-			style={classes.footerContainer}
+			styles={classes.footerContainer}
 		>
 			<p>&copy; 2023 Company Name</p>
 			<div className={classes.linkWrap}>
