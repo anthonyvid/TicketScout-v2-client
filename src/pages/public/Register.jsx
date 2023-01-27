@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -33,8 +33,8 @@ import DefaultStep from "components/registerSteps/DefaultStep.jsx";
 import EmployeeStep1 from "components/registerSteps/EmployeeStep1.jsx";
 import EmployeeStep2 from "components/registerSteps/EmployeeStep2.jsx";
 
-const employeeSteps = ["Enter Code", "Personal Info", "Code", "submit"];
-const storeSteps = ["Personal store Info", "Team Info", "Code", "submit"];
+const EMPLOYEE_STEPS = 3;
+const STORE_STEPS = 3;
 
 const Register = () => {
 	const classes = useClasses(registerStyles);
@@ -43,32 +43,22 @@ const Register = () => {
 	const [signUpCodeVerified, setSignUpCodeVerified] = useState(true); //todo: change back to false after
 	const [accountType, setAccountType] = useState(0);
 
+	const phoneRegExp =
+		/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
 	const schema = yup.object().shape({
-		email: yup.string().email().required(),
-		password: yup
+		firstname: yup.string().required("First name is required"),
+		lastname: yup.string().required("Last name is required"),
+		email: yup
 			.string()
-			.min(5)
-			.max(64)
-			.required()
-			.matches(/^(?=.*[a-z])/, "password must include lowercase letter")
-			.matches(/^(?=.*[A-Z])/, "password must include uppercase letter")
-			.matches(/^(?=.*[0-9])/, "password must include digit")
-			.matches(
-				/^(?=.*[!@#\$%\^&\*])/,
-				"password must include special character"
-			),
+			.email("Invalid email address")
+			.required("Email address is required"),
+		phoneNumber: yup
+			.string()
+			.max(12, "Phone number cannot exceed 12 characters")
+			.required("Phone number is required")
+			.matches(phoneRegExp, "Invalid phone number"),
 	});
-
-	const handleNext = () => setActiveStep(activeStep + 1);
-	const handleBack = () =>
-		setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-	const getDefaultStep = () => (
-		<DefaultStep
-			accountType={accountType}
-			setAccountType={setAccountType}
-		/>
-	);
 
 	const getEmployeeSteps = () => {
 		switch (activeStep) {
@@ -83,9 +73,13 @@ const Register = () => {
 					/>
 				);
 			case 2:
-				return <EmployeeStep2 control={control} errors={errors} />;
-			default:
-				return getDefaultStep();
+				return (
+					<EmployeeStep2
+						control={control}
+						errors={errors}
+						clearErrors={clearErrors}
+					/>
+				);
 		}
 	};
 
@@ -107,21 +101,39 @@ const Register = () => {
 	const sendRegisterRequest = (data) => console.log(data);
 	const defaultView = activeStep === 0;
 	const employeeType = accountType === 0;
-	const storeType = accountType === 1;
 
 	const {
 		control,
 		handleSubmit,
 		reset,
+		clearErrors,
 		setFocus,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
+			firstname: "",
+			lastname: "",
 			email: "",
-			password: "",
+			phoneNumber: "",
 		},
 		resolver: yupResolver(schema),
 	});
+
+	const handleNext = () => {
+		setActiveStep(activeStep + 1);
+	};
+	const handleBack = () =>
+		setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+	const getDefaultStep = () => (
+		<DefaultStep
+			accountType={accountType}
+			setAccountType={setAccountType}
+		/>
+	);
+
+	useEffect(() => console.log(errors), [errors]);
+
 	return (
 		<FlexContainer page justifyContentCenter alignItemsCenter col>
 			<Header showLogo={false} showLogin />
@@ -169,31 +181,33 @@ const Register = () => {
 							>
 								Back
 							</Button>
-							<Button
-								className={classes.nextBtn}
-								disabled={
-									!signUpCodeVerified ||
-									activeStep ===
-										(employeeType
-											? employeeSteps.length + 1
-											: storeSteps.length + 1)
-								}
-								onClick={handleNext}
-								variant="contained"
-							>
-								Next Step
-							</Button>
+							{activeStep ===
+							(employeeType
+								? EMPLOYEE_STEPS - 1
+								: STORE_STEPS - 1) ? (
+								<Button
+									className={classes.nextBtn}
+									variant="contained"
+									type="submit"
+								>
+									Submit
+								</Button>
+							) : (
+								<Button
+									className={classes.nextBtn}
+									onClick={handleNext}
+									variant="contained"
+								>
+									Next Step
+								</Button>
+							)}
 						</div>
 					)}
 
 					<div className={classes.stepperWrap}>
 						<RegisterStepper
 							activeStep={activeStep}
-							steps={
-								employeeType
-									? employeeSteps.length
-									: storeSteps.length
-							}
+							steps={employeeType ? EMPLOYEE_STEPS : STORE_STEPS}
 						/>
 					</div>
 				</form>

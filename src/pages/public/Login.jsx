@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -40,18 +40,21 @@ const Login = () => {
 	let { token, user } = useSelector((state) => state);
 
 	const schema = yup.object().shape({
-		email: yup.string().email().required(),
+		email: yup
+			.string()
+			.email("Invalid email address")
+			.required("Email address is required"),
 		password: yup
 			.string()
-			.min(5)
-			.max(64)
-			.required()
-			.matches(/^(?=.*[a-z])/, "password must include lowercase letter")
-			.matches(/^(?=.*[A-Z])/, "password must include uppercase letter")
-			.matches(/^(?=.*[0-9])/, "password must include digit")
+			.min(5, "Password must be at least 5 characters")
+			.max(64, "Password cannot exceed 64 characters")
+			.required("Password is required")
+			.matches(/^(?=.*[a-z])/, "Password must include lowercase letter")
+			.matches(/^(?=.*[A-Z])/, "Password must include uppercase letter")
+			.matches(/^(?=.*[0-9])/, "Password must include digit")
 			.matches(
 				/^(?=.*[!@#\$%\^&\*])/,
-				"password must include special character"
+				"Password must include special character"
 			),
 	});
 
@@ -134,10 +137,8 @@ const Login = () => {
 						label="Email"
 						name="email"
 						type="email"
-						errorText="Please enter a valid email"
 						control={control}
 						errors={errors}
-						rules={{ required: true }}
 					/>
 
 					<TextInput
@@ -148,10 +149,8 @@ const Login = () => {
 						label="Password"
 						name="password"
 						type="password"
-						errorText="Please enter a valid password"
 						control={control}
 						errors={errors}
-						rules={{ required: true }}
 					/>
 					<Button
 						variant="contained"

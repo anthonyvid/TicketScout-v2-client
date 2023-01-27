@@ -23,6 +23,7 @@ const textInputStyles = (theme) => ({
 		marginTop: "3px",
 		marginBottom: "-17px",
 		color: theme.palette.primary.error,
+		textAlign: "left",
 	},
 	textInputWrap: {
 		width: "100%",
@@ -147,7 +148,6 @@ TextInput.defaultProps = {
 	placeholder: "",
 	inputText: "",
 	name: "",
-	errorText: "Required",
 	staticLabel: false,
 	autoFocus: false,
 	fullWidth: false,
@@ -160,7 +160,6 @@ TextInput.propTypes = {
 	placeholder: PropTypes.string,
 	inputText: PropTypes.string,
 	name: PropTypes.string,
-	errorText: PropTypes.string,
 	staticLabel: PropTypes.bool,
 	autoFocus: PropTypes.bool,
 	fullWidth: PropTypes.bool,

@@ -26,6 +26,9 @@ const employeeStep2Styles = (theme) => ({
 		marginTop: "40px",
 		transition: "0.2s ease-in-out",
 		padding: "0 50px",
+		TextField: {
+			borderRadius: "15px",
+		},
 	},
 });
 

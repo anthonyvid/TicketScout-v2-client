@@ -30,26 +30,27 @@ const registerStyles = (theme) => ({
 	buttonWrap: {
 		display: "flex",
 		alignItems: "center",
-		justifyContent: "end",
+		justifyContent: "center",
 		flexDirection: "row",
 		gap: "13px",
 		width: "100%",
-
+		margin: "-25px 0 25px 0",
 		fontWeight: "bold",
 	},
 	nextBtn: {
-		width: "110px",
+		width: "200px",
 		borderRadius: "12px",
-		height: "45px",
+		height: "50px",
 	},
 	backBtn: {
 		borderRadius: "12px",
-		width: "110px",
-		height: "45px",
-		backgroundColor: "white",
+		width: "200px",
+		height: "50px",
+		backgroundColor: `${theme.palette.primary.main}30`,
 	},
 	hidden: {
 		display: "none",
+		visibility: "hidden",
 	},
 	pageWrap: {
 		width: "100%",

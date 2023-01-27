@@ -19,6 +19,10 @@ const registerStepperStyles = (theme) => ({
 		width: "50px",
 		backgroundColor: theme.palette.primary.main,
 	},
+	stepText: {
+		marginTop: "10px",
+		color: theme.palette.neutral.main,
+	},
 });
 
 export default registerStepperStyles;
