@@ -1,12 +1,4 @@
-import {
-	Button,
-	Grid,
-	Step,
-	StepButton,
-	StepLabel,
-	Stepper,
-	Typography,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
 import useClasses from "hooks/useClasses.js";
 import React, { useEffect, useReducer, useState } from "react";
@@ -14,21 +6,9 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
-// Icons
-
-// Styles
 import registerStyles from "styles/pages/Register.style.js";
-
 import Header from "components/Header.jsx";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import TextInput from "components/TextInput.jsx";
-import Footer from "components/Footer.jsx";
-import { Box } from "@mui/system";
-
 import RegisterStepper from "components/RegisterStepper.jsx";
-import { cx } from "@emotion/css";
 import DefaultStep from "components/registerSteps/DefaultStep.jsx";
 import EmployeeStep1 from "components/registerSteps/EmployeeStep1.jsx";
 import EmployeeStep2 from "components/registerSteps/EmployeeStep2.jsx";
@@ -73,13 +53,7 @@ const Register = () => {
 					/>
 				);
 			case 2:
-				return (
-					<EmployeeStep2
-						control={control}
-						errors={errors}
-						clearErrors={clearErrors}
-					/>
-				);
+				return <EmployeeStep2 control={control} errors={errors} />;
 		}
 	};
 
@@ -105,9 +79,6 @@ const Register = () => {
 	const {
 		control,
 		handleSubmit,
-		reset,
-		clearErrors,
-		setFocus,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {

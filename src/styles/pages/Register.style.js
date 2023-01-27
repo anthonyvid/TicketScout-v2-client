@@ -61,6 +61,12 @@ const registerStyles = (theme) => ({
 		width: "100%",
 		fontWeight: "bold",
 		fontSize: "20px",
+		[theme.breakpoints.down("md")]: {
+			width: "580px",
+		},
+		[theme.breakpoints.down("sm")]: {
+			width: "50%",
+		},
 	},
 });
 

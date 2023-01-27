@@ -4,7 +4,7 @@ import TextInput from "components/TextInput.jsx";
 import useClasses from "hooks/useClasses.js";
 import React, { useEffect } from "react";
 import employeeStep2Styles from "styles/components/registerSteps/EmployeeStep2.styles.js";
-const EmployeeStep2 = ({ control, errors, clearErrors }) => {
+const EmployeeStep2 = ({ control, errors }) => {
 	const classes = useClasses(employeeStep2Styles);
 
 	return (

@@ -46,6 +46,7 @@ const DefaultStep = ({ accountType, setAccountType }) => {
 						<h2>Employee</h2>
 						<p>You are joining a store</p>
 					</div>
+					<div className={classes.dummy} />
 				</div>
 				<div
 					onClick={() => setAccountType(1)}
@@ -74,6 +75,7 @@ const DefaultStep = ({ accountType, setAccountType }) => {
 						<h2>Store</h2>
 						<p>You are a store</p>
 					</div>
+					<div className={classes.dummy} />
 				</div>
 			</div>
 		</>

@@ -8,6 +8,9 @@ const defaultStepStyles = (theme) => ({
 		fontWeight: "800",
 		padding: 0,
 		margin: 0,
+		[theme.breakpoints.down("sm")]: {
+			fontSize: "34px",
+		},
 	},
 	subtitle: {
 		color: "#aeaebd",
@@ -18,12 +21,21 @@ const defaultStepStyles = (theme) => ({
 	},
 	contentWrap: {
 		display: "flex",
-		gap: "10px",
-		justifyContent: "space-between",
+		gap: "40px",
+		justifyContent: "center",
+		alignItems: "center",
 		width: "100%",
 		marginTop: "30px",
 		transition: "0.2s ease-in-out",
 		marginBottom: "50px",
+		[theme.breakpoints.down("md")]: {
+			gap: "20px",
+		},
+		[theme.breakpoints.down("sm")]: {
+			gap: "20px",
+			flexDirection: "column",
+			width: "60%",
+		},
 	},
 	box: {
 		position: "relative",
@@ -52,6 +64,17 @@ const defaultStepStyles = (theme) => ({
 			fontSize: "16px",
 			fontWeight: "600",
 		},
+		[theme.breakpoints.down("md")]: {
+			width: "280px",
+			height: "200px",
+		},
+		[theme.breakpoints.down("sm")]: {
+			width: "400px",
+			height: "150px",
+			flexDirection: "row",
+			alignItems: "center",
+			justifyContent: "space-between",
+		},
 	},
 	selected: {
 		boxShadow: `0 0 5px #9ecaed`,
@@ -65,6 +88,18 @@ const defaultStepStyles = (theme) => ({
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
+		[theme.breakpoints.down("sm")]: {
+			marginLeft: "10px",
+			marginRight: "-10px",
+		},
+	},
+	dummy: {
+		width: "60px",
+		height: "60px",
+		display: "none",
+		[theme.breakpoints.down("sm")]: {
+			display: "block",
+		},
 	},
 	icon: {
 		color: theme.palette.neutral.main,
