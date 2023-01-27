@@ -8,7 +8,7 @@ export const createNotification = (type, msg) => {
 
 	const showToastMessage = () => {
 		toast[type](msg, {
-			position: toast.POSITION.TOP_RIGHT,
+			position: toast.POSITION.BOTTOM_LEFT,
 			autoClose: 6000,
 			theme: "colored",
 		});

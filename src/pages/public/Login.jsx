@@ -20,7 +20,7 @@ import LinkButton from "components/LinkButton.jsx";
 import TextInput from "components/TextInput.jsx";
 
 // Mui Components
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, CircularProgress, Grid, Typography } from "@mui/material";
 
 // Icons
 import Logo from "assets/svg/logo.js";
@@ -34,7 +34,7 @@ import Header from "components/Header.jsx";
 
 const Login = () => {
 	const classes = useClasses(loginStyles);
-	const [inProgress, setInProgress] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	let { token, user } = useSelector((state) => state);
@@ -71,9 +71,9 @@ const Login = () => {
 
 	const sendLoginRequest = useCallback(
 		async (data) => {
-			if (inProgress) return;
+			if (loading) return;
 
-			setInProgress(true);
+			setLoading(true);
 			try {
 				const response = await login(data);
 
@@ -97,12 +97,13 @@ const Login = () => {
 				);
 				navigate(`/${user}/dashboard`);
 			} catch (error) {
-				console.error(error);
+				createNotification("error", error.message);
+				console.error(error.message);
 			} finally {
-				setInProgress(false);
+				setLoading(false);
 			}
 		},
-		[inProgress]
+		[loading]
 	);
 
 	return (
@@ -158,7 +159,7 @@ const Login = () => {
 						type="submit"
 						className={classes.submitBtn}
 					>
-						Submit
+						{loading ? <CircularProgress /> : "Submit"}
 					</Button>
 				</FlexContainer>
 			</form>

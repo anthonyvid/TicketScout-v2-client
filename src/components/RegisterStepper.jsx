@@ -6,45 +6,22 @@ import { cx } from "@emotion/css";
 
 const RegisterStepper = ({ activeStep, steps }) => {
 	const classes = useClasses(registerStepperStyles);
-	console.log(steps);
-	return (
-		<div className={classes.parent}>
-			{steps.map((step, i) => {
-				const width = 80 / steps.length;
-				const currentStep = i + 1;
 
-				const isGreyedOut = currentStep > activeStep;
+	return (
+		<div className={cx(classes.parent)}>
+			{[...Array(steps).keys()].map((step, i) => {
+				const currentStep = i;
+
+				const active = currentStep === activeStep;
 
 				return (
 					<div
-						key={currentStep}
-						style={{
-							width: `${width}%`,
-						}}
-						className={classes.step}
-					>
-						<div
-							className={cx(
-								{ [classes.stepBox]: true },
-								{ [classes.greyedOutText]: isGreyedOut },
-								{ [classes.greyedOutBox]: isGreyedOut },
-								{ [classes.activeText]: !isGreyedOut },
-								{
-									[classes.activeBox]: !isGreyedOut,
-								}
-							)}
-						>
-							<p>{currentStep}</p>
-						</div>
-						<p
-							className={cx(
-								{ [classes.greyedOutText]: isGreyedOut },
-								{ [classes.activeText]: !isGreyedOut }
-							)}
-						>
-							{step}
-						</p>
-					</div>
+						key={i}
+						className={cx(classes.step, {
+							[classes.activeStep]: active,
+							[classes.greyedOutStep]: !active,
+						})}
+					></div>
 				);
 			})}
 		</div>

@@ -12,3 +12,16 @@ export const login = async (credentials) => {
 		return error.response;
 	}
 };
+
+export const verifySignUpCode = async (code) => {
+	if (isEmpty(code)) throw Error("Please try again.");
+
+	try {
+		const response = await postRequest("auth/register/verifySignUpCode", {
+			code,
+		});
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};

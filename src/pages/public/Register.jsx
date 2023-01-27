@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -29,22 +29,19 @@ import { Box } from "@mui/system";
 
 import RegisterStepper from "components/RegisterStepper.jsx";
 import { cx } from "@emotion/css";
+import DefaultStep from "components/registerSteps/DefaultStep.jsx";
+import EmployeeStep1 from "components/registerSteps/EmployeeStep1.jsx";
+import EmployeeStep2 from "components/registerSteps/EmployeeStep2.jsx";
 
 const employeeSteps = ["Enter Code", "Personal Info", "Code", "submit"];
 const storeSteps = ["Personal store Info", "Team Info", "Code", "submit"];
 
 const Register = () => {
 	const classes = useClasses(registerStyles);
-	const [inProgress, setInProgress] = useState(false);
-	const [activeStep, setActiveStep] = useState(1);
+	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
+	const [activeStep, setActiveStep] = useState(0);
+	const [signUpCodeVerified, setSignUpCodeVerified] = useState(true); //todo: change back to false after
 	const [accountType, setAccountType] = useState(0);
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	let { token, user } = useSelector((state) => state);
-
-	const handleNext = () => setActiveStep(activeStep + 1);
-	const handleBack = () =>
-		setActiveStep((prevActiveStep) => prevActiveStep - 1);
 
 	const schema = yup.object().shape({
 		email: yup.string().email().required(),
@@ -62,56 +59,55 @@ const Register = () => {
 			),
 	});
 
+	const handleNext = () => setActiveStep(activeStep + 1);
+	const handleBack = () =>
+		setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+	const getDefaultStep = () => (
+		<DefaultStep
+			accountType={accountType}
+			setAccountType={setAccountType}
+		/>
+	);
+
 	const getEmployeeSteps = () => {
 		switch (activeStep) {
+			case 0:
+				return getDefaultStep();
 			case 1:
-				return defaultStep();
+				return (
+					<EmployeeStep1
+						code={signUpCode}
+						setCode={setSignUpCode}
+						setVerified={setSignUpCodeVerified}
+					/>
+				);
 			case 2:
-				return employeeStep1();
-			case 3:
-				return employeeStep2();
+				return <EmployeeStep2 control={control} errors={errors} />;
 			default:
-				return defaultStep();
+				return getDefaultStep();
 		}
 	};
 
 	const getStoreSteps = () => {
 		switch (activeStep) {
+			case 0:
+				return getDefaultStep();
 			case 1:
-				return defaultStep();
-			case 2:
 				return storeStep1();
-			case 3:
+			case 2:
 				return storeStep2();
 			default:
-				return defaultStep();
+				return getDefaultStep();
 		}
 	};
 
-	const defaultStep = () => {
-		return <FlexContainer col maxHeight>
-            <h1>Let's Get Started</h1>
-            <p>Choose the type of account you are creating</p>
-        </FlexContainer>;
-	};
-
-	const employeeStep1 = () => {
-		return <>Emp1</>;
-	};
-
-	const employeeStep2 = () => {
-		return <>Emp2</>;
-	};
-
-	const storeStep1 = () => {
-		return <>Store1</>;
-	};
-
-	const storeStep2 = () => {
-		return <>Store2</>;
-	};
-
-	const sendRegisterRequest = () => {};
+	const storeStep1 = () => <>Store1</>;
+	const storeStep2 = () => <>Store2</>;
+	const sendRegisterRequest = (data) => console.log(data);
+	const defaultView = activeStep === 0;
+	const employeeType = accountType === 0;
+	const storeType = accountType === 1;
 
 	const {
 		control,
@@ -141,50 +137,67 @@ const Register = () => {
 					onSubmit={handleSubmit(sendRegisterRequest)}
 					className={classes.registerFormWrap}
 				>
-					<div
-						className={cx(classes.stepperWrap, {
-							[classes.hidden]: activeStep === 1,
-						})}
+					<FlexContainer
+						alignItemsCenter
+						justifyContentCenter
+						col
+						maxHeight
+						styles={classes.pageWrap}
 					>
+						{employeeType
+							? getEmployeeSteps(activeStep)
+							: getStoreSteps(activeStep)}
+						{defaultView && (
+							<Button
+								sx={{ borderRadius: "8px" }}
+								className={classes.continueBtn}
+								onClick={handleNext}
+								variant="contained"
+							>
+								Continue
+							</Button>
+						)}
+					</FlexContainer>
+
+					{!defaultView && (
+						<div className={classes.buttonWrap}>
+							<Button
+								startIcon={<ArrowBackIcon />}
+								className={classes.backBtn}
+								onClick={handleBack}
+								variant="text"
+							>
+								Back
+							</Button>
+							<Button
+								className={classes.nextBtn}
+								disabled={
+									!signUpCodeVerified ||
+									activeStep ===
+										(employeeType
+											? employeeSteps.length + 1
+											: storeSteps.length + 1)
+								}
+								onClick={handleNext}
+								variant="contained"
+							>
+								Next Step
+							</Button>
+						</div>
+					)}
+
+					<div className={classes.stepperWrap}>
 						<RegisterStepper
 							activeStep={activeStep}
 							steps={
-								accountType === 0 ? employeeSteps : storeSteps
+								employeeType
+									? employeeSteps.length
+									: storeSteps.length
 							}
 						/>
 					</div>
-					<div className={classes.pageWrap}>
-						{accountType === 0
-							? getEmployeeSteps(activeStep)
-							: getStoreSteps(activeStep)}
-					</div>
-					<div className={classes.buttonWrap}>
-						<Button
-							startIcon={<ArrowBackIcon />}
-							className={classes.backBtn}
-							disabled={activeStep === 1}
-							onClick={handleBack}
-							variant="text"
-						>
-							Back
-						</Button>
-						<Button
-							className={classes.nextBtn}
-							disabled={
-								activeStep ===
-								(accountType === 0
-									? employeeSteps.length
-									: storeSteps.length)
-							}
-							onClick={handleNext}
-							variant="contained"
-						>
-							Next Step
-						</Button>
-					</div>
 				</form>
 			</FlexContainer>
-			<Footer />
 		</FlexContainer>
 	);
 };

@@ -26,7 +26,8 @@ export const colorTokens = {
 		200: "#9cadd9",
 		300: "#758dc9",
 		400: "#5573be",
-		500: "#315bb4",
+		// 500: "#315bb4",
+		500: "#0c70df",
 		600: "#2a53aa",
 		700: "#1f489e",
 		800: "#163f92",
@@ -110,26 +111,38 @@ export const themeSettings = (mode) => {
 			h1: {
 				fontFamily: ["Nunito", "sans-serif"].join(","),
 				fontSize: 40,
+				margin: 0,
+				padding: 0,
 			},
 			h2: {
 				fontFamily: ["Nunito", "sans-serif"].join(","),
 				fontSize: 32,
+				margin: 0,
+				padding: 0,
 			},
 			h3: {
 				fontFamily: ["Nunito", "sans-serif"].join(","),
 				fontSize: 24,
+				margin: 0,
+				padding: 0,
 			},
 			h4: {
 				fontFamily: ["Nunito", "sans-serif"].join(","),
 				fontSize: 20,
+				margin: 0,
+				padding: 0,
 			},
 			h5: {
 				fontFamily: ["Nunito", "sans-serif"].join(","),
 				fontSize: 16,
+				margin: 0,
+				padding: 0,
 			},
 			h6: {
 				fontFamily: ["Nunito", "sans-serif"].join(","),
 				fontSize: 14,
+				margin: 0,
+				padding: 0,
 			},
 		},
 	};

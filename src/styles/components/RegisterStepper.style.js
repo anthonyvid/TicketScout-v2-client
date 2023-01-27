@@ -2,39 +2,21 @@ const registerStepperStyles = (theme) => ({
 	parent: {
 		display: "flex",
 		alignItems: "center",
-		justifyContent: "space-evenly",
-		width: "100%",
-		height: "100%",
-		fontWeight: "700",
-		borderRadius: "10px",
-		border: `1px solid ${theme.palette.neutral.medium}`,
+		width: "auto",
+		height: "12px",
+		gap: "10px",
 	},
 	step: {
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-		gap: "13px",
+		transition: "0.2s ease-out",
+		width: "25px",
 		height: "100%",
+		borderRadius: "15px",
 	},
-	stepBox: {
-		width: "39px",
-		height: "39px",
-		borderRadius: "8px",
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	greyedOutText: {
-		color: theme.palette.neutral.mediumMain,
-	},
-	greyedOutBox: {
+	greyedOutStep: {
 		backgroundColor: theme.palette.neutral.light,
 	},
-	activeText: {
-		color: theme.palette.background.alt,
-	},
-	activeBox: {
-		color: theme.palette.background.default,
+	activeStep: {
+		width: "50px",
 		backgroundColor: theme.palette.primary.main,
 	},
 });
