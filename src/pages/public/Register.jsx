@@ -106,7 +106,13 @@ const Register = () => {
 	useEffect(() => console.log(errors), [errors]);
 
 	return (
-		<FlexContainer page justifyContentCenter alignItemsCenter col>
+		<FlexContainer
+			page
+			justifyContentCenter
+			alignItemsCenter
+			col
+			styles={classes.registerContainer}
+		>
 			<Header showLogo={false} showLogin />
 			<FlexContainer
 				gap="15px"
@@ -140,9 +146,41 @@ const Register = () => {
 								Continue
 							</Button>
 						)}
+						{!defaultView && (
+							<div className={classes.buttonWrap}>
+								<Button
+									startIcon={<ArrowBackIcon />}
+									className={classes.backBtn}
+									onClick={handleBack}
+									variant="text"
+								>
+									Back
+								</Button>
+								{activeStep ===
+								(employeeType
+									? EMPLOYEE_STEPS - 1
+									: STORE_STEPS - 1) ? (
+									<Button
+										className={classes.nextBtn}
+										variant="contained"
+										type="submit"
+									>
+										Submit
+									</Button>
+								) : (
+									<Button
+										className={classes.nextBtn}
+										onClick={handleNext}
+										variant="contained"
+									>
+										Next Step
+									</Button>
+								)}
+							</div>
+						)}
 					</FlexContainer>
 
-					{!defaultView && (
+					{/* {!defaultView && (
 						<div className={classes.buttonWrap}>
 							<Button
 								startIcon={<ArrowBackIcon />}
@@ -173,7 +211,7 @@ const Register = () => {
 								</Button>
 							)}
 						</div>
-					)}
+					)} */}
 
 					<div className={classes.stepperWrap}>
 						<RegisterStepper

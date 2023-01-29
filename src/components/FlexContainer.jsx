@@ -78,7 +78,7 @@ const FlexContainer = ({
 			disableGutters={disableGutters}
 			fluid="true"
 			className={cx(
-				{ [classes.background]: true },
+				classes.background,
 				{ [classes.container]: page && !autoHeight },
 				{ [classes.autoHeight]: autoHeight && !maxHeight },
 				{ [classes.maxHeight]: maxHeight && !autoHeight },

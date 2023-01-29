@@ -1,16 +1,13 @@
 const registerStyles = (theme) => ({
 	registerContainer: {
-		display: "flex",
-		// padding: "20px 60px",
-		color: theme.palette.neutral.main,
-		// height: "100px",
+		paddingBottom: "100px",
 	},
 	registerFormWrap: {
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "space-between",
 		alignItems: "center",
-		width: "800px",
+		width: "80%",
 		height: "100%",
 		textAlign: "center",
 		paddingBottom: "100px",
@@ -21,7 +18,7 @@ const registerStyles = (theme) => ({
 		display: "flex",
 		justifyContent: "center",
 		position: "absolute",
-		bottom: "50px",
+		bottom: "0px",
 		alignItems: "center",
 	},
 	relative: {
@@ -34,8 +31,8 @@ const registerStyles = (theme) => ({
 		flexDirection: "row",
 		gap: "13px",
 		width: "100%",
-		margin: "-25px 0 25px 0",
 		fontWeight: "bold",
+        paddingTop: '30px',
 	},
 	nextBtn: {
 		width: "200px",
@@ -58,11 +55,11 @@ const registerStyles = (theme) => ({
 	},
 	continueBtn: {
 		height: "50px",
-		width: "100%",
+		width: "calc(80% + 35px)",
 		fontWeight: "bold",
 		fontSize: "20px",
 		[theme.breakpoints.down("md")]: {
-			width: "580px",
+			width: "100%",
 		},
 		[theme.breakpoints.down("sm")]: {
 			width: "50%",

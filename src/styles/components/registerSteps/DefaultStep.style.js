@@ -4,20 +4,23 @@ const defaultStepStyles = (theme) => ({
 		flexDirection: "column",
 	},
 	title: {
-		fontSize: "38px",
+		fontSize: "2.3rem",
 		fontWeight: "800",
 		padding: 0,
 		margin: 0,
 		[theme.breakpoints.down("sm")]: {
-			fontSize: "34px",
+			fontSize: "1.5rem",
 		},
 	},
 	subtitle: {
 		color: "#aeaebd",
-		fontSize: "18px",
+		fontSize: "1.2rem",
 		padding: 0,
 		fontWeight: "600",
 		margin: 0,
+		[theme.breakpoints.down("sm")]: {
+			fontSize: "1rem",
+		},
 	},
 	contentWrap: {
 		display: "flex",
@@ -34,7 +37,8 @@ const defaultStepStyles = (theme) => ({
 		[theme.breakpoints.down("sm")]: {
 			gap: "20px",
 			flexDirection: "column",
-			width: "60%",
+			width: "100%",
+			marginBottom: "15px",
 		},
 	},
 	box: {
@@ -44,7 +48,7 @@ const defaultStepStyles = (theme) => ({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: "10px",
-		width: "380px",
+		width: "40%",
 		height: "300px",
 		gap: "15px",
 		border: `2px solid ${theme.palette.neutral.light}`,
@@ -57,19 +61,19 @@ const defaultStepStyles = (theme) => ({
 			transition: "0.2s ease-in-out",
 		},
 		h2: {
-			fontSize: "28px",
+			fontSize: "1.7rem",
 			color: theme.palette.neutral.dark,
 		},
 		p: {
-			fontSize: "16px",
+			fontSize: "1rem",
 			fontWeight: "600",
 		},
 		[theme.breakpoints.down("md")]: {
-			width: "280px",
+			width: "50%",
 			height: "200px",
 		},
 		[theme.breakpoints.down("sm")]: {
-			width: "400px",
+			width: "100%",
 			height: "150px",
 			flexDirection: "row",
 			alignItems: "center",
@@ -89,8 +93,8 @@ const defaultStepStyles = (theme) => ({
 		justifyContent: "center",
 		alignItems: "center",
 		[theme.breakpoints.down("sm")]: {
-			marginLeft: "10px",
-			marginRight: "-10px",
+			marginLeft: "6px",
+			marginRight: "-6px",
 		},
 	},
 	dummy: {

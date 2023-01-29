@@ -25,6 +25,7 @@ const headerStyles = (theme) => ({
 		padding: "20px 60px",
 		color: theme.palette.neutral.main,
 		height: "100px",
+		width: "100%",
 	},
 });
 

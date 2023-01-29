@@ -33,6 +33,9 @@ const employeeStep1Styles = (theme) => ({
 		height: "60px",
 		gap: "20px",
 		transition: "0.2s ease-in-out",
+		[theme.breakpoints.down("sm")]: {
+			gap: "10px",
+		},
 	},
 });
 

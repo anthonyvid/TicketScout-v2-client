@@ -60,6 +60,7 @@ const EmployeeStep1 = ({ code, setCode, setVerified }) => {
 					onClick={() => onVerify()}
 					variant="contained"
 					disabled={disabled}
+					style={{ marginBottom: "15px" }}
 				>
 					{loading ? <CircularProgress /> : "Verify Code"}
 				</Button>
