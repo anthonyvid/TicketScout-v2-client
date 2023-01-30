@@ -29,6 +29,9 @@ const employeeStep2Styles = (theme) => ({
 		TextField: {
 			borderRadius: "15px",
 		},
+		[theme.breakpoints.down("sm")]: {
+			padding: "0",
+		},
 	},
 });
 

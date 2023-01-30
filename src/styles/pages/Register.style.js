@@ -32,7 +32,7 @@ const registerStyles = (theme) => ({
 		gap: "13px",
 		width: "100%",
 		fontWeight: "bold",
-        paddingTop: '30px',
+		paddingTop: "30px",
 	},
 	nextBtn: {
 		width: "200px",

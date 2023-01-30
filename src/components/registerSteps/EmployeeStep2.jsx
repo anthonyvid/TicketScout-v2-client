@@ -20,7 +20,6 @@ const EmployeeStep2 = ({ control, errors }) => {
 				<FlexContainer gap="25px">
 					<TextInput
 						staticLabel
-						autoFocus
 						fullWidth
 						label="Firstname"
 						placeholder="John"
