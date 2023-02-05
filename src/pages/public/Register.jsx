@@ -13,14 +13,59 @@ import DefaultStep from "components/registerSteps/DefaultStep.jsx";
 import EmployeeStep1 from "components/registerSteps/EmployeeStep2.jsx";
 import EmployeeStep2 from "components/registerSteps/EmployeeStep1.jsx";
 import StoreStep1 from "components/registerSteps/StoreStep1.jsx";
+import StoreStep2 from "components/registerSteps/StoreStep2.jsx";
+import StoreStep3 from "components/registerSteps/StoreStep3.jsx";
 
 const EMPLOYEE_STEPS = 3;
-const STORE_STEPS = 3;
+// const STORE_STEPS = 3;
+const planType = {
+	BASIC: 0,
+	STANDARD: 1,
+	PRO: 2,
+};
+
+const plan = {
+	0: {
+		price: "Free",
+		name: "Basic",
+		perks: [
+			"50 Tickets & Invoices / Month",
+			"5 Employee Accounts",
+			"Outbound Emails",
+			"Time Clock",
+			"SMS",
+		],
+	},
+	1: {
+		price: "$19.99",
+		name: "Standard",
+		perks: [
+			"Unlimited Tickets & Invoices / Month",
+			"20 Employee Accounts",
+			"Outbound Emails",
+			"Time Clock",
+			"SMS",
+		],
+	},
+	2: {
+		price: "$29.99",
+		name: "Pro",
+		perks: [
+			"Unlimited Tickets & Invoices / Month",
+			"Unlimited Employee Accounts",
+			"Outbound Emails",
+			"Time Clock",
+			"SMS",
+		],
+	},
+};
 
 const Register = () => {
 	const classes = useClasses(registerStyles);
 	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
 	const [activeStep, setActiveStep] = useState(0);
+	const [STORE_STEPS, setSTORE_STEPS] = useState(3);
+	const [subscriptionType, setSubscriptionType] = useState(0);
 	const [storeUrl, setStoreUrl] = useState("");
 	const [signUpCodeVerified, setSignUpCodeVerified] = useState(true); //todo: change back to false after
 	const [accountType, setAccountType] = useState(0);
@@ -87,17 +132,31 @@ const Register = () => {
 					/>
 				);
 			case 2:
-				return storeStep2();
+				return (
+					<StoreStep2
+						setSubscriptionType={setSubscriptionType}
+						subscriptionType={subscriptionType}
+						planType={planType}
+						plan={plan}
+					/>
+				);
+			case 3:
+				return (
+					<StoreStep3
+						subscriptionType={subscriptionType}
+						plan={plan}
+					/>
+				);
 			default:
 				return getDefaultStep();
 		}
 	};
 
-	const storeStep2 = () => <>Store2</>;
 	const employeeSubmit = (data) => console.log(data);
 	const storeSubmit = (data) => console.log(data);
 	const defaultView = activeStep === 0;
 	const employeeType = accountType === 0;
+	const storeType = accountType === 1;
 
 	const {
 		control,
@@ -134,6 +193,14 @@ const Register = () => {
 		storeName = storeName.replace(/\s+/g, "-");
 		setStoreUrl(storeName);
 	}, [watch2("storeName")]);
+
+	useEffect(() => {
+		if (subscriptionType !== planType.BASIC) {
+			setSTORE_STEPS(4);
+		} else {
+			setSTORE_STEPS(3);
+		}
+	}, [subscriptionType]);
 
 	const handleNext = () => {
 		setActiveStep(activeStep + 1);
@@ -220,7 +287,10 @@ const Register = () => {
 										onClick={handleNext}
 										variant="contained"
 									>
-										Next Step
+										{storeType &&
+										subscriptionType !== planType.BASIC
+											? "Continue to payment"
+											: "Next Step"}
 									</Button>
 								)}
 							</div>
