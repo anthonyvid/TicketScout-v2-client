@@ -2,18 +2,17 @@ import FlexContainer from "components/FlexContainer.jsx";
 import PhoneInput from "components/PhoneInput.jsx";
 import TextInput from "components/TextInput.jsx";
 import useClasses from "hooks/useClasses.js";
+import storeStep1Styles from "styles/components/registerSteps/StoreStep1.style.js";
 
-import employeeStep1Styles from "styles/components/registerSteps/EmployeeStep1.style.js";
-const EmployeeStep1 = ({ control, errors }) => {
-	const classes = useClasses(employeeStep1Styles);
+const StoreStep1 = ({ control, errors, storeUrl }) => {
+	const classes = useClasses(storeStep1Styles);
 
 	return (
 		<>
 			<div className={classes.titleWrap}>
-				<h1 className={classes.title}>Personal Information</h1>
+				<h1 className={classes.title}>Store Information</h1>
 				<p className={classes.subtitle}>
-					Start your registration by providing your personal
-					information
+					Provide the following information about you and you're store
 				</p>
 			</div>
 			<div className={classes.contentWrap}>
@@ -59,13 +58,31 @@ const EmployeeStep1 = ({ control, errors }) => {
 						errors={errors}
 					/>
 				</FlexContainer>
-				<FlexContainer
-					gap="25px"
-					styles={classes.nameWrap}
-				></FlexContainer>
+				<FlexContainer gap="25px">
+					<TextInput
+						staticLabel
+						fullWidth
+						label="Store Name"
+						name="storeName"
+						placeholder="Ticket Scout"
+						type="text"
+						control={control}
+						errors={errors}
+					/>
+					<TextInput
+						staticLabel
+						fullWidth
+						label="Store URL"
+						placeholder={`https://${storeUrl}`}
+						type="text"
+						disabled
+						control={control}
+						errors={errors}
+					/>
+				</FlexContainer>
 			</div>
 		</>
 	);
 };
 
-export default EmployeeStep1;
+export default StoreStep1;

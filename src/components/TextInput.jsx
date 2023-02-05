@@ -41,6 +41,7 @@ const TextInput = ({
 	placeholder,
 	errors,
 	control,
+	disabled,
 	label,
 	staticLabel,
 	name,
@@ -97,6 +98,7 @@ const TextInput = ({
 						}
 						autoFocus={autoFocus}
 						fullWidth={fullWidth}
+						disabled={disabled}
 						label={staticLabel ? null : label}
 						error={errors[name] !== undefined}
 						InputProps={{
@@ -152,6 +154,7 @@ TextInput.defaultProps = {
 	autoFocus: false,
 	fullWidth: false,
 	peekPassword: false,
+	disabled: false,
 	altLabel: false,
 	rules: {},
 };
@@ -164,6 +167,7 @@ TextInput.propTypes = {
 	autoFocus: PropTypes.bool,
 	fullWidth: PropTypes.bool,
 	peekPassword: PropTypes.bool,
+	disabled: PropTypes.bool,
 	altLabel: PropTypes.bool,
 	rules: PropTypes.object,
 	errors: PropTypes.object,

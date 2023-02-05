@@ -1,4 +1,4 @@
-const employeeStep1Styles = (theme) => ({
+const storeStep1Styles = (theme) => ({
 	titleWrap: {
 		display: "flex",
 		flexDirection: "column",
@@ -21,7 +21,7 @@ const employeeStep1Styles = (theme) => ({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		gap: "30px",
+		gap: "20px",
 		width: "100%",
 		marginTop: "40px",
 		transition: "0.2s ease-in-out",
@@ -35,4 +35,4 @@ const employeeStep1Styles = (theme) => ({
 	},
 });
 
-export default employeeStep1Styles;
+export default storeStep1Styles;

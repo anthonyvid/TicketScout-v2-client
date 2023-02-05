@@ -25,12 +25,16 @@ const employeeStep2Styles = (theme) => ({
 		width: "100%",
 		marginTop: "40px",
 		transition: "0.2s ease-in-out",
-		padding: "0 50px",
-		TextField: {
-			borderRadius: "15px",
-		},
+	},
+	otpWrap: {
+		display: "flex",
+		justifyContent: "center",
+		width: "100%",
+		height: "60px",
+		gap: "20px",
+		transition: "0.2s ease-in-out",
 		[theme.breakpoints.down("sm")]: {
-			padding: "0",
+			gap: "10px",
 		},
 	},
 });
