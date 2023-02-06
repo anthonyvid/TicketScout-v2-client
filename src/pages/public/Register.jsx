@@ -1,3 +1,8 @@
+import {
+	employeeSchema,
+	planType,
+	storeSchema,
+} from "constants/register.constants.js";
 import { Button } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
 import useClasses from "hooks/useClasses.js";
@@ -15,109 +20,66 @@ import EmployeeStep2 from "components/registerSteps/EmployeeStep1.jsx";
 import StoreStep1 from "components/registerSteps/StoreStep1.jsx";
 import StoreStep2 from "components/registerSteps/StoreStep2.jsx";
 import StoreStep3 from "components/registerSteps/StoreStep3.jsx";
+import { isEmpty } from "lodash";
+import { createCheckoutSession } from "services/stripe.service.js";
+import { createNotification } from "utils/notification.js";
+import { statusCodes } from "constants/statusCodes.constants.js";
+import { register } from "services/account.service.js";
+import { createStore } from "services/store.service.js";
 
 const EMPLOYEE_STEPS = 3;
-// const STORE_STEPS = 3;
-const planType = {
-	BASIC: 0,
-	STANDARD: 1,
-	PRO: 2,
-};
-
-const plan = {
-	0: {
-		price: "Free",
-		name: "Basic",
-		perks: [
-			"50 Tickets & Invoices / Month",
-			"5 Employee Accounts",
-			"Outbound Emails",
-			"Time Clock",
-			"SMS",
-		],
-	},
-	1: {
-		price: "$19.99",
-		name: "Standard",
-		perks: [
-			"Unlimited Tickets & Invoices / Month",
-			"20 Employee Accounts",
-			"Outbound Emails",
-			"Time Clock",
-			"SMS",
-		],
-	},
-	2: {
-		price: "$29.99",
-		name: "Pro",
-		perks: [
-			"Unlimited Tickets & Invoices / Month",
-			"Unlimited Employee Accounts",
-			"Outbound Emails",
-			"Time Clock",
-			"SMS",
-		],
-	},
-};
+const STORE_STEPS = 3;
 
 const Register = () => {
 	const classes = useClasses(registerStyles);
+	const [loading, setLoading] = useState(false);
+
 	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
 	const [activeStep, setActiveStep] = useState(0);
-	const [STORE_STEPS, setSTORE_STEPS] = useState(3);
 	const [subscriptionType, setSubscriptionType] = useState(0);
 	const [storeUrl, setStoreUrl] = useState("");
 	const [signUpCodeVerified, setSignUpCodeVerified] = useState(true); //todo: change back to false after
 	const [accountType, setAccountType] = useState(0);
+	const defaultView = activeStep === 0;
+	const employeeType = accountType === 0;
 
-	const phoneRegExp =
-		/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
-	const schema = yup.object().shape({
-		firstname: yup.string().required("First name is required"),
-		lastname: yup.string().required("Last name is required"),
-		email: yup
-			.string()
-			.email("Invalid email address")
-			.required("Email address is required"),
-		phoneNumber: yup
-			.string()
-			.max(12, "Phone number cannot exceed 12 characters")
-			.required("Phone number is required")
-			.matches(phoneRegExp, "Invalid phone number"),
+	const {
+		control,
+		handleSubmit,
+		getValues,
+		formState: { errors },
+	} = useForm({
+		defaultValues: {
+			firstname: "",
+			lastname: "",
+			email: "",
+			phoneNumber: "",
+			password: "",
+			confirmPassword: "",
+		},
+		mode: "onChange",
+		resolver: yupResolver(employeeSchema),
 	});
 
-	const storeSchema = yup.object().shape({
-		firstname: yup.string().required("First name is required"),
-		lastname: yup.string().required("Last name is required"),
-		email: yup
-			.string()
-			.email("Invalid email address")
-			.required("Email address is required"),
-		phoneNumber: yup
-			.string()
-			.max(12, "Phone number cannot exceed 12 characters")
-			.required("Phone number is required")
-			.matches(phoneRegExp, "Invalid phone number"),
-		storeName: yup.string().required("Store name is required"),
+	const {
+		watch: watch2,
+		control: control2,
+		getValues: getValues2,
+		formState: { errors: errors2 },
+		handleSubmit: handleSubmit2,
+	} = useForm({
+		defaultValues: {
+			firstname: "",
+			lastname: "",
+			email: "",
+			phoneNumber: "",
+			storeName: "",
+			password: "",
+			confirmPassword: "",
+		},
+		mode: "onChange",
+		resolver: yupResolver(storeSchema),
 	});
-
-	const getEmployeeSteps = () => {
-		switch (activeStep) {
-			case 0:
-				return getDefaultStep();
-			case 2:
-				return (
-					<EmployeeStep1
-						code={signUpCode}
-						setCode={setSignUpCode}
-						setVerified={setSignUpCodeVerified}
-					/>
-				);
-			case 1:
-				return <EmployeeStep2 control={control} errors={errors} />;
-		}
-	};
 
 	const getStoreSteps = () => {
 		switch (activeStep) {
@@ -136,57 +98,49 @@ const Register = () => {
 					<StoreStep2
 						setSubscriptionType={setSubscriptionType}
 						subscriptionType={subscriptionType}
-						planType={planType}
-						plan={plan}
 					/>
 				);
 			case 3:
-				return (
-					<StoreStep3
-						subscriptionType={subscriptionType}
-						plan={plan}
-					/>
-				);
-			default:
-				return getDefaultStep();
+				return <StoreStep3 subscriptionType={subscriptionType} />;
 		}
 	};
 
-	const employeeSubmit = (data) => console.log(data);
-	const storeSubmit = (data) => console.log(data);
-	const defaultView = activeStep === 0;
-	const employeeType = accountType === 0;
-	const storeType = accountType === 1;
+	const getEmployeeSteps = () => {
+		switch (activeStep) {
+			case 0:
+				return getDefaultStep();
+			case 2:
+				return (
+					<EmployeeStep1
+						code={signUpCode}
+						setCode={setSignUpCode}
+						setVerified={setSignUpCodeVerified}
+					/>
+				);
+			case 1:
+				return <EmployeeStep2 control={control} errors={errors} />;
+		}
+	};
 
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm({
-		defaultValues: {
-			firstname: "",
-			lastname: "",
-			email: "",
-			phoneNumber: "",
-		},
-		resolver: yupResolver(schema),
-	});
+	const employeeSubmit = (data) => {};
 
-	const {
-		watch: watch2,
-		control: control2,
-		formState: { errors: errors2 },
-		handleSubmit: handleSubmit2,
-	} = useForm({
-		defaultValues: {
-			firstname: "",
-			lastname: "",
-			email: "",
-			phoneNumber: "",
-			storeName: "",
-		},
-		resolver: yupResolver(storeSchema),
-	});
+	const storeSubmit = (data) => {
+		console.log(data);
+		if (loading) return;
+		setLoading(true);
+		try {
+			// const response = await createStore();
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
+		} finally {
+			setLoading(false);
+		}
+
+		if (subscriptionType !== 0) {
+			handleCheckoutPage();
+		}
+	};
 
 	useEffect(() => {
 		let storeName = watch2("storeName");
@@ -194,19 +148,31 @@ const Register = () => {
 		setStoreUrl(storeName);
 	}, [watch2("storeName")]);
 
-	useEffect(() => {
-		if (subscriptionType !== planType.BASIC) {
-			setSTORE_STEPS(4);
-		} else {
-			setSTORE_STEPS(3);
+	const handleCheckoutPage = async () => {
+		try {
+			const response = await createCheckoutSession(subscriptionType);
+
+			if (response.status !== statusCodes.OK) {
+				const errMsg = response.data.msg;
+				createNotification("error", errMsg);
+				console.error(errMsg);
+				return;
+			}
+
+			const url = response.data.url;
+			window.open(url, "_blank");
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
 		}
-	}, [subscriptionType]);
+	};
 
 	const handleNext = () => {
 		setActiveStep(activeStep + 1);
 	};
-	const handleBack = () =>
+	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
+	};
 
 	const getDefaultStep = () => (
 		<DefaultStep
@@ -214,6 +180,16 @@ const Register = () => {
 			setAccountType={setAccountType}
 		/>
 	);
+
+	const isFormValid = (errors, values) => {
+		let valid = true;
+		for (const value of Object.values(values))
+			if (value.length === 0) valid = false;
+
+		if (!isEmpty(errors)) valid = false;
+		return valid;
+		// return true;
+	};
 
 	return (
 		<FlexContainer
@@ -267,13 +243,11 @@ const Register = () => {
 									className={classes.backBtn}
 									onClick={handleBack}
 									variant="text"
+									type="button"
 								>
 									Back
 								</Button>
-								{activeStep ===
-								(employeeType
-									? EMPLOYEE_STEPS - 1
-									: STORE_STEPS - 1) ? (
+								{activeStep === 2 ? (
 									<Button
 										className={classes.nextBtn}
 										variant="contained"
@@ -285,12 +259,21 @@ const Register = () => {
 									<Button
 										className={classes.nextBtn}
 										onClick={handleNext}
+										type="button"
 										variant="contained"
+										disabled={
+											employeeType
+												? !isFormValid(
+														errors,
+														getValues()
+												  )
+												: !isFormValid(
+														errors2,
+														getValues2()
+												  )
+										}
 									>
-										{storeType &&
-										subscriptionType !== planType.BASIC
-											? "Continue to payment"
-											: "Next Step"}
+										Next Step
 									</Button>
 								)}
 							</div>

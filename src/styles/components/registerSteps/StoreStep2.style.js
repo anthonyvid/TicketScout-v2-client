@@ -151,7 +151,7 @@ const StoreStep2Styles = (theme) => ({
 		gap: "5px",
 	},
 	perkIcon: {
-		color: "#55cb8a",
+		color: theme.palette.primary.success,
 	},
 });
 

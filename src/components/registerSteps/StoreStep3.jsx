@@ -3,7 +3,7 @@ import React from "react";
 
 import StoreStep3Styles from "styles/components/registerSteps/StoreStep3.style.js";
 
-const StoreStep3 = ({ subscriptionType, plan }) => {
+const StoreStep3 = ({ subscriptionType }) => {
 	const classes = useClasses(StoreStep3Styles);
 	return (
 		<>

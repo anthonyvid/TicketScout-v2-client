@@ -5,8 +5,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import StoreStep2Styles from "styles/components/registerSteps/StoreStep2.style.js";
-
-const StoreStep2 = ({ setSubscriptionType, subscriptionType, planType, plan }) => {
+import { planType } from "constants/register.constants.js";
+import { planInfo } from "constants/register.constants.js";
+const StoreStep2 = ({ setSubscriptionType, subscriptionType }) => {
 	const classes = useClasses(StoreStep2Styles);
 	return (
 		<>
@@ -21,35 +22,23 @@ const StoreStep2 = ({ setSubscriptionType, subscriptionType, planType, plan }) =
 					setSubscriptionType={setSubscriptionType}
 					subscriptionType={subscriptionType}
 					type={planType.BASIC}
-					plan={plan}
-					planType={planType}
 				/>
 				<Subscription
 					setSubscriptionType={setSubscriptionType}
 					subscriptionType={subscriptionType}
 					type={planType.STANDARD}
-					plan={plan}
-					planType={planType}
 				/>
 				<Subscription
 					setSubscriptionType={setSubscriptionType}
 					subscriptionType={subscriptionType}
 					type={planType.PRO}
-					plan={plan}
-					planType={planType}
 				/>
 			</div>
 		</>
 	);
 };
 
-const Subscription = ({
-	setSubscriptionType,
-	subscriptionType,
-	type,
-	plan,
-	planType,
-}) => {
+const Subscription = ({ setSubscriptionType, subscriptionType, type }) => {
 	const classes = useClasses(StoreStep2Styles);
 	return (
 		<div
@@ -69,9 +58,9 @@ const Subscription = ({
 					})}
 				/>
 			</div>
-			<h2>{plan[type].name}</h2>
+			<h2>{planInfo[type].name}</h2>
 			<div className={classes.perkWrap}>
-				{plan[type].perks.map((perk, i) => {
+				{planInfo[type].perks.map((perk, i) => {
 					return (
 						<div key={i} className={classes.perkItem}>
 							<CheckCircleOutlineIcon
@@ -83,7 +72,7 @@ const Subscription = ({
 				})}
 			</div>
 			<div className={classes.priceWrap}>
-				<h3>{plan[type].price}</h3>
+				<h3>{planInfo[type].price}</h3>
 				{type !== planType.BASIC && <p>CAD/month</p>}
 			</div>
 		</div>

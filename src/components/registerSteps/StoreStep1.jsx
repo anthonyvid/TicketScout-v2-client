@@ -61,6 +61,28 @@ const StoreStep1 = ({ control, errors, storeUrl }) => {
 				<FlexContainer gap="25px">
 					<TextInput
 						staticLabel
+						peekPassword
+						fullWidth
+						label="Password"
+						name="password"
+						type="password"
+						control={control}
+						errors={errors}
+					/>
+					<TextInput
+						staticLabel
+						peekPassword
+						fullWidth
+						label="Confirm Password"
+						name="confirmPassword"
+						type="password"
+						control={control}
+						errors={errors}
+					/>
+				</FlexContainer>
+				<FlexContainer gap="25px">
+					<TextInput
+						staticLabel
 						fullWidth
 						label="Store Name"
 						name="storeName"

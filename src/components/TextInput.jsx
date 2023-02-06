@@ -116,6 +116,7 @@ const TextInput = ({
 									{peekPassword && (
 										<InputAdornment position="start">
 											<IconButton
+												tabIndex={-1}
 												aria-label="toggle password visibility"
 												onClick={
 													handleClickShowPassword

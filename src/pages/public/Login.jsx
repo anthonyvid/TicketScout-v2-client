@@ -31,6 +31,7 @@ import { statusCodes } from "constants/statusCodes.constants.js";
 // Styles
 import loginStyles from "styles/pages/Login.style.js";
 import Header from "components/Header.jsx";
+import { loginSchema } from "constants/register.constants.js";
 
 const Login = () => {
 	const classes = useClasses(loginStyles);
@@ -38,25 +39,6 @@ const Login = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	let { token, user } = useSelector((state) => state);
-
-	const schema = yup.object().shape({
-		email: yup
-			.string()
-			.email("Invalid email address")
-			.required("Email address is required"),
-		password: yup
-			.string()
-			.min(5, "Password must be at least 5 characters")
-			.max(64, "Password cannot exceed 64 characters")
-			.required("Password is required")
-			.matches(/^(?=.*[a-z])/, "Password must include lowercase letter")
-			.matches(/^(?=.*[A-Z])/, "Password must include uppercase letter")
-			.matches(/^(?=.*[0-9])/, "Password must include digit")
-			.matches(
-				/^(?=.*[!@#\$%\^&\*])/,
-				"Password must include special character"
-			),
-	});
 
 	const {
 		control,
@@ -69,7 +51,7 @@ const Login = () => {
 			email: "",
 			password: "",
 		},
-		resolver: yupResolver(schema),
+		resolver: yupResolver(loginSchema),
 	});
 
 	const sendLoginRequest = useCallback(

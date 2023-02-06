@@ -71,6 +71,8 @@ export const themeSettings = (mode) => {
 							main: colorTokens.primary[500],
 							light: colorTokens.primary[800],
 							error: colorTokens.status.error,
+							success: colorTokens.status.success,
+							warning: colorTokens.status.warning,
 						},
 						neutral: {
 							dark: colorTokens.grey[100],
