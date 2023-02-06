@@ -1,4 +1,4 @@
-const storeStep1Styles = (theme) => ({
+const OrganizationStep1Styles = (theme) => ({
 	titleWrap: {
 		display: "flex",
 		flexDirection: "column",
@@ -35,4 +35,4 @@ const storeStep1Styles = (theme) => ({
 	},
 });
 
-export default storeStep1Styles;
+export default OrganizationStep1Styles;

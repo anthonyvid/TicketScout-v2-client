@@ -4,11 +4,11 @@ import React from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import StoreStep2Styles from "styles/components/registerSteps/StoreStep2.style.js";
-import { planType } from "constants/register.constants.js";
+import OrganizationStep2Styles from "styles/components/registerSteps/OrganizationStep2.style.js";
+import { planTypes } from "constants/register.constants.js";
 import { planInfo } from "constants/register.constants.js";
-const StoreStep2 = ({ setSubscriptionType, subscriptionType }) => {
-	const classes = useClasses(StoreStep2Styles);
+const OrganizationStep2 = ({ setSubscriptionType, subscriptionType }) => {
+	const classes = useClasses(OrganizationStep2Styles);
 	return (
 		<>
 			<div className={classes.titleWrap}>
@@ -21,17 +21,17 @@ const StoreStep2 = ({ setSubscriptionType, subscriptionType }) => {
 				<Subscription
 					setSubscriptionType={setSubscriptionType}
 					subscriptionType={subscriptionType}
-					type={planType.BASIC}
+					type={planTypes.BASIC}
 				/>
 				<Subscription
 					setSubscriptionType={setSubscriptionType}
 					subscriptionType={subscriptionType}
-					type={planType.STANDARD}
+					type={planTypes.STANDARD}
 				/>
 				<Subscription
 					setSubscriptionType={setSubscriptionType}
 					subscriptionType={subscriptionType}
-					type={planType.PRO}
+					type={planTypes.PRO}
 				/>
 			</div>
 		</>
@@ -39,7 +39,7 @@ const StoreStep2 = ({ setSubscriptionType, subscriptionType }) => {
 };
 
 const Subscription = ({ setSubscriptionType, subscriptionType, type }) => {
-	const classes = useClasses(StoreStep2Styles);
+	const classes = useClasses(OrganizationStep2Styles);
 	return (
 		<div
 			onClick={() => setSubscriptionType(type)}
@@ -73,10 +73,10 @@ const Subscription = ({ setSubscriptionType, subscriptionType, type }) => {
 			</div>
 			<div className={classes.priceWrap}>
 				<h3>{planInfo[type].price}</h3>
-				{type !== planType.BASIC && <p>CAD/month</p>}
+				{type !== planTypes.BASIC && <p>CAD/month</p>}
 			</div>
 		</div>
 	);
 };
 
-export default StoreStep2;
+export default OrganizationStep2;

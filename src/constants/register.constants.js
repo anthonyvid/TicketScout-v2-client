@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const planType = Object.freeze({
+export const planTypes = Object.freeze({
 	BASIC: 0,
 	STANDARD: 1,
 	PRO: 2,
@@ -77,6 +77,12 @@ export const storeSchema = yup.object().shape({
 		.string()
 		.required("Please retype your password.")
 		.oneOf([yup.ref("password")], "Your passwords do not match."),
+});
+
+yup.addMethod(yup.string, "uniqueStoreName", (isUnique, errorMessage) => {
+	return this.test("unique-store-name", errorMessage, (value) => {
+        return isUnique;
+    });
 });
 
 export const employeeSchema = yup.object().shape({

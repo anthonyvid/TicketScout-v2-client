@@ -1,4 +1,5 @@
 import {
+	CircularProgress,
 	IconButton,
 	InputAdornment,
 	InputLabel,
@@ -12,6 +13,8 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import KeyboardCapslockIcon from "@mui/icons-material/KeyboardCapslock";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
 
 const PLACEHOLDER = {
 	EMAIL: "john@email.com",
@@ -50,6 +53,9 @@ const TextInput = ({
 	rules,
 	peekPassword,
 	altLabel,
+	onChangeHandler,
+	asyncValidationIcon,
+	asyncValidationFlag,
 }) => {
 	const classes = useClasses(textInputStyles);
 	const [showPassword, setShowPassword] = useState(false);
@@ -88,7 +94,10 @@ const TextInput = ({
 				render={({ field: { onChange, onBlur, value } }) => (
 					<TextField
 						onBlur={onBlur}
-						onChange={onChange}
+						onChange={(value) => {
+							onChange(value);
+							onChangeHandler(value);
+						}}
 						value={value}
 						placeholder={placeholder}
 						type={peekPassword && showPassword ? "text" : type}
@@ -129,6 +138,15 @@ const TextInput = ({
 													<Visibility />
 												)}
 											</IconButton>
+										</InputAdornment>
+									)}
+									{asyncValidationIcon && (
+										<InputAdornment position="end">
+											{asyncValidationFlag ? (
+												<CheckCircleOutlineIcon />
+											) : (
+												<DoNotDisturbAltIcon />
+											)}
 										</InputAdornment>
 									)}
 								</>

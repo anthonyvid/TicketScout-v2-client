@@ -1,8 +1,9 @@
 import {
 	employeeSchema,
-	planType,
+	planTypes,
 	storeSchema,
 } from "constants/register.constants.js";
+import { debounce } from "lodash";
 import { Button } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
 import useClasses from "hooks/useClasses.js";
@@ -17,15 +18,19 @@ import RegisterStepper from "components/RegisterStepper.jsx";
 import DefaultStep from "components/registerSteps/DefaultStep.jsx";
 import EmployeeStep1 from "components/registerSteps/EmployeeStep2.jsx";
 import EmployeeStep2 from "components/registerSteps/EmployeeStep1.jsx";
-import StoreStep1 from "components/registerSteps/StoreStep1.jsx";
-import StoreStep2 from "components/registerSteps/StoreStep2.jsx";
-import StoreStep3 from "components/registerSteps/StoreStep3.jsx";
+
 import { isEmpty } from "lodash";
 import { createCheckoutSession } from "services/stripe.service.js";
 import { createNotification } from "utils/notification.js";
 import { statusCodes } from "constants/statusCodes.constants.js";
 import { register } from "services/account.service.js";
-import { createStore } from "services/store.service.js";
+import {
+	createOrganization,
+	getOrganization,
+	getOrganizations,
+} from "services/organization.service.js";
+import OrganizationStep1 from "components/registerSteps/OrganizationStep1.jsx";
+import OrganizationStep2 from "components/registerSteps/OrganizationStep2.jsx";
 
 const EMPLOYEE_STEPS = 3;
 const STORE_STEPS = 3;
@@ -33,20 +38,25 @@ const STORE_STEPS = 3;
 const Register = () => {
 	const classes = useClasses(registerStyles);
 	const [loading, setLoading] = useState(false);
-
+	const [uniqueStoreName, setUniqueStoreName] = useState(true);
 	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
 	const [activeStep, setActiveStep] = useState(0);
 	const [subscriptionType, setSubscriptionType] = useState(0);
 	const [storeUrl, setStoreUrl] = useState("");
 	const [signUpCodeVerified, setSignUpCodeVerified] = useState(true); //todo: change back to false after
 	const [accountType, setAccountType] = useState(0);
+	const [storeName, setStoreName] = useState("");
 	const defaultView = activeStep === 0;
 	const employeeType = accountType === 0;
+	const storeNameSearch = (e) => setStoreName(e?.target?.value);
+	const debouncedOnChange = debounce(storeNameSearch, 500);
 
 	const {
 		control,
 		handleSubmit,
 		getValues,
+		setError: setError,
+		clearErrors: clearErrors,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
@@ -64,6 +74,8 @@ const Register = () => {
 	const {
 		watch: watch2,
 		control: control2,
+		setError: setError2,
+		clearErrors: clearErrors2,
 		getValues: getValues2,
 		formState: { errors: errors2 },
 		handleSubmit: handleSubmit2,
@@ -87,21 +99,21 @@ const Register = () => {
 				return getDefaultStep();
 			case 1:
 				return (
-					<StoreStep1
+					<OrganizationStep1
 						control={control2}
 						errors={errors2}
 						storeUrl={storeUrl}
+						debouncedOnChange={debouncedOnChange}
+						uniqueStoreName={uniqueStoreName}
 					/>
 				);
 			case 2:
 				return (
-					<StoreStep2
+					<OrganizationStep2
 						setSubscriptionType={setSubscriptionType}
 						subscriptionType={subscriptionType}
 					/>
 				);
-			case 3:
-				return <StoreStep3 subscriptionType={subscriptionType} />;
 		}
 	};
 
@@ -109,6 +121,8 @@ const Register = () => {
 		switch (activeStep) {
 			case 0:
 				return getDefaultStep();
+			case 1:
+				return <EmployeeStep2 control={control} errors={errors} />;
 			case 2:
 				return (
 					<EmployeeStep1
@@ -117,19 +131,22 @@ const Register = () => {
 						setVerified={setSignUpCodeVerified}
 					/>
 				);
-			case 1:
-				return <EmployeeStep2 control={control} errors={errors} />;
 		}
 	};
 
 	const employeeSubmit = (data) => {};
 
-	const storeSubmit = (data) => {
-		console.log(data);
+	const storeSubmit = async (data) => {
 		if (loading) return;
 		setLoading(true);
+
+		const storeData = {
+			...data,
+			subscriptionType,
+		};
+
 		try {
-			// const response = await createStore();
+			const response = await createOrganization(storeData);
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
@@ -137,7 +154,7 @@ const Register = () => {
 			setLoading(false);
 		}
 
-		if (subscriptionType !== 0) {
+		if (subscriptionType !== planTypes.BASIC) {
 			handleCheckoutPage();
 		}
 	};
@@ -147,6 +164,36 @@ const Register = () => {
 		storeName = storeName.replace(/\s+/g, "-");
 		setStoreUrl(storeName);
 	}, [watch2("storeName")]);
+
+	useEffect(() => {
+		if (activeStep !== 1) return;
+
+		const fetchData = async () => {
+			try {
+				const response = await getOrganizations(storeName);
+				const organizations = response.data.organizations;
+				setUniqueStoreName(
+					!organizations.includes(storeName.toLowerCase())
+				);
+			} catch (error) {
+				createNotification("error", error.message);
+				console.error(error.message);
+			}
+		};
+
+		fetchData().catch(console.error);
+	}, [storeName]);
+
+	useEffect(() => {
+		if (!uniqueStoreName) {
+			setError2("storeName", {
+				type: "custom",
+				message: "Store name is not unique",
+			});
+		} else {
+			clearErrors2("storeName");
+		}
+	}, [storeName, uniqueStoreName]);
 
 	const handleCheckoutPage = async () => {
 		try {
@@ -167,7 +214,8 @@ const Register = () => {
 		}
 	};
 
-	const handleNext = () => {
+	const handleNext = (e) => {
+		e.preventDefault();
 		setActiveStep(activeStep + 1);
 	};
 	const handleBack = () => {
@@ -230,7 +278,7 @@ const Register = () => {
 							<Button
 								sx={{ borderRadius: "8px" }}
 								className={classes.continueBtn}
-								onClick={handleNext}
+								onClick={(e) => handleNext(e)}
 								variant="contained"
 							>
 								Continue
@@ -250,6 +298,12 @@ const Register = () => {
 								{activeStep === 2 ? (
 									<Button
 										className={classes.nextBtn}
+										style={{
+											display:
+												activeStep !== 2
+													? "block"
+													: "hidden",
+										}}
 										variant="contained"
 										type="submit"
 									>

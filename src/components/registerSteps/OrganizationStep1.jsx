@@ -2,10 +2,16 @@ import FlexContainer from "components/FlexContainer.jsx";
 import PhoneInput from "components/PhoneInput.jsx";
 import TextInput from "components/TextInput.jsx";
 import useClasses from "hooks/useClasses.js";
-import storeStep1Styles from "styles/components/registerSteps/StoreStep1.style.js";
+import OrganizationStep1Styles from "styles/components/registerSteps/OrganizationStep1.style.js";
 
-const StoreStep1 = ({ control, errors, storeUrl }) => {
-	const classes = useClasses(storeStep1Styles);
+const OrganizationStep1 = ({
+	control,
+	errors,
+	storeUrl,
+	debouncedOnChange,
+	uniqueStoreName,
+}) => {
+	const classes = useClasses(OrganizationStep1Styles);
 
 	return (
 		<>
@@ -87,9 +93,12 @@ const StoreStep1 = ({ control, errors, storeUrl }) => {
 						label="Store Name"
 						name="storeName"
 						placeholder="Ticket Scout"
+						onChangeHandler={debouncedOnChange}
 						type="text"
 						control={control}
 						errors={errors}
+						asyncValidationIcon
+						asyncValidationFlag={uniqueStoreName}
 					/>
 					<TextInput
 						staticLabel
@@ -107,4 +116,4 @@ const StoreStep1 = ({ control, errors, storeUrl }) => {
 	);
 };
 
-export default StoreStep1;
+export default OrganizationStep1;
