@@ -14,7 +14,8 @@ import KeyboardCapslockIcon from "@mui/icons-material/KeyboardCapslock";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
+import ErrorIcon from "@mui/icons-material/Error";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const PLACEHOLDER = {
 	EMAIL: "john@email.com",
@@ -37,6 +38,12 @@ const textInputStyles = (theme) => ({
 		marginBottom: "5px",
 		justifyContent: "space-between",
 	},
+	errorIcon: {
+		color: theme.palette.primary.error,
+	},
+	successIcon: {
+		color: theme.palette.primary.success,
+	},
 });
 
 const TextInput = ({
@@ -54,8 +61,9 @@ const TextInput = ({
 	peekPassword,
 	altLabel,
 	onChangeHandler,
-	asyncValidationIcon,
-	asyncValidationFlag,
+	uniqueDataValidation,
+	isDataUnique,
+	uniqueData,
 }) => {
 	const classes = useClasses(textInputStyles);
 	const [showPassword, setShowPassword] = useState(false);
@@ -140,12 +148,24 @@ const TextInput = ({
 											</IconButton>
 										</InputAdornment>
 									)}
-									{asyncValidationIcon && (
+									{uniqueDataValidation && (
 										<InputAdornment position="end">
-											{asyncValidationFlag ? (
-												<CheckCircleOutlineIcon />
+											{uniqueData !== "" ? (
+												isDataUnique ? (
+													<CheckCircleIcon
+														className={
+															classes.successIcon
+														}
+													/>
+												) : (
+													<ErrorIcon
+														className={
+															classes.errorIcon
+														}
+													/>
+												)
 											) : (
-												<DoNotDisturbAltIcon />
+												""
 											)}
 										</InputAdornment>
 									)}
@@ -174,16 +194,21 @@ TextInput.defaultProps = {
 	fullWidth: false,
 	peekPassword: false,
 	disabled: false,
+	uniqueDataValidation: false,
+	uniqueData: "",
 	altLabel: false,
 	rules: {},
+	onChangeHandler: () => {},
 };
 
 TextInput.propTypes = {
 	placeholder: PropTypes.string,
+	uniqueData: PropTypes.string,
 	inputText: PropTypes.string,
 	name: PropTypes.string,
 	staticLabel: PropTypes.bool,
 	autoFocus: PropTypes.bool,
+	uniqueDataValidation: PropTypes.bool,
 	fullWidth: PropTypes.bool,
 	peekPassword: PropTypes.bool,
 	disabled: PropTypes.bool,
@@ -191,6 +216,7 @@ TextInput.propTypes = {
 	rules: PropTypes.object,
 	errors: PropTypes.object,
 	control: PropTypes.object,
+	onChangeHandler: PropTypes.func,
 };
 
 export default TextInput;

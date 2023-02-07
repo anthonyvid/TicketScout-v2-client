@@ -10,6 +10,7 @@ const OrganizationStep1 = ({
 	storeUrl,
 	debouncedOnChange,
 	uniqueStoreName,
+	storeName,
 }) => {
 	const classes = useClasses(OrganizationStep1Styles);
 
@@ -97,8 +98,9 @@ const OrganizationStep1 = ({
 						type="text"
 						control={control}
 						errors={errors}
-						asyncValidationIcon
-						asyncValidationFlag={uniqueStoreName}
+						uniqueDataValidation
+						isDataUnique={uniqueStoreName}
+						uniqueData={storeName}
 					/>
 					<TextInput
 						staticLabel

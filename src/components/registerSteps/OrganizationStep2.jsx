@@ -7,7 +7,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import OrganizationStep2Styles from "styles/components/registerSteps/OrganizationStep2.style.js";
 import { planTypes } from "constants/register.constants.js";
 import { planInfo } from "constants/register.constants.js";
-const OrganizationStep2 = ({ setSubscriptionType, subscriptionType }) => {
+const OrganizationStep2 = ({ setPlanType, planType }) => {
 	const classes = useClasses(OrganizationStep2Styles);
 	return (
 		<>
@@ -19,18 +19,18 @@ const OrganizationStep2 = ({ setSubscriptionType, subscriptionType }) => {
 			</div>
 			<div className={classes.contentWrap}>
 				<Subscription
-					setSubscriptionType={setSubscriptionType}
-					subscriptionType={subscriptionType}
+					setPlanType={setPlanType}
+					planType={planType}
 					type={planTypes.BASIC}
 				/>
 				<Subscription
-					setSubscriptionType={setSubscriptionType}
-					subscriptionType={subscriptionType}
+					setPlanType={setPlanType}
+					planType={planType}
 					type={planTypes.STANDARD}
 				/>
 				<Subscription
-					setSubscriptionType={setSubscriptionType}
-					subscriptionType={subscriptionType}
+					setPlanType={setPlanType}
+					planType={planType}
 					type={planTypes.PRO}
 				/>
 			</div>
@@ -38,23 +38,23 @@ const OrganizationStep2 = ({ setSubscriptionType, subscriptionType }) => {
 	);
 };
 
-const Subscription = ({ setSubscriptionType, subscriptionType, type }) => {
+const Subscription = ({ setPlanType, planType, type }) => {
 	const classes = useClasses(OrganizationStep2Styles);
 	return (
 		<div
-			onClick={() => setSubscriptionType(type)}
+			onClick={() => setPlanType(type)}
 			className={cx(classes.box, {
-				[classes.selected]: subscriptionType === type,
+				[classes.selected]: planType === type,
 			})}
 		>
 			<div
 				className={cx(classes.circle, {
-					[classes.circleActive]: subscriptionType === type,
+					[classes.circleActive]: planType === type,
 				})}
 			>
 				<CheckIcon
 					className={cx({
-						[classes.hideCheck]: subscriptionType !== type,
+						[classes.hideCheck]: planType !== type,
 					})}
 				/>
 			</div>

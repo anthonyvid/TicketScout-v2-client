@@ -28,28 +28,101 @@ import {
 	createOrganization,
 	getOrganization,
 	getOrganizations,
+	isUniqueStoreName,
 } from "services/organization.service.js";
 import OrganizationStep1 from "components/registerSteps/OrganizationStep1.jsx";
 import OrganizationStep2 from "components/registerSteps/OrganizationStep2.jsx";
 
 const EMPLOYEE_STEPS = 3;
 const STORE_STEPS = 3;
+const REBOUNCE_DELAY = 750;
 
 const Register = () => {
 	const classes = useClasses(registerStyles);
 	const [loading, setLoading] = useState(false);
-	const [uniqueStoreName, setUniqueStoreName] = useState(true);
+	const [uniqueStoreName, setUniqueStoreName] = useState("");
 	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
 	const [activeStep, setActiveStep] = useState(0);
-	const [subscriptionType, setSubscriptionType] = useState(0);
+	const [planType, setPlanType] = useState(0);
 	const [storeUrl, setStoreUrl] = useState("");
 	const [signUpCodeVerified, setSignUpCodeVerified] = useState(true); //todo: change back to false after
 	const [accountType, setAccountType] = useState(0);
 	const [storeName, setStoreName] = useState("");
 	const defaultView = activeStep === 0;
 	const employeeType = accountType === 0;
+
 	const storeNameSearch = (e) => setStoreName(e?.target?.value);
-	const debouncedOnChange = debounce(storeNameSearch, 500);
+	const debouncedOnChange = debounce(storeNameSearch, REBOUNCE_DELAY);
+
+	const phoneRegExp =
+		/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+	const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+	const storeSchema = yup.object().shape({
+		firstname: yup.string().required("First name is required."),
+		lastname: yup.string().required("Last name is required."),
+		email: yup
+			.string()
+			.email("Invalid email address.")
+			.required("Email address is required."),
+		phoneNumber: yup
+			.string()
+			.max(12, "Phone number cannot exceed 12 characters.")
+			.required("Phone number is required.")
+			.matches(phoneRegExp, "Invalid phone number."),
+		storeName: yup.string().when(() => uniqueStoreName, {
+			is: true,
+			then: yup.string().required("Store name is required."),
+			otherwise: yup.string().required("Store name is already taken."),
+		}),
+		password: yup
+			.string()
+			.min(5, "Password must be at least 5 characters.")
+			.max(64, "Password cannot exceed 64 characters.")
+			.required("Password is required.")
+			.matches(/^(?=.*[a-z])/, "Password must include lowercase letter.")
+			.matches(/^(?=.*[A-Z])/, "Password must include uppercase letter.")
+			.matches(/^(?=.*[0-9])/, "Password must include digit.")
+			.matches(
+				/^(?=.*[!@#\$%\^&\*])/,
+				"Password must include special character."
+			),
+		confirmPassword: yup
+			.string()
+			.required("Please retype your password.")
+			.oneOf([yup.ref("password")], "Your passwords do not match."),
+	});
+
+	const employeeSchema = yup.object().shape({
+		firstname: yup.string().required("First name is required."),
+		lastname: yup.string().required("Last name is required."),
+		email: yup
+			.string()
+			.email("Invalid email address.")
+			.required("Email address is required."),
+		phoneNumber: yup
+			.string()
+			.max(12, "Phone number cannot exceed 12 characters.")
+			.required("Phone number is required.")
+			.matches(phoneRegExp, "Invalid phone number."),
+		password: yup
+			.string()
+			.min(5, "Password must be at least 5 characters.")
+			.max(64, "Password cannot exceed 64 characters.")
+			.required("Password is required.")
+			.matches(/^(?=.*[a-z])/, "Password must include lowercase letter.")
+			.matches(/^(?=.*[A-Z])/, "Password must include uppercase letter.")
+			.matches(/^(?=.*[0-9])/, "Password must include digit.")
+			.matches(
+				/^(?=.*[!@#\$%\^&\*])/,
+				"Password must include special character."
+			),
+		confirmPassword: yup
+			.string()
+			.required("Please retype your password.")
+			.oneOf([yup.ref("password")], "Your passwords do not match."),
+	});
 
 	const {
 		control,
@@ -105,13 +178,14 @@ const Register = () => {
 						storeUrl={storeUrl}
 						debouncedOnChange={debouncedOnChange}
 						uniqueStoreName={uniqueStoreName}
+						storeName={storeName}
 					/>
 				);
 			case 2:
 				return (
 					<OrganizationStep2
-						setSubscriptionType={setSubscriptionType}
-						subscriptionType={subscriptionType}
+						setPlanType={setPlanType}
+						planType={planType}
 					/>
 				);
 		}
@@ -142,11 +216,13 @@ const Register = () => {
 
 		const storeData = {
 			...data,
-			subscriptionType,
+			planType,
+			storeUrl,
 		};
 
 		try {
 			const response = await createOrganization(storeData);
+			console.log(response.data);
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
@@ -154,7 +230,7 @@ const Register = () => {
 			setLoading(false);
 		}
 
-		if (subscriptionType !== planTypes.BASIC) {
+		if (planType !== planTypes.BASIC) {
 			handleCheckoutPage();
 		}
 	};
@@ -162,19 +238,20 @@ const Register = () => {
 	useEffect(() => {
 		let storeName = watch2("storeName");
 		storeName = storeName.replace(/\s+/g, "-");
+
+		if (storeName.slice(-1) === "-") storeName = storeName.slice(0, -1);
+		if (storeName.charAt(0) === "-") storeName = storeName.substring(1);
+
 		setStoreUrl(storeName);
 	}, [watch2("storeName")]);
 
 	useEffect(() => {
-		if (activeStep !== 1) return;
-
+		if (activeStep !== 1 || storeName === "") return;
 		const fetchData = async () => {
 			try {
-				const response = await getOrganizations(storeName);
-				const organizations = response.data.organizations;
-				setUniqueStoreName(
-					!organizations.includes(storeName.toLowerCase())
-				);
+				const response = await isUniqueStoreName(storeName);
+				const isUnique = response.data.isUnique;
+				setUniqueStoreName(isUnique);
 			} catch (error) {
 				createNotification("error", error.message);
 				console.error(error.message);
@@ -184,20 +261,9 @@ const Register = () => {
 		fetchData().catch(console.error);
 	}, [storeName]);
 
-	useEffect(() => {
-		if (!uniqueStoreName) {
-			setError2("storeName", {
-				type: "custom",
-				message: "Store name is not unique",
-			});
-		} else {
-			clearErrors2("storeName");
-		}
-	}, [storeName, uniqueStoreName]);
-
 	const handleCheckoutPage = async () => {
 		try {
-			const response = await createCheckoutSession(subscriptionType);
+			const response = await createCheckoutSession(planType);
 
 			if (response.status !== statusCodes.OK) {
 				const errMsg = response.data.msg;
@@ -235,6 +301,9 @@ const Register = () => {
 			if (value.length === 0) valid = false;
 
 		if (!isEmpty(errors)) valid = false;
+
+		// if (!uniqueStoreName) valid = false;
+
 		return valid;
 		// return true;
 	};
