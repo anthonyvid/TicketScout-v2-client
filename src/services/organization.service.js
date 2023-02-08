@@ -4,7 +4,7 @@ import { isEmpty } from "lodash";
 
 export const createOrganization = async (data) => {
 	if (isEmpty(data)) return new Error("Invalid Entry.");
-	console.log(data);
+
 	try {
 		const response = await postRequest("organizations", data);
 		return response;

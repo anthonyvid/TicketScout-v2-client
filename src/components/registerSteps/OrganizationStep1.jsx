@@ -10,7 +10,9 @@ const OrganizationStep1 = ({
 	storeUrl,
 	debouncedOnChange,
 	uniqueStoreName,
-	storeName,
+	uniqueEmail,
+	storeNameRebounce,
+	emailRebounce,
 }) => {
 	const classes = useClasses(OrganizationStep1Styles);
 
@@ -54,6 +56,10 @@ const OrganizationStep1 = ({
 						type="email"
 						control={control}
 						errors={errors}
+						onChangeHandler={debouncedOnChange[1]}
+						uniqueDataValidation
+						isDataUnique={uniqueEmail}
+						uniqueData={emailRebounce}
 					/>
 					<PhoneInput
 						fullWidth
@@ -94,13 +100,13 @@ const OrganizationStep1 = ({
 						label="Store Name"
 						name="storeName"
 						placeholder="Ticket Scout"
-						onChangeHandler={debouncedOnChange}
+						onChangeHandler={debouncedOnChange[0]}
 						type="text"
 						control={control}
 						errors={errors}
 						uniqueDataValidation
 						isDataUnique={uniqueStoreName}
-						uniqueData={storeName}
+						uniqueData={storeNameRebounce}
 					/>
 					<TextInput
 						staticLabel

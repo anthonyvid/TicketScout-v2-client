@@ -7,7 +7,7 @@ import OtpInput from "components/OtpInput.jsx";
 import { Button, CircularProgress } from "@mui/material";
 import { statusCodes } from "constants/statusCodes.constants.js";
 import { createNotification } from "utils/notification.js";
-import { verifySignUpCode } from "services/account.service.js";
+import { verifySignUpCode } from "services/user.service.js";
 
 const EmployeeStep2 = ({ code, setCode, setVerified }) => {
 	const classes = useClasses(employeeStep2Styles);
@@ -25,11 +25,7 @@ const EmployeeStep2 = ({ code, setCode, setVerified }) => {
 			const response = await verifySignUpCode(code);
 
 			if (response.status !== statusCodes.OK) {
-				const errMsg = response.data.msg;
-				const key = response.data.key;
-				createNotification("error", errMsg);
-				console.error(errMsg);
-				return;
+				throw new Error(response.data.message);
 			}
 
 			setCode(new Array(6).fill(""));

@@ -36,3 +36,12 @@ export const verifySignUpCode = async (code) => {
 		return error.response;
 	}
 };
+
+export const isUniqueEmail = async (email) => {
+	try {
+		const response = await postRequest(`users/checkUnique?email=${email}`);
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};

@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Services
-import { login } from "services/account.service.js";
+import { login } from "services/user.service.js";
 
 // Utils/Hooks/Reducers
 import { createNotification } from "utils/notification.js";
@@ -61,16 +61,11 @@ const Login = () => {
 			setLoading(true);
 			try {
 				const response = await login(data);
-
+				console.log(response);
 				if (response.status !== statusCodes.OK) {
-					const errMsg = response.data.msg;
-					const key = response.data.key;
-					createNotification("error", errMsg);
-					console.error(errMsg);
 					setFocus("email");
-					if (key === "no_account") reset();
-
-					return;
+					if (response.data.key === "no_account") reset();
+					throw new Error(response.data.message);
 				}
 
 				reset();

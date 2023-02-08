@@ -22,8 +22,9 @@ import EmployeeStep2 from "components/registerSteps/EmployeeStep1.jsx";
 import { isEmpty } from "lodash";
 import { createCheckoutSession } from "services/stripe.service.js";
 import { createNotification } from "utils/notification.js";
+import { useSearchParams } from "react-router-dom";
 import { statusCodes } from "constants/statusCodes.constants.js";
-import { register } from "services/account.service.js";
+import { isUniqueEmail, register } from "services/user.service.js";
 import {
 	createOrganization,
 	getOrganization,
@@ -40,24 +41,31 @@ const REBOUNCE_DELAY = 750;
 const Register = () => {
 	const classes = useClasses(registerStyles);
 	const [loading, setLoading] = useState(false);
+
 	const [uniqueStoreName, setUniqueStoreName] = useState("");
+	const [uniqueEmail, setUniqueEmail] = useState("");
 	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
 	const [activeStep, setActiveStep] = useState(0);
 	const [planType, setPlanType] = useState(0);
 	const [storeUrl, setStoreUrl] = useState("");
 	const [signUpCodeVerified, setSignUpCodeVerified] = useState(true); //todo: change back to false after
 	const [accountType, setAccountType] = useState(0);
-	const [storeName, setStoreName] = useState("");
+	const [storeNameRebounce, setStoreNameRebounce] = useState("");
+	const [emailRebounce, setEmailRebounce] = useState("");
 	const defaultView = activeStep === 0;
 	const employeeType = accountType === 0;
 
-	const storeNameSearch = (e) => setStoreName(e?.target?.value);
-	const debouncedOnChange = debounce(storeNameSearch, REBOUNCE_DELAY);
+	const storeNameRebounced = (e) => setStoreNameRebounce(e?.target?.value);
+	const emailRebounced = (e) => setEmailRebounce(e?.target?.value);
+
+	const storeNameDebounceOnChange = debounce(
+		storeNameRebounced,
+		REBOUNCE_DELAY
+	);
+	const emailDebounceOnChange = debounce(emailRebounced, REBOUNCE_DELAY);
 
 	const phoneRegExp =
 		/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
-	const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 	const storeSchema = yup.object().shape({
 		firstname: yup.string().required("First name is required."),
@@ -71,23 +79,21 @@ const Register = () => {
 			.max(12, "Phone number cannot exceed 12 characters.")
 			.required("Phone number is required.")
 			.matches(phoneRegExp, "Invalid phone number."),
-		storeName: yup.string().when(() => uniqueStoreName, {
-			is: true,
-			then: yup.string().required("Store name is required."),
-			otherwise: yup.string().required("Store name is already taken."),
-		}),
-		password: yup
+		storeName: yup
 			.string()
-			.min(5, "Password must be at least 5 characters.")
-			.max(64, "Password cannot exceed 64 characters.")
-			.required("Password is required.")
-			.matches(/^(?=.*[a-z])/, "Password must include lowercase letter.")
-			.matches(/^(?=.*[A-Z])/, "Password must include uppercase letter.")
-			.matches(/^(?=.*[0-9])/, "Password must include digit.")
-			.matches(
-				/^(?=.*[!@#\$%\^&\*])/,
-				"Password must include special character."
-			),
+			.required("Store name is required.")
+			.matches(/^(?!\s+$).*/, "Invalid store name."),
+		password: yup.string(),
+		// .min(5, "Password must be at least 5 characters.")
+		// .max(64, "Password cannot exceed 64 characters.")
+		// .required("Password is required.")
+		// .matches(/^(?=.*[a-z])/, "Password must include lowercase letter.")
+		// .matches(/^(?=.*[A-Z])/, "Password must include uppercase letter.")
+		// .matches(/^(?=.*[0-9])/, "Password must include digit.")
+		// .matches(
+		// 	/^(?=.*[!@#\$%\^&\*])/,
+		// 	"Password must include special character."
+		// ),
 		confirmPassword: yup
 			.string()
 			.required("Please retype your password.")
@@ -128,6 +134,7 @@ const Register = () => {
 		control,
 		handleSubmit,
 		getValues,
+		reset: reset,
 		setError: setError,
 		clearErrors: clearErrors,
 		formState: { errors },
@@ -148,6 +155,7 @@ const Register = () => {
 		watch: watch2,
 		control: control2,
 		setError: setError2,
+		reset: reset2,
 		clearErrors: clearErrors2,
 		getValues: getValues2,
 		formState: { errors: errors2 },
@@ -176,9 +184,14 @@ const Register = () => {
 						control={control2}
 						errors={errors2}
 						storeUrl={storeUrl}
-						debouncedOnChange={debouncedOnChange}
+						debouncedOnChange={[
+							storeNameDebounceOnChange,
+							emailDebounceOnChange,
+						]}
 						uniqueStoreName={uniqueStoreName}
-						storeName={storeName}
+						uniqueEmail={uniqueEmail}
+						storeNameRebounce={storeNameRebounce}
+						emailRebounce={emailRebounce}
 					/>
 				);
 			case 2:
@@ -222,16 +235,28 @@ const Register = () => {
 
 		try {
 			const response = await createOrganization(storeData);
-			console.log(response.data);
+			console.log(response);
+			if (response.status !== statusCodes.OK) {
+				setError2(
+					response.data.key,
+					{ type: "focus", message: response.data.message },
+					{ shouldFocus: true }
+				);
+				if (response.data.key === "storeName")
+					setUniqueStoreName(false);
+				if (response.data.key === "email") setUniqueEmail(false);
+				if (response.data.key !== "planType") setActiveStep(1);
+				throw new Error(response.data.message);
+			}
+
+			if (planType !== planTypes.BASIC) {
+				handleCheckoutPage();
+			}
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
 		} finally {
 			setLoading(false);
-		}
-
-		if (planType !== planTypes.BASIC) {
-			handleCheckoutPage();
 		}
 	};
 
@@ -246,10 +271,13 @@ const Register = () => {
 	}, [watch2("storeName")]);
 
 	useEffect(() => {
-		if (activeStep !== 1 || storeName === "") return;
+		if (activeStep !== 1 || storeNameRebounce === "") return;
 		const fetchData = async () => {
 			try {
-				const response = await isUniqueStoreName(storeName);
+				const response = await isUniqueStoreName(storeNameRebounce);
+				if (response.status !== statusCodes.OK)
+					throw new Error(response.data.message);
+
 				const isUnique = response.data.isUnique;
 				setUniqueStoreName(isUnique);
 			} catch (error) {
@@ -259,17 +287,33 @@ const Register = () => {
 		};
 
 		fetchData().catch(console.error);
-	}, [storeName]);
+	}, [storeNameRebounce]);
+
+	useEffect(() => {
+		if (activeStep !== 1 || emailRebounce === "" || errors2.email) return;
+		const fetchData = async () => {
+			try {
+				const response = await isUniqueEmail(emailRebounce);
+				if (response.status !== statusCodes.OK)
+					throw new Error(response.data.message);
+
+				const isUnique = response.data.isUnique;
+				setUniqueEmail(isUnique);
+			} catch (error) {
+				createNotification("error", error.message);
+				console.error(error.message);
+			}
+		};
+
+		fetchData().catch(console.error);
+	}, [emailRebounce]);
 
 	const handleCheckoutPage = async () => {
 		try {
 			const response = await createCheckoutSession(planType);
 
 			if (response.status !== statusCodes.OK) {
-				const errMsg = response.data.msg;
-				createNotification("error", errMsg);
-				console.error(errMsg);
-				return;
+				throw new Error(response.data.msg);
 			}
 
 			const url = response.data.url;
@@ -300,12 +344,9 @@ const Register = () => {
 		for (const value of Object.values(values))
 			if (value.length === 0) valid = false;
 
-		if (!isEmpty(errors)) valid = false;
-
-		// if (!uniqueStoreName) valid = false;
+		if (!isEmpty(errors) || !uniqueStoreName || !uniqueEmail) valid = false;
 
 		return valid;
-		// return true;
 	};
 
 	return (
