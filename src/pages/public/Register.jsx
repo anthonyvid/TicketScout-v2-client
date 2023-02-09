@@ -1,9 +1,5 @@
-import {
-	employeeSchema,
-	planTypes,
-	storeSchema,
-} from "constants/register.constants.js";
-import { debounce } from "lodash";
+import { planTypes, registerTypes } from "constants/register.constants.js";
+import { debounce, isNumber } from "lodash";
 import { Button } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
 import useClasses from "hooks/useClasses.js";
@@ -16,13 +12,13 @@ import registerStyles from "styles/pages/Register.style.js";
 import Header from "components/Header.jsx";
 import RegisterStepper from "components/RegisterStepper.jsx";
 import DefaultStep from "components/registerSteps/DefaultStep.jsx";
-import EmployeeStep1 from "components/registerSteps/EmployeeStep2.jsx";
-import EmployeeStep2 from "components/registerSteps/EmployeeStep1.jsx";
+import UserStep1 from "components/registerSteps/UserStep1.jsx";
+import UserStep2 from "components/registerSteps/UserStep2.jsx";
 
 import { isEmpty } from "lodash";
 import { createCheckoutSession } from "services/stripe.service.js";
 import { createNotification } from "utils/notification.js";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { statusCodes } from "constants/statusCodes.constants.js";
 import { isUniqueEmail, register } from "services/user.service.js";
 import {
@@ -34,26 +30,27 @@ import {
 import OrganizationStep1 from "components/registerSteps/OrganizationStep1.jsx";
 import OrganizationStep2 from "components/registerSteps/OrganizationStep2.jsx";
 
-const EMPLOYEE_STEPS = 3;
+const USER_STEPS = 3;
 const STORE_STEPS = 3;
 const REBOUNCE_DELAY = 750;
 
 const Register = () => {
 	const classes = useClasses(registerStyles);
 	const [loading, setLoading] = useState(false);
-
+	const [searchParams] = useSearchParams();
 	const [uniqueStoreName, setUniqueStoreName] = useState("");
 	const [uniqueEmail, setUniqueEmail] = useState("");
 	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
 	const [activeStep, setActiveStep] = useState(0);
-	const [planType, setPlanType] = useState(0);
+	const [planType, setPlanType] = useState(planTypes.BASIC);
 	const [storeUrl, setStoreUrl] = useState("");
 	const [signUpCodeVerified, setSignUpCodeVerified] = useState(true); //todo: change back to false after
-	const [accountType, setAccountType] = useState(0);
+	const [accountType, setAccountType] = useState(registerTypes.USER);
 	const [storeNameRebounce, setStoreNameRebounce] = useState("");
 	const [emailRebounce, setEmailRebounce] = useState("");
+	const navigate = useNavigate();
 	const defaultView = activeStep === 0;
-	const employeeType = accountType === 0;
+	const userType = accountType === registerTypes.USER;
 
 	const storeNameRebounced = (e) => setStoreNameRebounce(e?.target?.value);
 	const emailRebounced = (e) => setEmailRebounce(e?.target?.value);
@@ -100,7 +97,7 @@ const Register = () => {
 			.oneOf([yup.ref("password")], "Your passwords do not match."),
 	});
 
-	const employeeSchema = yup.object().shape({
+	const userSchema = yup.object().shape({
 		firstname: yup.string().required("First name is required."),
 		lastname: yup.string().required("Last name is required."),
 		email: yup
@@ -148,7 +145,7 @@ const Register = () => {
 			confirmPassword: "",
 		},
 		mode: "onChange",
-		resolver: yupResolver(employeeSchema),
+		resolver: yupResolver(userSchema),
 	});
 
 	const {
@@ -204,15 +201,15 @@ const Register = () => {
 		}
 	};
 
-	const getEmployeeSteps = () => {
+	const getUserSteps = () => {
 		switch (activeStep) {
 			case 0:
 				return getDefaultStep();
 			case 1:
-				return <EmployeeStep2 control={control} errors={errors} />;
+				return <UserStep1 control={control} errors={errors} />;
 			case 2:
 				return (
-					<EmployeeStep1
+					<UserStep2
 						code={signUpCode}
 						setCode={setSignUpCode}
 						setVerified={setSignUpCodeVerified}
@@ -221,10 +218,11 @@ const Register = () => {
 		}
 	};
 
-	const employeeSubmit = (data) => {};
+	const userSubmit = (data) => {};
 
-	const storeSubmit = async (data) => {
+	const organizationSubmit = async (data) => {
 		if (loading) return;
+
 		setLoading(true);
 
 		const storeData = {
@@ -308,16 +306,52 @@ const Register = () => {
 		fetchData().catch(console.error);
 	}, [emailRebounce]);
 
+	// useEffect(() => {
+	// 	console.log(errors2, getValues2());
+	// 	if (!isFormValid(errors2, getValues2())) {
+	// 		setAccountType(1);
+	// 		setActiveStep(1);
+	// 		return;
+	// 	}
+	// 	const type = parseInt(searchParams.get("type"));
+	// 	const step = parseInt(searchParams.get("step"));
+	// 	const plan = parseInt(searchParams.get("plan"));
+
+	// 	if (!type && !step && !plan) return;
+	// 	if (type !== registerTypes.USER && type !== registerTypes.ORGANIZATION)
+	// 		return;
+	// 	if (
+	// 		plan !== planTypes.BASIC &&
+	// 		plan !== planTypes.STANDARD &&
+	// 		plan !== planTypes.PRO
+	// 	)
+	// 		return;
+	// 	if (step < 0 || step > (userType ? USER_STEPS - 1 : STORE_STEPS - 1))
+	// 		return;
+
+	// 	setAccountType(type);
+	// 	setActiveStep(step);
+	// 	setPlanType(plan);
+	// }, [
+	// 	searchParams.get("type"),
+	// 	searchParams.get("step"),
+	// 	searchParams.get("plan"),
+	// ]);
+
 	const handleCheckoutPage = async () => {
 		try {
-			const response = await createCheckoutSession(planType);
+			const response = await createCheckoutSession(
+				planType,
+				getValues2("email")
+			);
 
 			if (response.status !== statusCodes.OK) {
-				throw new Error(response.data.msg);
+				throw new Error(response.data.message);
 			}
 
 			const url = response.data.url;
-			window.open(url, "_blank");
+
+			window.open(url);
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
@@ -368,9 +402,9 @@ const Register = () => {
 			>
 				<form
 					onSubmit={
-						employeeType
-							? handleSubmit(employeeSubmit)
-							: handleSubmit2(storeSubmit)
+						userType
+							? handleSubmit(userSubmit)
+							: handleSubmit2(organizationSubmit)
 					}
 					className={classes.registerFormWrap}
 				>
@@ -381,8 +415,8 @@ const Register = () => {
 						maxHeight
 						styles={classes.pageWrap}
 					>
-						{employeeType
-							? getEmployeeSteps(activeStep)
+						{userType
+							? getUserSteps(activeStep)
 							: getStoreSteps(activeStep)}
 						{defaultView && (
 							<Button
@@ -426,7 +460,7 @@ const Register = () => {
 										type="button"
 										variant="contained"
 										disabled={
-											employeeType
+											userType
 												? !isFormValid(
 														errors,
 														getValues()
@@ -447,7 +481,7 @@ const Register = () => {
 					<div className={classes.stepperWrap}>
 						<RegisterStepper
 							activeStep={activeStep}
-							steps={employeeType ? EMPLOYEE_STEPS : STORE_STEPS}
+							steps={userType ? USER_STEPS : STORE_STEPS}
 						/>
 					</div>
 				</form>

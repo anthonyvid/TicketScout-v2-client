@@ -1,8 +1,8 @@
 // color design tokens export
 export const colorTokens = {
 	status: {
-		error: "#d32f2f",
-		error2: "#ff514e",
+		// error: "#d32f2f",
+		error: "#ed4337",
 		warning: "#ffb13b",
 		success: "#55cb8a",
 	},

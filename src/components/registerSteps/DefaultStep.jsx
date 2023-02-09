@@ -4,10 +4,11 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import defaultStepStyles from "styles/components/registerSteps/DefaultStep.style.js";
 import StoreIcon from "@mui/icons-material/Store";
 import CheckIcon from "@mui/icons-material/Check";
+import { registerTypes } from "constants/register.constants.js";
 
 const DefaultStep = ({ accountType, setAccountType }) => {
-	const employeeType = accountType === 0;
-	const storeType = accountType === 1;
+	const userType = accountType === registerTypes.USER;
+	const storeType = accountType === registerTypes.ORGANIZATION;
 
 	const classes = useClasses(defaultStepStyles);
 	return (
@@ -22,12 +23,12 @@ const DefaultStep = ({ accountType, setAccountType }) => {
 				<div
 					onClick={() => setAccountType(0)}
 					className={cx(classes.box, {
-						[classes.selected]: employeeType,
+						[classes.selected]: userType,
 					})}
 				>
 					<div
 						className={cx(classes.circle, {
-							[classes.circleActive]: employeeType,
+							[classes.circleActive]: userType,
 						})}
 					>
 						<CheckIcon
@@ -61,7 +62,7 @@ const DefaultStep = ({ accountType, setAccountType }) => {
 					>
 						<CheckIcon
 							className={cx({
-								[classes.hideCheck]: employeeType,
+								[classes.hideCheck]: userType,
 							})}
 						/>
 					</div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import employeeStep2Styles from "styles/components/registerSteps/EmployeeStep2.style.js";
+import userStep2Styles from "styles/components/registerSteps/UserStep2.style.js";
 import useClasses from "hooks/useClasses.js";
 
 import OtpInput from "components/OtpInput.jsx";
@@ -9,8 +9,8 @@ import { statusCodes } from "constants/statusCodes.constants.js";
 import { createNotification } from "utils/notification.js";
 import { verifySignUpCode } from "services/user.service.js";
 
-const EmployeeStep2 = ({ code, setCode, setVerified }) => {
-	const classes = useClasses(employeeStep2Styles);
+const UserStep2 = ({ code, setCode, setVerified }) => {
+	const classes = useClasses(userStep2Styles);
 	const [disabled, setDisabled] = useState(true);
 	const [loading, setLoading] = useState(false);
 
@@ -64,4 +64,4 @@ const EmployeeStep2 = ({ code, setCode, setVerified }) => {
 	);
 };
 
-export default EmployeeStep2;
+export default UserStep2;

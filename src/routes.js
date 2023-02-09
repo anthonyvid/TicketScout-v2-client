@@ -1,3 +1,4 @@
+import CheckoutSuccess from "pages/public/CheckoutSuccess.jsx";
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/private/Dashboard.jsx";
@@ -10,8 +11,11 @@ const publicRoutes = [
 	{ component: <Home />, path: "/" },
 	{ component: <Login />, path: "/account/login" },
 	{ component: <Register />, path: "/account/register" },
+	{ component: <CheckoutSuccess />, path: "/checkout/success" },
 ];
-const privateRoutes = [{ component: <Dashboard />, path: `/:organization/dashboard` }];
+const privateRoutes = [
+	{ component: <Dashboard />, path: `/:organization/dashboard` },
+];
 
 const AppRoutes = () => {
 	return (

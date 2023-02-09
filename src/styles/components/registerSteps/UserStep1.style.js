@@ -1,4 +1,4 @@
-const employeeStep2Styles = (theme) => ({
+const userStep1Styles = (theme) => ({
 	titleWrap: {
 		display: "flex",
 		flexDirection: "column",
@@ -25,18 +25,14 @@ const employeeStep2Styles = (theme) => ({
 		width: "100%",
 		marginTop: "40px",
 		transition: "0.2s ease-in-out",
-	},
-	otpWrap: {
-		display: "flex",
-		justifyContent: "center",
-		width: "100%",
-		height: "60px",
-		gap: "20px",
-		transition: "0.2s ease-in-out",
+		padding: "0 50px",
+		TextField: {
+			borderRadius: "15px",
+		},
 		[theme.breakpoints.down("sm")]: {
-			gap: "10px",
+			padding: "0",
 		},
 	},
 });
 
-export default employeeStep2Styles;
+export default userStep1Styles;

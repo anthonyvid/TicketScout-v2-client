@@ -3,9 +3,9 @@ import PhoneInput from "components/PhoneInput.jsx";
 import TextInput from "components/TextInput.jsx";
 import useClasses from "hooks/useClasses.js";
 
-import employeeStep1Styles from "styles/components/registerSteps/EmployeeStep1.style.js";
-const EmployeeStep1 = ({ control, errors }) => {
-	const classes = useClasses(employeeStep1Styles);
+import userStep1Styles from "styles/components/registerSteps/UserStep1.style.js";
+const UserStep1 = ({ control, errors }) => {
+	const classes = useClasses(userStep1Styles);
 
 	return (
 		<>
@@ -86,4 +86,4 @@ const EmployeeStep1 = ({ control, errors }) => {
 	);
 };
 
-export default EmployeeStep1;
+export default UserStep1;

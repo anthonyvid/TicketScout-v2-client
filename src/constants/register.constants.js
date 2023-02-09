@@ -6,6 +6,11 @@ export const planTypes = Object.freeze({
 	PRO: 2,
 });
 
+export const registerTypes = Object.freeze({
+	USER: 0,
+	ORGANIZATION: 1,
+});
+
 export const planInfo = Object.freeze({
 	0: {
 		price: "Free",
@@ -44,8 +49,6 @@ export const planInfo = Object.freeze({
 		],
 	},
 });
-
-
 
 export const loginSchema = yup.object().shape({
 	email: yup
