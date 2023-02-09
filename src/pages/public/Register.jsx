@@ -20,15 +20,15 @@ import { createCheckoutSession } from "services/stripe.service.js";
 import { createNotification } from "utils/notification.js";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { statusCodes } from "constants/statusCodes.constants.js";
-import { isUniqueEmail, register } from "services/user.service.js";
-import {
-	createOrganization,
-	getOrganization,
-	getOrganizations,
-	isUniqueStoreName,
-} from "services/organization.service.js";
+
+import { createOrganization } from "services/organization.service.js";
 import OrganizationStep1 from "components/registerSteps/OrganizationStep1.jsx";
 import OrganizationStep2 from "components/registerSteps/OrganizationStep2.jsx";
+import {
+	register,
+	isUniqueEmail,
+	isUniqueStoreName,
+} from "services/auth.service.js";
 
 const USER_STEPS = 3;
 const STORE_STEPS = 3;
@@ -44,11 +44,11 @@ const Register = () => {
 	const [activeStep, setActiveStep] = useState(0);
 	const [planType, setPlanType] = useState(planTypes.BASIC);
 	const [storeUrl, setStoreUrl] = useState("");
-	const [signUpCodeVerified, setSignUpCodeVerified] = useState(true); //todo: change back to false after
+	const [signUpCodeVerified, setSignUpCodeVerified] = useState(false);
 	const [accountType, setAccountType] = useState(registerTypes.USER);
 	const [storeNameRebounce, setStoreNameRebounce] = useState("");
 	const [emailRebounce, setEmailRebounce] = useState("");
-	const navigate = useNavigate();
+
 	const defaultView = activeStep === 0;
 	const userType = accountType === registerTypes.USER;
 
@@ -80,17 +80,18 @@ const Register = () => {
 			.string()
 			.required("Store name is required.")
 			.matches(/^(?!\s+$).*/, "Invalid store name."),
-		password: yup.string(),
-		// .min(5, "Password must be at least 5 characters.")
-		// .max(64, "Password cannot exceed 64 characters.")
-		// .required("Password is required.")
-		// .matches(/^(?=.*[a-z])/, "Password must include lowercase letter.")
-		// .matches(/^(?=.*[A-Z])/, "Password must include uppercase letter.")
-		// .matches(/^(?=.*[0-9])/, "Password must include digit.")
-		// .matches(
-		// 	/^(?=.*[!@#\$%\^&\*])/,
-		// 	"Password must include special character."
-		// ),
+		password: yup
+			.string()
+			.min(5, "Password must be at least 5 characters.")
+			.max(64, "Password cannot exceed 64 characters.")
+			.required("Password is required.")
+			.matches(/^(?=.*[a-z])/, "Password must include lowercase letter.")
+			.matches(/^(?=.*[A-Z])/, "Password must include uppercase letter.")
+			.matches(/^(?=.*[0-9])/, "Password must include digit.")
+			.matches(
+				/^(?=.*[!@#\$%\^&\*])/,
+				"Password must include special character."
+			),
 		confirmPassword: yup
 			.string()
 			.required("Please retype your password.")
@@ -206,7 +207,15 @@ const Register = () => {
 			case 0:
 				return getDefaultStep();
 			case 1:
-				return <UserStep1 control={control} errors={errors} />;
+				return (
+					<UserStep1
+						control={control}
+						errors={errors}
+						debouncedOnChange={[emailDebounceOnChange]}
+						emailRebounce={emailRebounce}
+						uniqueEmail={uniqueEmail}
+					/>
+				);
 			case 2:
 				return (
 					<UserStep2
@@ -218,11 +227,39 @@ const Register = () => {
 		}
 	};
 
-	const userSubmit = (data) => {};
+	const userSubmit = async (data) => {
+		if (loading) return;
+		setLoading(true);
+
+		const userData = {
+			...data,
+			signUpCode,
+			signUpCodeVerified,
+		};
+
+		try {
+			const response = await register(userData);
+			console.log(response);
+			if (response.status !== statusCodes.OK) {
+				setError(
+					response.data.key,
+					{ type: "focus", message: response.data.message },
+					{ shouldFocus: true }
+				);
+				if (response.data.key === "email") setUniqueEmail(false);
+				if (response.data.key !== "planType") setActiveStep(1);
+				throw new Error(response.data.message);
+			}
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	const organizationSubmit = async (data) => {
 		if (loading) return;
-
 		setLoading(true);
 
 		const storeData = {
@@ -259,6 +296,20 @@ const Register = () => {
 	};
 
 	useEffect(() => {
+		if (userType) {
+			clearErrors2();
+			reset2();
+		} else {
+			clearErrors();
+			reset();
+		}
+		setUniqueStoreName("");
+		setUniqueEmail("");
+		setStoreNameRebounce("");
+		setEmailRebounce("");
+	}, [accountType]);
+
+	useEffect(() => {
 		let storeName = watch2("storeName");
 		storeName = storeName.replace(/\s+/g, "-");
 
@@ -288,7 +339,12 @@ const Register = () => {
 	}, [storeNameRebounce]);
 
 	useEffect(() => {
-		if (activeStep !== 1 || emailRebounce === "" || errors2.email) return;
+		if (
+			activeStep !== 1 ||
+			emailRebounce === "" ||
+			(userType ? errors.email : errors2.email)
+		)
+			return;
 		const fetchData = async () => {
 			try {
 				const response = await isUniqueEmail(emailRebounce);
@@ -361,7 +417,12 @@ const Register = () => {
 		for (const value of Object.values(values))
 			if (value.length === 0) valid = false;
 
-		if (!isEmpty(errors) || !uniqueStoreName || !uniqueEmail) valid = false;
+		if (!isEmpty(errors) || !uniqueEmail) valid = false;
+
+		if (!userType && !uniqueStoreName) {
+			console.log("a");
+			valid = false;
+		}
 
 		return valid;
 	};
@@ -405,7 +466,9 @@ const Register = () => {
 							<Button
 								sx={{ borderRadius: "8px" }}
 								className={classes.continueBtn}
-								onClick={(e) => handleNext(e)}
+								onClick={(e) => {
+									handleNext(e);
+								}}
 								variant="contained"
 							>
 								Continue
@@ -425,14 +488,13 @@ const Register = () => {
 								{activeStep === 2 ? (
 									<Button
 										className={classes.nextBtn}
-										style={{
-											display:
-												activeStep !== 2
-													? "block"
-													: "hidden",
-										}}
 										variant="contained"
 										type="submit"
+										disabled={
+											userType
+												? !signUpCodeVerified
+												: false
+										}
 									>
 										Complete Registration
 									</Button>

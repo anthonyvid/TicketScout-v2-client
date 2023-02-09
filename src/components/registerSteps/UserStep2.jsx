@@ -7,7 +7,7 @@ import OtpInput from "components/OtpInput.jsx";
 import { Button, CircularProgress } from "@mui/material";
 import { statusCodes } from "constants/statusCodes.constants.js";
 import { createNotification } from "utils/notification.js";
-import { verifySignUpCode } from "services/user.service.js";
+import { verifySignUpCode } from "services/auth.service.js";
 
 const UserStep2 = ({ code, setCode, setVerified }) => {
 	const classes = useClasses(userStep2Styles);
@@ -19,17 +19,20 @@ const UserStep2 = ({ code, setCode, setVerified }) => {
 	}, [code]);
 
 	const onVerify = async () => {
+		if (loading) return;
+		setLoading(true);
 		try {
-			setLoading(true);
-
-			const response = await verifySignUpCode(code);
+			const response = await verifySignUpCode(code.join(""));
 
 			if (response.status !== statusCodes.OK) {
+				setCode(new Array(6).fill(""));
 				throw new Error(response.data.message);
 			}
 
-			setCode(new Array(6).fill(""));
-			createNotification("success", "Success");
+			createNotification(
+				"success",
+				"Successfully verified sign up code."
+			);
 			setVerified(true);
 		} catch (error) {
 			createNotification("error", error.message);

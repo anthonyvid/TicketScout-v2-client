@@ -22,13 +22,4 @@ export const getOrganizations = async (storeName) => {
 	}
 };
 
-export const isUniqueStoreName = async (storeName) => {
-	try {
-		const response = await postRequest(
-			`organizations/checkUnique?storeName=${storeName}`
-		);
-		return response;
-	} catch (error) {
-		return error.response;
-	}
-};
+

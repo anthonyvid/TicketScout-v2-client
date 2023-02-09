@@ -4,7 +4,13 @@ import TextInput from "components/TextInput.jsx";
 import useClasses from "hooks/useClasses.js";
 
 import userStep1Styles from "styles/components/registerSteps/UserStep1.style.js";
-const UserStep1 = ({ control, errors }) => {
+const UserStep1 = ({
+	control,
+	errors,
+	debouncedOnChange,
+	emailRebounce,
+	uniqueEmail,
+}) => {
 	const classes = useClasses(userStep1Styles);
 
 	return (
@@ -48,6 +54,10 @@ const UserStep1 = ({ control, errors }) => {
 						type="email"
 						control={control}
 						errors={errors}
+						onChangeHandler={debouncedOnChange[0]}
+						uniqueDataValidation
+						isDataUnique={uniqueEmail}
+						uniqueData={emailRebounce}
 					/>
 					<PhoneInput
 						fullWidth

@@ -10,7 +10,7 @@ import lockLottie from "../../assets/lotties/lock.json";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { createNotification } from "utils/notification.js";
 import { isEmail } from "utils/helper.js";
-import { forgotPassword } from "services/user.service.js";
+import { forgotPassword } from "services/auth.service.js";
 import { statusCodes } from "constants/statusCodes.constants.js";
 
 const ForgotPassword = () => {

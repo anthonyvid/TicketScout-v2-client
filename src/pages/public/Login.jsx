@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Services
-import { login } from "services/user.service.js";
+import { login } from "services/auth.service.js";
 
 // Utils/Hooks/Reducers
 import { createNotification } from "utils/notification.js";
@@ -59,8 +59,6 @@ const Login = () => {
 
 	const sendLoginRequest = useCallback(
 		async (data) => {
-
-
 			setLoading(true);
 			try {
 				const response = await login(data);
