@@ -42,3 +42,19 @@ p {
 	margin: 0;
 	padding: 0;
 }
+
+.Toastify__toast--info {
+	background: #3498db;
+}
+.Toastify__toast--success {
+	/* background: #07bc0c; */
+	background: red;
+}
+.Toastify__toast--warning {
+	/* background: #f1c40f; */
+	background: #ffb13b;
+}
+.Toastify__toast--error {
+	background: #ed4337;
+	/* background: #e74c3c; */
+}

@@ -1,4 +1,7 @@
 import CheckoutSuccess from "pages/public/CheckoutSuccess.jsx";
+import ForgotPassword from "pages/public/ForgotPassword.jsx";
+import NotFound from "pages/public/NotFound.jsx";
+import ResetPassword from "pages/public/ResetPassword.jsx";
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/private/Dashboard.jsx";
@@ -12,6 +15,8 @@ const publicRoutes = [
 	{ component: <Login />, path: "/account/login" },
 	{ component: <Register />, path: "/account/register" },
 	{ component: <CheckoutSuccess />, path: "/checkout/success" },
+	{ component: <ForgotPassword />, path: "/account/forgot-password" },
+	{ component: <ResetPassword />, path: "/account/reset-password" },
 ];
 const privateRoutes = [
 	{ component: <Dashboard />, path: `/:organization/dashboard` },
@@ -29,6 +34,7 @@ const AppRoutes = () => {
 				{publicRoutes.map(({ component, path }) => (
 					<Route key={path} path={path} element={component} />
 				))}
+				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</Router>
 	);

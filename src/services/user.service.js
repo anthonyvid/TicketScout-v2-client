@@ -45,3 +45,21 @@ export const isUniqueEmail = async (email) => {
 		return error.response;
 	}
 };
+
+export const resetPassword = async (data) => {
+	try {
+		const response = await postRequest(`users/reset-password`, { data });
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};
+
+export const forgotPassword = async (email) => {
+	try {
+		const response = await postRequest(`auth/forgot-password`, { email });
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};

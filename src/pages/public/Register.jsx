@@ -306,37 +306,20 @@ const Register = () => {
 		fetchData().catch(console.error);
 	}, [emailRebounce]);
 
-	// useEffect(() => {
-	// 	console.log(errors2, getValues2());
-	// 	if (!isFormValid(errors2, getValues2())) {
-	// 		setAccountType(1);
-	// 		setActiveStep(1);
-	// 		return;
-	// 	}
-	// 	const type = parseInt(searchParams.get("type"));
-	// 	const step = parseInt(searchParams.get("step"));
-	// 	const plan = parseInt(searchParams.get("plan"));
+	useEffect(() => {
+		const type = parseInt(searchParams.get("type"));
+		const step = parseInt(searchParams.get("step"));
 
-	// 	if (!type && !step && !plan) return;
-	// 	if (type !== registerTypes.USER && type !== registerTypes.ORGANIZATION)
-	// 		return;
-	// 	if (
-	// 		plan !== planTypes.BASIC &&
-	// 		plan !== planTypes.STANDARD &&
-	// 		plan !== planTypes.PRO
-	// 	)
-	// 		return;
-	// 	if (step < 0 || step > (userType ? USER_STEPS - 1 : STORE_STEPS - 1))
-	// 		return;
+		if (!type && !step) return;
+		if (type !== registerTypes.USER && type !== registerTypes.ORGANIZATION)
+			return;
 
-	// 	setAccountType(type);
-	// 	setActiveStep(step);
-	// 	setPlanType(plan);
-	// }, [
-	// 	searchParams.get("type"),
-	// 	searchParams.get("step"),
-	// 	searchParams.get("plan"),
-	// ]);
+		if (step < 0 || step > (userType ? USER_STEPS - 1 : STORE_STEPS - 1))
+			return;
+
+		setAccountType(type);
+		setActiveStep(step);
+	}, [searchParams.get("type"), searchParams.get("step")]);
 
 	const handleCheckoutPage = async () => {
 		try {
@@ -351,7 +334,7 @@ const Register = () => {
 
 			const url = response.data.url;
 
-			window.open(url);
+			window.open(url, "_self");
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);

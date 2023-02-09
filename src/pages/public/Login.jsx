@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -38,6 +38,7 @@ const Login = () => {
 	const [loading, setLoading] = useState(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [searchParams, setSearchParams] = useSearchParams();
 	let { token, user } = useSelector((state) => state);
 
 	const {
@@ -45,18 +46,20 @@ const Login = () => {
 		handleSubmit,
 		reset,
 		setFocus,
+		setValue,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
 			email: "",
 			password: "",
 		},
+		mode: "onChange",
 		resolver: yupResolver(loginSchema),
 	});
 
 	const sendLoginRequest = useCallback(
 		async (data) => {
-			if (loading) return;
+
 
 			setLoading(true);
 			try {
@@ -85,6 +88,25 @@ const Login = () => {
 		},
 		[loading]
 	);
+
+	useEffect(() => {
+		const from = searchParams.get("from");
+		const email = searchParams.get("email");
+
+		if (from === "checkout") {
+			createNotification(
+				"info",
+				"Your account has been created and your current plan is Basic."
+			);
+			searchParams.delete("from");
+		}
+
+		if (email) {
+			setValue("email", email);
+			searchParams.delete("email");
+		}
+		setSearchParams(searchParams);
+	}, []);
 
 	return (
 		<FlexContainer page justifyContentCenter alignItemsCenter col>
