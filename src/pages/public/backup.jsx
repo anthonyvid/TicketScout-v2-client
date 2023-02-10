@@ -1,4 +1,8 @@
-import { planTypes, registerTypes } from "constants/register.constants.js";
+import {
+	phoneRegExp,
+	planTypes,
+	registerTypes,
+} from "constants/register.constants.js";
 import { debounce, isNumber } from "lodash";
 import { Button } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
@@ -35,25 +39,41 @@ const USER_STEPS = 3;
 const STORE_STEPS = 3;
 const REBOUNCE_DELAY = 750;
 
+const initialState = {
+	loading: false,
+	uniqueStoreName: "",
+	uniqueEmail: "",
+	signUpCode: new Array(6).fill(""),
+	activeStep: 0,
+	planType: planTypes.BASIC,
+	storeUrl: "",
+	signUpCodeVerified: false,
+	accountType: registerTypes.USER,
+	storeNameRebounce: "",
+	emailRebounce: "",
+};
+
 const Register = () => {
 	const classes = useClasses(registerStyles);
-	const [loading, setLoading] = useState(false);
-	const [employerData, setEmployerData] = useState(null);
+	const [state, setState] = useReducer(reducer, initialState);
+
+	const setLoading = (value) => setState({ loading: value });
+	const setUniqueStoreName = (value) => setState({ uniqueStoreName: value });
+	const setUniqueEmail = (value) => setState({ uniqueEmail: value });
+	const setSignUpCode = (value) => setState({ signUpCode: value });
+	const setActiveStep = (value) => setState({ activeStep: value });
+	const setPlanType = (value) => setState({ planType: value });
+	const setStoreUrl = (value) => setState({ storeUrl: value });
+	const setSignUpCodeVerified = (value) =>
+		setState({ signUpCodeVerified: value });
+	const setAccountType = (value) => setState({ accountType: value });
+	const setStoreNameRebounce = (value) =>
+		setState({ storeNameRebounce: value });
+	const setEmailRebounce = (value) => setState({ emailRebounce: value });
+
 	const [searchParams] = useSearchParams();
-	const [uniqueStoreName, setUniqueStoreName] = useState("");
-	const [uniqueEmail, setUniqueEmail] = useState("");
-	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
-	const [activeStep, setActiveStep] = useState(0);
-	const [planType, setPlanType] = useState(planTypes.BASIC);
-	const [storeUrl, setStoreUrl] = useState("");
-	const [signUpCodeVerified, setSignUpCodeVerified] = useState(false);
-	const [accountType, setAccountType] = useState(registerTypes.USER);
-	const [storeNameRebounce, setStoreNameRebounce] = useState("");
-	const [emailRebounce, setEmailRebounce] = useState("");
-
-	const defaultView = activeStep === 0;
-	const userType = accountType === registerTypes.USER;
-
+	const defaultView = state.activeStep === 0;
+	const userType = state.accountType === registerTypes.USER;
 	const storeNameRebounced = (e) => setStoreNameRebounce(e?.target?.value);
 	const emailRebounced = (e) => setEmailRebounce(e?.target?.value);
 
@@ -62,9 +82,6 @@ const Register = () => {
 		REBOUNCE_DELAY
 	);
 	const emailDebounceOnChange = debounce(emailRebounced, REBOUNCE_DELAY);
-
-	const phoneRegExp =
-		/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 	const storeSchema = yup.object().shape({
 		firstname: yup.string().required("First name is required."),
@@ -175,7 +192,7 @@ const Register = () => {
 	});
 
 	const getStoreSteps = () => {
-		switch (activeStep) {
+		switch (state.activeStep) {
 			case 0:
 				return getDefaultStep();
 			case 1:
@@ -183,29 +200,29 @@ const Register = () => {
 					<OrganizationStep1
 						control={control2}
 						errors={errors2}
-						storeUrl={storeUrl}
+						storeUrl={state.storeUrl}
 						debouncedOnChange={[
 							storeNameDebounceOnChange,
 							emailDebounceOnChange,
 						]}
-						uniqueStoreName={uniqueStoreName}
-						uniqueEmail={uniqueEmail}
-						storeNameRebounce={storeNameRebounce}
-						emailRebounce={emailRebounce}
+						uniqueStoreName={state.uniqueStoreName}
+						uniqueEmail={state.uniqueEmail}
+						storeNameRebounce={state.storeNameRebounce}
+						emailRebounce={state.emailRebounce}
 					/>
 				);
 			case 2:
 				return (
 					<OrganizationStep2
 						setPlanType={setPlanType}
-						planType={planType}
+						planType={state.planType}
 					/>
 				);
 		}
 	};
 
 	const getUserSteps = () => {
-		switch (activeStep) {
+		switch (state.activeStep) {
 			case 0:
 				return getDefaultStep();
 			case 1:
@@ -214,31 +231,30 @@ const Register = () => {
 						control={control}
 						errors={errors}
 						debouncedOnChange={[emailDebounceOnChange]}
-						emailRebounce={emailRebounce}
-						uniqueEmail={uniqueEmail}
+						emailRebounce={state.emailRebounce}
+						uniqueEmail={state.uniqueEmail}
 					/>
 				);
 			case 2:
 				return (
 					<UserStep2
-						code={signUpCode}
+						code={state.signUpCode}
 						setCode={setSignUpCode}
 						setVerified={setSignUpCodeVerified}
-						setEmployerData={setEmployerData}
 					/>
 				);
 		}
 	};
 
 	const userSubmit = async (data) => {
-		if (loading) return;
+		if (state.loading) return;
 		setLoading(true);
 
 		const userData = {
 			...data,
-			signUpCode: employerData.code,
-			signUpCodeVerified,
-			organizationId: employerData.organizationId,
+			signUpCode: state.signUpCode,
+			signUpCodeVerified: state.signUpCodeVerified,
+			// organizationId: employerData.store_id,
 		};
 
 		try {
@@ -263,13 +279,13 @@ const Register = () => {
 	};
 
 	const organizationSubmit = async (data) => {
-		if (loading) return;
+		if (state.loading) return;
 		setLoading(true);
 
 		const storeData = {
 			...data,
-			planType,
-			storeUrl,
+			planType: state.planType,
+			storeUrl: state.storeUrl,
 		};
 
 		try {
@@ -288,7 +304,7 @@ const Register = () => {
 				throw new Error(response.data.message);
 			}
 
-			if (planType !== planTypes.BASIC) {
+			if (state.planType !== planTypes.BASIC) {
 				handleCheckoutPage();
 			}
 		} catch (error) {
@@ -298,6 +314,8 @@ const Register = () => {
 			setLoading(false);
 		}
 	};
+
+	useEffect(() => console.log(state), []);
 
 	useEffect(() => {
 		if (userType) {
@@ -311,7 +329,7 @@ const Register = () => {
 		setUniqueEmail("");
 		setStoreNameRebounce("");
 		setEmailRebounce("");
-	}, [accountType]);
+	}, [state.accountType]);
 
 	useEffect(() => {
 		let storeName = watch2("storeName");
@@ -324,10 +342,12 @@ const Register = () => {
 	}, [watch2("storeName")]);
 
 	useEffect(() => {
-		if (activeStep !== 1 || storeNameRebounce === "") return;
+		if (state.activeStep !== 1 || state.storeNameRebounce === "") return;
 		const fetchData = async () => {
 			try {
-				const response = await isUniqueStoreName(storeNameRebounce);
+				const response = await isUniqueStoreName(
+					state.storeNameRebounce
+				);
 				if (response.status !== statusCodes.OK)
 					throw new Error(response.data.message);
 
@@ -340,18 +360,18 @@ const Register = () => {
 		};
 
 		fetchData().catch(console.error);
-	}, [storeNameRebounce]);
+	}, [state.storeNameRebounce]);
 
 	useEffect(() => {
 		if (
-			activeStep !== 1 ||
-			emailRebounce === "" ||
+			state.activeStep !== 1 ||
+			state.emailRebounce === "" ||
 			(userType ? errors.email : errors2.email)
 		)
 			return;
 		const fetchData = async () => {
 			try {
-				const response = await isUniqueEmail(emailRebounce);
+				const response = await isUniqueEmail(state.emailRebounce);
 				if (response.status !== statusCodes.OK)
 					throw new Error(response.data.message);
 
@@ -364,7 +384,7 @@ const Register = () => {
 		};
 
 		fetchData().catch(console.error);
-	}, [emailRebounce]);
+	}, [state.emailRebounce]);
 
 	useEffect(() => {
 		const type = parseInt(searchParams.get("type"));
@@ -384,7 +404,7 @@ const Register = () => {
 	const handleCheckoutPage = async () => {
 		try {
 			const response = await createCheckoutSession(
-				planType,
+				state.planType,
 				getValues2("email")
 			);
 
@@ -403,15 +423,15 @@ const Register = () => {
 
 	const handleNext = (e) => {
 		e.preventDefault();
-		setActiveStep(activeStep + 1);
+		setActiveStep(state.activeStep + 1);
 	};
 	const handleBack = () => {
-		setActiveStep((prevActiveStep) => prevActiveStep - 1);
+		setActiveStep(state.activeStep - 1);
 	};
 
 	const getDefaultStep = () => (
 		<DefaultStep
-			accountType={accountType}
+			accountType={state.accountType}
 			setAccountType={setAccountType}
 		/>
 	);
@@ -421,9 +441,9 @@ const Register = () => {
 		for (const value of Object.values(values))
 			if (value.length === 0) valid = false;
 
-		if (!isEmpty(errors) || !uniqueEmail) valid = false;
+		if (!isEmpty(errors) || !state.uniqueEmail) valid = false;
 
-		if (!userType && !uniqueStoreName) {
+		if (!userType && !state.uniqueStoreName) {
 			valid = false;
 		}
 
@@ -463,8 +483,8 @@ const Register = () => {
 						styles={classes.pageWrap}
 					>
 						{userType
-							? getUserSteps(activeStep)
-							: getStoreSteps(activeStep)}
+							? getUserSteps(state.activeStep)
+							: getStoreSteps(state.activeStep)}
 						{defaultView && (
 							<Button
 								sx={{ borderRadius: "8px" }}
@@ -488,15 +508,14 @@ const Register = () => {
 								>
 									Back
 								</Button>
-								{activeStep === 2 ? (
+								{state.activeStep === 2 ? (
 									<Button
 										className={classes.nextBtn}
 										variant="contained"
 										type="submit"
 										disabled={
 											userType
-												? !signUpCodeVerified ||
-												  !employerData
+												? !state.signUpCodeVerified
 												: false
 										}
 									>
@@ -529,7 +548,7 @@ const Register = () => {
 
 					<div className={classes.stepperWrap}>
 						<RegisterStepper
-							activeStep={activeStep}
+							activeStep={state.activeStep}
 							steps={userType ? USER_STEPS : STORE_STEPS}
 						/>
 					</div>

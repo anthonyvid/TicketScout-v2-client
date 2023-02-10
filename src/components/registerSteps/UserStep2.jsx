@@ -9,7 +9,7 @@ import { statusCodes } from "constants/statusCodes.constants.js";
 import { createNotification } from "utils/notification.js";
 import { verifySignUpCode } from "services/auth.service.js";
 
-const UserStep2 = ({ code, setCode, setVerified }) => {
+const UserStep2 = ({ code, setCode, setVerified, setEmployerData }) => {
 	const classes = useClasses(userStep2Styles);
 	const [disabled, setDisabled] = useState(true);
 	const [loading, setLoading] = useState(false);
@@ -34,6 +34,8 @@ const UserStep2 = ({ code, setCode, setVerified }) => {
 				"Successfully verified sign up code."
 			);
 			setVerified(true);
+			console.log(response);
+			setEmployerData(response.data);
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
