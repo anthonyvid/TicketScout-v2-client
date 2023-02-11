@@ -30,6 +30,8 @@ import {
 	isUniqueStoreName,
 } from "services/auth.service.js";
 import { reducer } from "reducers/index.js";
+import { useDispatch } from "react-redux";
+import { setLogin } from "reducers/auth/index.js";
 
 const USER_STEPS = 3;
 const STORE_STEPS = 3;
@@ -41,6 +43,7 @@ const Register = () => {
 	const [employerData, setEmployerData] = useState(null);
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [uniqueStoreName, setUniqueStoreName] = useState("");
 	const [uniqueEmail, setUniqueEmail] = useState("");
 	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
@@ -245,7 +248,11 @@ const Register = () => {
 
 		try {
 			const response = await register(userData);
-			if (response.status !== statusCodes.OK) {
+			console.log(response);
+			if (
+				response.status !== statusCodes.OK ||
+				response.status !== statusCodes.CREATED
+			) {
 				setError(
 					response.data.key,
 					{ type: "focus", message: response.data.message },
@@ -255,6 +262,13 @@ const Register = () => {
 				if (response.data.key !== "signUpCode") setActiveStep(1);
 				throw new Error(response.data.message);
 			}
+			dispatch(
+				setLogin({
+					user: response.data.user,
+					token: response.data.token,
+				})
+			);
+			navigate(`/${response.data.user.storeUrl}/dashboard`);
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
