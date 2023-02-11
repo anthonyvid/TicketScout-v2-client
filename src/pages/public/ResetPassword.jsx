@@ -4,7 +4,7 @@ import TextInput from "components/TextInput.jsx";
 import useClasses from "hooks/useClasses.js";
 import React, { useState } from "react";
 import Lottie from "react-lottie-player";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import resetPasswordStyles from "styles/pages/ResetPassword.style.js";
 import lockLottie from "../../assets/lotties/lock.json";
 import successLottie from "../../assets/lotties/checkoutSuccess.json";
@@ -16,11 +16,15 @@ import * as yup from "yup";
 import { resetPassword } from "services/user.service.js";
 import { statusCodes } from "constants/statusCodes.constants.js";
 import { cx } from "@emotion/css";
+import { useSelector } from "react-redux";
 
 const ResetPassword = () => {
 	const classes = useClasses(resetPasswordStyles);
 	const navigate = useNavigate();
+	const params = useParams();
+	const { user, token } = useSelector((state) => state);
 	const [loading, setLoading] = useState(false);
+	const [email, setEmail] = useState("");
 	const [isReset, setIsReset] = useState(false);
 	const handleReset = () => {
 		createNotification(
@@ -68,18 +72,33 @@ const ResetPassword = () => {
 		if (loading) return;
 		setLoading(true);
 
-		try {
-			// const response = await resetPassword(data);
-			// console.log(response);
-			// if (response.status !== statusCodes.OK)
-			// 	throw new Error(response.data.message);
+		const resetData = {
+			...data,
+			id: params.id,
+			token: params.token,
+		};
 
+		try {
+			const response = await resetPassword(resetData);
+            
+			if (response.status !== statusCodes.OK)
+				throw new Error(response.data.message);
+
+			setEmail(response.data.email);
 			setIsReset(true);
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
 		} finally {
 			setLoading(false);
+		}
+	};
+
+	const handleContinue = () => {
+		if (user && token) {
+			navigate("/dashboard");
+		} else {
+			navigate(`/account/login?email=${email}`);
 		}
 	};
 
@@ -164,7 +183,7 @@ const ResetPassword = () => {
 						</Button>
 					) : (
 						<Button
-							onClick={() => navigate("/dashboard")}
+							onClick={handleContinue}
 							className={classes.resetButton}
 							variant="contained"
 							type="button"

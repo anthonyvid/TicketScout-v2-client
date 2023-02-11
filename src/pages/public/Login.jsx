@@ -39,7 +39,6 @@ const Login = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [searchParams, setSearchParams] = useSearchParams();
-	let { token, user } = useSelector((state) => state);
 
 	const {
 		control,
@@ -62,21 +61,20 @@ const Login = () => {
 			setLoading(true);
 			try {
 				const response = await login(data);
-				console.log(response);
+
 				if (response.status !== statusCodes.OK) {
 					setFocus("email");
 					if (response.data.key === "no_account") reset();
 					throw new Error(response.data.message);
 				}
-
 				reset();
 				dispatch(
 					setLogin({
-						// user: loggedIn.user,
-						// token: loggedIn.token,
+						user: response.data.user,
+						token: response.data.token,
 					})
 				);
-				navigate(`/${user}/dashboard`);
+				navigate(`/${response.data.user.storeUrl}/dashboard`);
 			} catch (error) {
 				createNotification("error", error.message);
 				console.error(error.message);

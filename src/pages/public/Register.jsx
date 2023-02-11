@@ -40,6 +40,7 @@ const Register = () => {
 	const [loading, setLoading] = useState(false);
 	const [employerData, setEmployerData] = useState(null);
 	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 	const [uniqueStoreName, setUniqueStoreName] = useState("");
 	const [uniqueEmail, setUniqueEmail] = useState("");
 	const [signUpCode, setSignUpCode] = useState(new Array(6).fill(""));
@@ -239,11 +240,11 @@ const Register = () => {
 			signUpCode: employerData.code,
 			signUpCodeVerified,
 			organizationId: employerData.organizationId,
+			storeUrl: employerData.storeUrl,
 		};
 
 		try {
 			const response = await register(userData);
-			console.log(response);
 			if (response.status !== statusCodes.OK) {
 				setError(
 					response.data.key,
@@ -251,7 +252,7 @@ const Register = () => {
 					{ shouldFocus: true }
 				);
 				if (response.data.key === "email") setUniqueEmail(false);
-				if (response.data.key !== "planType") setActiveStep(1);
+				if (response.data.key !== "signUpCode") setActiveStep(1);
 				throw new Error(response.data.message);
 			}
 		} catch (error) {
@@ -290,6 +291,8 @@ const Register = () => {
 
 			if (planType !== planTypes.BASIC) {
 				handleCheckoutPage();
+			} else {
+				navigate(`${response.data.storeUrl}/dashboard`);
 			}
 		} catch (error) {
 			createNotification("error", error.message);

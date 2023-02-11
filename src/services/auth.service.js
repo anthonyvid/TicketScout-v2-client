@@ -1,5 +1,6 @@
 import { postRequest } from "config/axiosConfig.js";
 import { isEmpty } from "lodash";
+import { getCached } from "utils/helper.js";
 
 export const login = async (credentials) => {
 	if (isEmpty(credentials)) return new Error("Invalid Entry.");
@@ -64,6 +65,15 @@ export const isUniqueStoreName = async (storeName) => {
 export const forgotPassword = async (email) => {
 	try {
 		const response = await postRequest(`auth/forgot-password`, { email });
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};
+
+export const isAuthenticated = async (data) => {
+	try {
+		const response = await postRequest(`auth/authenticate-user`, data);
 		return response;
 	} catch (error) {
 		return error.response;

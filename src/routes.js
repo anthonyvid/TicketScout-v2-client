@@ -16,7 +16,10 @@ const publicRoutes = [
 	{ component: <Register />, path: "/account/register" },
 	{ component: <CheckoutSuccess />, path: "/checkout/success" },
 	{ component: <ForgotPassword />, path: "/account/forgot-password" },
-	{ component: <ResetPassword />, path: "/account/reset-password" },
+	{
+		component: <ResetPassword />,
+		path: "/account/reset-password/:id/:token",
+	},
 ];
 const privateRoutes = [
 	{ component: <Dashboard />, path: `/:organization/dashboard` },

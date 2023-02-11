@@ -1,15 +1,15 @@
 import axios from "axios";
-
+import { getCached } from "utils/helper.js";
 const axiosClient = axios.create();
 
 axiosClient.defaults.headers = {
 	"Content-Type": "application/json",
 	Accept: "application/json",
+	Authorization: `Bearer ${getCached("token") || ""}`,
 };
 
 //All request will wait 2 seconds before timeout
-// axiosClient.defaults.timeout = 2000;
-
+axiosClient.defaults.timeout = 2000;
 axiosClient.defaults.withCredentials = true;
 
 export function getRequest(URL) {

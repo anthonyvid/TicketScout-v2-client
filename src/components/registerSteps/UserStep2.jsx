@@ -34,7 +34,6 @@ const UserStep2 = ({ code, setCode, setVerified, setEmployerData }) => {
 				"Successfully verified sign up code."
 			);
 			setVerified(true);
-			console.log(response);
 			setEmployerData(response.data);
 		} catch (error) {
 			createNotification("error", error.message);

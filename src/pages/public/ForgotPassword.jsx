@@ -21,7 +21,6 @@ const ForgotPassword = () => {
 	const handleReset = async () => {
 		try {
 			if (isEmail(email)) {
-				console.log("asd");
 				const response = await forgotPassword(email);
 				console.log(response);
 
