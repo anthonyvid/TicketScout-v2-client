@@ -14,7 +14,6 @@ const forgotPasswordStyles = (theme) => ({
 		height: "50px",
 		margin: "20px 0 0 0",
 	},
-
 	wrap: {
 		display: "flex",
 		height: "auto",
@@ -33,6 +32,9 @@ const forgotPasswordStyles = (theme) => ({
 		display: "flex",
 		justifyContent: "center",
 		alighItems: "center",
+		[theme.breakpoints.down("sm")]: {
+			height: 55,
+		},
 	},
 });
 

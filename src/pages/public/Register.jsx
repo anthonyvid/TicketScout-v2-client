@@ -18,7 +18,7 @@ import UserStep2 from "components/registerSteps/UserStep2.jsx";
 import { isEmpty } from "lodash";
 import { createCheckoutSession } from "services/stripe.service.js";
 import { createNotification } from "utils/notification.js";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { statusCodes } from "constants/statusCodes.constants.js";
 
 import { createOrganization } from "services/organization.service.js";
@@ -448,14 +448,7 @@ const Register = () => {
 	};
 
 	return (
-		<FlexContainer
-			page
-			justifyContentCenter
-			alignItemsCenter
-			col
-			styles={classes.registerContainer}
-		>
-			<Header showLogo={false} showLogin />
+		<FlexContainer page justifyContentCenter alignItemsCenter col>
 			<FlexContainer
 				gap="15px"
 				justifyContentCenter
@@ -549,6 +542,13 @@ const Register = () => {
 							activeStep={activeStep}
 							steps={userType ? USER_STEPS : STORE_STEPS}
 						/>
+					</div>
+
+					<div className={classes.register}>
+						Aleady have an account? &nbsp;&nbsp;
+						<Link tabIndex="-1" to="/account/login">
+							Log in
+						</Link>
 					</div>
 				</form>
 			</FlexContainer>

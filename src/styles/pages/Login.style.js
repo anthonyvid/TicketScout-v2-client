@@ -3,13 +3,32 @@ const loginStyles = (theme) => ({
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
-		width: "350px",
+		width: "400px",
 		height: "100%",
-		marginBottom: "110px",
 		textAlign: "center",
+		[theme.breakpoints.down("sm")]: {
+			width: "325px",
+		},
 	},
 	submitBtn: {
-		height: "40px",
+		height: "50px",
+	},
+	heading: { fontSize: "40px" },
+	subheading: {
+		fontSize: "18px",
+		color: theme.palette.neutral.main,
+		marginBottom: "15px",
+	},
+	signUp: {
+		position: "absolute",
+		bottom: 40,
+		width: "100%",
+		fontSize: "15px",
+		color: theme.palette.neutral.main,
+		fontWeight: 600,
+	},
+	textWrap: {
+		marginBottom: "20px",
 	},
 });
 

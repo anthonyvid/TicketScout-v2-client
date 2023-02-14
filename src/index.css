@@ -58,3 +58,7 @@ p {
 	background: #ed4337;
 	/* background: #e74c3c; */
 }
+
+.Button {
+	border-radius: 15px;
+}

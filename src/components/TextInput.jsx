@@ -73,7 +73,7 @@ const TextInput = ({
 		placeholder = PLACEHOLDER.EMAIL;
 	} else if (type === "password") {
 		placeholder = PLACEHOLDER.PASSWORD;
-}
+	}
 
 	const checkForCaps = useCallback(
 		(e) => {
@@ -92,7 +92,7 @@ const TextInput = ({
 				{staticLabel && <InputLabel>{label}</InputLabel>}
 				{altLabel && (
 					<Link tabIndex="-1" to="/account/forgot-password">
-						<InputLabel>Forgot Password?</InputLabel>
+						<InputLabel>Forgot Password</InputLabel>
 					</Link>
 				)}
 			</div>

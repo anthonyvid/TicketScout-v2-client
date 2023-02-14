@@ -39,7 +39,28 @@ export const colorTokens = {
 export const themeSettings = (mode) => {
 	return {
 		components: {
+			"MuiInputBase-input": {
+				styleOverrides: {
+					root: {},
+					input: { borderRadius: "15px" },
+				},
+			},
 			MuiButton: {
+				styleOverrides: {
+					root: {
+						fontWeight: "700",
+						fontSize: "15px",
+						textTransform: "capitalize",
+						borderRadius: "10px",
+					},
+					contained: {
+						// background:
+						// 	"linear-gradient(to right, #74d9eb, #8fb0c7)",
+						// "&:hover": {
+						// 	background: "linear-gradient(to right, red, blue)",
+						// },
+					},
+				},
 				variants: [
 					{
 						props: { variant: "light" },

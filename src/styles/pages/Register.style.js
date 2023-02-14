@@ -1,7 +1,4 @@
 const registerStyles = (theme) => ({
-	registerContainer: {
-		paddingBottom: "100px",
-	},
 	registerFormWrap: {
 		display: "flex",
 		flexDirection: "column",
@@ -10,7 +7,6 @@ const registerStyles = (theme) => ({
 		width: "80%",
 		height: "100%",
 		textAlign: "center",
-		paddingBottom: "100px",
 		position: "relative",
 	},
 	stepperWrap: {
@@ -18,7 +14,7 @@ const registerStyles = (theme) => ({
 		display: "flex",
 		justifyContent: "center",
 		position: "absolute",
-		bottom: "0px",
+		bottom: 100,
 		alignItems: "center",
 	},
 	relative: {
@@ -64,6 +60,14 @@ const registerStyles = (theme) => ({
 		[theme.breakpoints.down("sm")]: {
 			width: "50%",
 		},
+	},
+	register: {
+		width: "100%",
+		position: "absolute",
+		bottom: 30,
+		fontSize: "15px",
+		color: theme.palette.neutral.main,
+		fontWeight: 600,
 	},
 });
 

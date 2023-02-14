@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+	Link,
+	useLocation,
+	useNavigate,
+	useSearchParams,
+} from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -38,7 +43,13 @@ const Login = () => {
 	const [loading, setLoading] = useState(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [width, setWidth] = useState(window.innerWidth);
 	const [searchParams, setSearchParams] = useSearchParams();
+	const isMobile = width <= 768;
+
+	const handleWindowSizeChange = () => {
+		setWidth(window.innerWidth);
+	};
 
 	const {
 		control,
@@ -104,9 +115,15 @@ const Login = () => {
 		setSearchParams(searchParams);
 	}, []);
 
+	useEffect(() => {
+		window.addEventListener("resize", handleWindowSizeChange);
+		return () => {
+			window.removeEventListener("resize", handleWindowSizeChange);
+		};
+	}, []);
+
 	return (
 		<FlexContainer page justifyContentCenter alignItemsCenter col>
-			<Header showRegister showLogo={true} />
 			<form
 				onSubmit={handleSubmit(sendLoginRequest)}
 				className={classes.loginFormWrap}
@@ -118,16 +135,16 @@ const Login = () => {
 					col
 				>
 					<div>
-						<Typography variant="h2">
+						<h1 className={classes.heading}>
 							<strong>Account Log In</strong>
-						</Typography>
-						<Typography variant="h6">
+						</h1>
+						<h3 className={classes.subheading}>
 							Welcome back! Please enter your details.
-						</Typography>
+						</h3>
 					</div>
 					<TextInput
 						staticLabel
-						autoFocus
+						autoFocus={!isMobile}
 						fullWidth
 						label="Email"
 						name="email"
@@ -135,7 +152,6 @@ const Login = () => {
 						control={control}
 						errors={errors}
 					/>
-
 					<TextInput
 						altLabel
 						staticLabel
@@ -156,8 +172,13 @@ const Login = () => {
 						{loading ? <CircularProgress /> : "Submit"}
 					</Button>
 				</FlexContainer>
+				<div className={classes.signUp}>
+					Dont have an account yet? &nbsp;&nbsp;
+					<Link tabIndex="-1" to="/account/register">
+						Sign up
+					</Link>
+				</div>
 			</form>
-			<Footer />
 		</FlexContainer>
 	);
 };
