@@ -30,6 +30,16 @@ const loginStyles = (theme) => ({
 	textWrap: {
 		marginBottom: "20px",
 	},
+	lottieWrap: {
+		width: "100%",
+		height: 80,
+		display: "flex",
+		justifyContent: "center",
+		alighItems: "center",
+		[theme.breakpoints.down("sm")]: {
+			height: 55,
+		},
+	},
 });
 
 export default loginStyles;

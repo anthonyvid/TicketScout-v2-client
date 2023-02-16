@@ -25,7 +25,7 @@ const PrivateRoutes = () => {
 				);
 				navigate("account/login");
 				//todo: call logout function maybe
-				throw new Error(response.data.message);
+				throw new Error(response.data.message || response.statusText);
 			}
 		} catch (error) {
 			createNotification("error", error.message);

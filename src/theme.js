@@ -39,10 +39,16 @@ export const colorTokens = {
 export const themeSettings = (mode) => {
 	return {
 		components: {
-			"MuiInputBase-input": {
+			MuiInputBase: {
 				styleOverrides: {
-					root: {},
-					input: { borderRadius: "15px" },
+					input: {},
+				},
+			},
+			MuiOutlinedInput: {
+				styleOverrides: {
+					root: {
+						borderRadius: "10px",
+					},
 				},
 			},
 			MuiButton: {

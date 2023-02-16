@@ -7,7 +7,7 @@ const flexContainerStyles = (theme) => ({
 		height: "auto",
 	},
 	maxHeight: {
-		height: "100%",
+		height: "100vh",
 	},
 });
 

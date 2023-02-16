@@ -16,6 +16,8 @@ import { useEffect } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import EmailIcon from "@mui/icons-material/Email";
+import { cx } from "@emotion/css";
 
 const PLACEHOLDER = {
 	EMAIL: "john@email.com",
@@ -44,6 +46,23 @@ const textInputStyles = (theme) => ({
 	successIcon: {
 		color: theme.palette.primary.success,
 	},
+	emailIcon: {
+		color: theme.palette.neutral.main,
+	},
+	input: {
+		borderRadius: "10px",
+	},
+	// error: {
+	// 	background: `${theme.palette.primary.error}20`,
+	// },
+	// success: {
+	// 	background: `${theme.palette.primary.main}20`,
+	// 	"& .MuiOutlinedInput-root": {
+	// 		"& fieldset": {
+	// 			borderColor: theme.palette.primary.main,
+	// 		},
+	// 	},
+	// },
 });
 
 const TextInput = ({
@@ -101,6 +120,10 @@ const TextInput = ({
 				rules={rules}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<TextField
+						className={cx(classes.input, {
+							[classes.error]: errors[name],
+							[classes.success]: !errors[name] && value,
+						})}
 						onBlur={onBlur}
 						onChange={(value) => {
 							onChange(value);
@@ -119,6 +142,15 @@ const TextInput = ({
 						label={staticLabel ? null : label}
 						error={errors[name] !== undefined}
 						InputProps={{
+							// startAdornment: (
+							// 	<>
+							// 		{type === "email" && (
+							// 			<EmailIcon
+							// 				className={classes.emailIcon}
+							// 			/>
+							// 		)}
+							// 	</>
+							// ),
 							endAdornment: (
 								<>
 									{type === "password" && (

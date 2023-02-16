@@ -42,7 +42,9 @@ const CheckoutSuccess = () => {
 				console.log(response);
 
 				if (response.status !== statusCodes.OK)
-					throw new Error(response.data.message);
+					throw new Error(
+						response.data.message || response.statusText
+					);
 
 				setUser(response.data.user);
 				setToken(response.data.token);

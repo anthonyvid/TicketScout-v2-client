@@ -260,7 +260,7 @@ const Register = () => {
 				);
 				if (response.data.key === "email") setUniqueEmail(false);
 				if (response.data.key !== "signUpCode") setActiveStep(1);
-				throw new Error(response.data.message);
+				throw new Error(response.data.message || response.statusText);
 			}
 			dispatch(
 				setLogin({
@@ -300,7 +300,7 @@ const Register = () => {
 					setUniqueStoreName(false);
 				if (response.data.key === "email") setUniqueEmail(false);
 				if (response.data.key !== "planType") setActiveStep(1);
-				throw new Error(response.data.message);
+				throw new Error(response.data.message || response.statusText);
 			}
 
 			if (planType !== planTypes.BASIC) {
@@ -345,8 +345,11 @@ const Register = () => {
 		const fetchData = async () => {
 			try {
 				const response = await isUniqueStoreName(storeNameRebounce);
+
 				if (response.status !== statusCodes.OK)
-					throw new Error(response.data.message);
+					throw new Error(
+						response.data.message || response.statusText
+					);
 
 				const isUnique = response.data.isUnique;
 				setUniqueStoreName(isUnique);
@@ -370,7 +373,9 @@ const Register = () => {
 			try {
 				const response = await isUniqueEmail(emailRebounce);
 				if (response.status !== statusCodes.OK)
-					throw new Error(response.data.message);
+					throw new Error(
+						response.data.message || response.statusText
+					);
 
 				const isUnique = response.data.isUnique;
 				setUniqueEmail(isUnique);
@@ -406,7 +411,7 @@ const Register = () => {
 			);
 
 			if (response.status !== statusCodes.OK) {
-				throw new Error(response.data.message);
+				throw new Error(response.data.message || response.statusText);
 			}
 
 			const url = response.data.url;
@@ -457,6 +462,12 @@ const Register = () => {
 				maxHeight
 				styles={classes.relative}
 			>
+				<div className={classes.register}>
+					Aleady have an account? &nbsp;&nbsp;
+					<Link tabIndex="-1" to="/account/login">
+						Log in
+					</Link>
+				</div>
 				<form
 					onSubmit={
 						userType
@@ -536,19 +547,11 @@ const Register = () => {
 							</div>
 						)}
 					</FlexContainer>
-
 					<div className={classes.stepperWrap}>
 						<RegisterStepper
 							activeStep={activeStep}
 							steps={userType ? USER_STEPS : STORE_STEPS}
 						/>
-					</div>
-
-					<div className={classes.register}>
-						Aleady have an account? &nbsp;&nbsp;
-						<Link tabIndex="-1" to="/account/login">
-							Log in
-						</Link>
 					</div>
 				</form>
 			</FlexContainer>

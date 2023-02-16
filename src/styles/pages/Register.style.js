@@ -7,18 +7,16 @@ const registerStyles = (theme) => ({
 		width: "80%",
 		height: "100%",
 		textAlign: "center",
-		position: "relative",
 	},
 	stepperWrap: {
 		width: "100%",
+		height: "10%",
 		display: "flex",
 		justifyContent: "center",
-		position: "absolute",
-		bottom: 100,
 		alignItems: "center",
 	},
 	relative: {
-		position: "relative",
+		// position: "relative",
 	},
 	buttonWrap: {
 		display: "flex",
@@ -45,10 +43,7 @@ const registerStyles = (theme) => ({
 		display: "none",
 		visibility: "hidden",
 	},
-	pageWrap: {
-		width: "100%",
-		height: "100%",
-	},
+	pageWrap: {},
 	continueBtn: {
 		height: "50px",
 		width: "calc(80% + 35px)",
@@ -62,9 +57,12 @@ const registerStyles = (theme) => ({
 		},
 	},
 	register: {
-		width: "100%",
 		position: "absolute",
-		bottom: 30,
+		top: 20,
+		right: 30,
+		// width: "100%",
+		// padding: "20px",
+		// marginTop: "20px",
 		fontSize: "15px",
 		color: theme.palette.neutral.main,
 		fontWeight: 600,

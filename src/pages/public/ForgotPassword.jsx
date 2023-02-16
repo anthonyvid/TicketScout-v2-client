@@ -25,7 +25,9 @@ const ForgotPassword = () => {
 				console.log(response);
 
 				if (response.status !== statusCodes.OK)
-					throw new Error(response.data.message);
+					throw new Error(
+						response.data.message || response.statusText
+					);
 			}
 		} catch (error) {
 			createNotification("error", error.message);

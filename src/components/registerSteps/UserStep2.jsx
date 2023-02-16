@@ -26,7 +26,7 @@ const UserStep2 = ({ code, setCode, setVerified, setEmployerData }) => {
 
 			if (response.status !== statusCodes.OK) {
 				setCode(new Array(6).fill(""));
-				throw new Error(response.data.message);
+				throw new Error(response.data.message || response.statusText);
 			}
 
 			createNotification(

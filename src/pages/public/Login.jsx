@@ -38,6 +38,10 @@ import loginStyles from "styles/pages/Login.style.js";
 import Header from "components/Header.jsx";
 import { loginSchema } from "constants/register.constants.js";
 
+import userLottie from "../../assets/lotties/login.json";
+import Lottie from "react-lottie-player";
+import LoginUser from "assets/svg/LoginUser.js";
+
 const Login = () => {
 	const classes = useClasses(loginStyles);
 	const [loading, setLoading] = useState(false);
@@ -46,6 +50,7 @@ const Login = () => {
 	const [width, setWidth] = useState(window.innerWidth);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const isMobile = width <= 768;
+	const [play, setPlay] = useState(false);
 
 	const handleWindowSizeChange = () => {
 		setWidth(window.innerWidth);
@@ -76,7 +81,9 @@ const Login = () => {
 				if (response.status !== statusCodes.OK) {
 					setFocus("email");
 					if (response.data.key === "no_account") reset();
-					throw new Error(response.data.message);
+					throw new Error(
+						response.data.message || response.statusText
+					);
 				}
 				reset();
 				dispatch(
@@ -134,6 +141,20 @@ const Login = () => {
 					alignItemsCenter
 					col
 				>
+					<div className={classes.lottieWrap}>
+						{loading ? (
+							<Lottie
+								animationData={userLottie}
+								loop={false}
+								play
+								rendererSettings={{
+									preserveAspectRatio: "xMidYMid slice",
+								}}
+							/>
+						) : (
+							<LoginUser />
+						)}
+					</div>
 					<div>
 						<h1 className={classes.heading}>
 							<strong>Account Log In</strong>

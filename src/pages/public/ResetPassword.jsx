@@ -82,7 +82,7 @@ const ResetPassword = () => {
 			const response = await resetPassword(resetData);
             
 			if (response.status !== statusCodes.OK)
-				throw new Error(response.data.message);
+				throw new Error(response.data.message || response.statusText);
 
 			setEmail(response.data.email);
 			setIsReset(true);
