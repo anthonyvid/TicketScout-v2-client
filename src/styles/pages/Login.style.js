@@ -9,6 +9,7 @@ const loginStyles = (theme) => ({
 		[theme.breakpoints.down("sm")]: {
 			width: "325px",
 		},
+        marginBottom: '100px'
 	},
 	submitBtn: {
 		height: "50px",
@@ -30,7 +31,8 @@ const loginStyles = (theme) => ({
 	textWrap: {
 		marginBottom: "20px",
 	},
-	lottieWrap: {
+	logoWrap: {
+		marginBottom: "30px",
 		width: "100%",
 		height: 80,
 		display: "flex",

@@ -28,7 +28,7 @@ import TextInput from "components/TextInput.jsx";
 import { Button, CircularProgress, Grid, Typography } from "@mui/material";
 
 // Icons
-import Logo from "assets/svg/logo.js";
+import Logo from "assets/svg/Logo.js";
 
 // Constants
 import { statusCodes } from "constants/statusCodes.constants.js";
@@ -40,7 +40,6 @@ import { loginSchema } from "constants/register.constants.js";
 
 import userLottie from "../../assets/lotties/login.json";
 import Lottie from "react-lottie-player";
-import LoginUser from "assets/svg/LoginUser.js";
 
 const Login = () => {
 	const classes = useClasses(loginStyles);
@@ -141,19 +140,8 @@ const Login = () => {
 					alignItemsCenter
 					col
 				>
-					<div className={classes.lottieWrap}>
-						{loading ? (
-							<Lottie
-								animationData={userLottie}
-								loop={false}
-								play
-								rendererSettings={{
-									preserveAspectRatio: "xMidYMid slice",
-								}}
-							/>
-						) : (
-							<LoginUser />
-						)}
+					<div className={classes.logoWrap}>
+						<Logo />
 					</div>
 					<div>
 						<h1 className={classes.heading}>

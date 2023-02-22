@@ -11,7 +11,7 @@ import LinkButton from "./LinkButton.jsx";
 import { Grid } from "@mui/material";
 
 // Icons
-import Logo from "assets/svg/logo.js";
+// import Logo from "assets/svg/logo.js";
 
 // Styles
 import headerStyles from "styles/components/Header.style.js";
@@ -21,7 +21,7 @@ const Header = ({ showLogo, showMenu, showRegister, showLogin }) => {
 	return (
 		<FlexContainer styles={classes.headerContainer}>
 			<Grid className={classes.header} item xs={12}>
-				<div>{showLogo && <Logo width={50} height={50} />}</div>
+				{/* <div>{showLogo && <Logo width={50} height={50} />}</div> */}
 
 				<div>{showMenu && ""}</div>
 

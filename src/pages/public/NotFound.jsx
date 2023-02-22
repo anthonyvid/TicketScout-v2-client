@@ -12,7 +12,7 @@ const NotFound = () => {
 	const navigate = useNavigate();
 
 	let { token, user } = useSelector((state) => state);
-
+	console.log(user);
 	return (
 		<FlexContainer col page justifyContentCenter alignItemsCenter>
 			<div className={classes.lottieWrap}>
@@ -31,7 +31,7 @@ const NotFound = () => {
 			</div>
 			{user && token ? (
 				<Button
-					onClick={() => navigate("/dashboard")}
+					onClick={() => navigate(`/${user.storeUrl}/dashboard`)}
 					className={classes.button}
 					variant="contained"
 				>
