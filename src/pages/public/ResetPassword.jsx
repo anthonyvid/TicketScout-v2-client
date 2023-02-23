@@ -16,6 +16,8 @@ import * as yup from "yup";
 import { resetPassword } from "services/user.service.js";
 import { statusCodes } from "constants/statusCodes.constants.js";
 import { cx } from "@emotion/css";
+import LockIcon from "@mui/icons-material/Lock";
+
 import { useSelector } from "react-redux";
 
 const ResetPassword = () => {
@@ -80,7 +82,7 @@ const ResetPassword = () => {
 
 		try {
 			const response = await resetPassword(resetData);
-            
+
 			if (response.status !== statusCodes.OK)
 				throw new Error(response.data.message || response.statusText);
 
@@ -152,6 +154,13 @@ const ResetPassword = () => {
 								type="password"
 								control={control}
 								errors={errors}
+								InputProps={{
+									startAdornment: (
+										<LockIcon
+											className={classes.lockIcon}
+										/>
+									),
+								}}
 							/>
 							<br />
 							<TextInput
@@ -163,6 +172,13 @@ const ResetPassword = () => {
 								type="password"
 								control={control}
 								errors={errors}
+								InputProps={{
+									startAdornment: (
+										<LockIcon
+											className={classes.lockIcon}
+										/>
+									),
+								}}
 							/>
 						</>
 					)}

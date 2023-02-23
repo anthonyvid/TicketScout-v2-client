@@ -12,6 +12,7 @@ import { createNotification } from "utils/notification.js";
 import { isEmail } from "utils/helper.js";
 import { forgotPassword } from "services/auth.service.js";
 import { statusCodes } from "constants/statusCodes.constants.js";
+import EmailIcon from "@mui/icons-material/Email";
 
 const ForgotPassword = () => {
 	const classes = useClasses(forgotPasswordStyles);
@@ -73,6 +74,11 @@ const ForgotPassword = () => {
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					placeholder="Enter your email"
+					InputProps={{
+						startAdornment: (
+							<EmailIcon className={classes.emailIcon} />
+						),
+					}}
 				/>
 				<Button
 					onClick={handleReset}

@@ -11,7 +11,10 @@ const resetPasswordStyles = (theme) => ({
 		height: "50px",
 		margin: "30px 0 0 0",
 	},
-
+	passwordIcon: {
+		color: theme.palette.neutral.main,
+		marginRight: "7px",
+	},
 	wrap: {
 		display: "flex",
 		height: "auto",

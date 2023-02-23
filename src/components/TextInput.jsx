@@ -17,6 +17,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import EmailIcon from "@mui/icons-material/Email";
+import LockIcon from "@mui/icons-material/Lock";
 import { cx } from "@emotion/css";
 
 const PLACEHOLDER = {
@@ -46,11 +47,13 @@ const textInputStyles = (theme) => ({
 	successIcon: {
 		color: theme.palette.primary.success,
 	},
-	emailIcon: {
-		color: theme.palette.neutral.main,
-	},
+
 	input: {
 		borderRadius: "10px",
+	},
+	startIcon: {
+		color: theme.palette.neutral.main,
+		marginRight: "7px",
 	},
 	// error: {
 	// 	background: `${theme.palette.primary.error}20`,
@@ -93,6 +96,18 @@ const TextInput = ({
 	} else if (type === "password") {
 		placeholder = PLACEHOLDER.PASSWORD;
 	}
+
+	const getStartIcon = () => {
+		switch (type) {
+			case "email":
+				return <EmailIcon className={classes.startIcon} />;
+			case "password":
+				return <LockIcon className={classes.startIcon} />;
+
+			default:
+				break;
+		}
+	};
 
 	const checkForCaps = useCallback(
 		(e) => {
@@ -142,15 +157,7 @@ const TextInput = ({
 						label={staticLabel ? null : label}
 						error={errors[name] !== undefined}
 						InputProps={{
-							// startAdornment: (
-							// 	<>
-							// 		{type === "email" && (
-							// 			<EmailIcon
-							// 				className={classes.emailIcon}
-							// 			/>
-							// 		)}
-							// 	</>
-							// ),
+							startAdornment: getStartIcon(),
 							endAdornment: (
 								<>
 									{type === "password" && (

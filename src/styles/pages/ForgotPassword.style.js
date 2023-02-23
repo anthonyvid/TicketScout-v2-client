@@ -36,6 +36,10 @@ const forgotPasswordStyles = (theme) => ({
 			height: 55,
 		},
 	},
+	emailIcon: {
+		color: theme.palette.neutral.main,
+		marginRight: "7px",
+	},
 });
 
 export default forgotPasswordStyles;
