@@ -29,7 +29,7 @@ const FlexContainer = ({
 }) => {
 	const classes = useClasses(flexContainerStyles);
 
-	let direction = "row";
+	let direction = "";
 
 	if (row) {
 		direction = "row";

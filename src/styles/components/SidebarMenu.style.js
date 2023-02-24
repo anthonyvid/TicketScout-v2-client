@@ -1,5 +1,3 @@
-import { letterSpacing } from "@mui/system";
-
 const sidebarMenuStyles = (theme) => ({
 	sidebar: {
 		width: "270px",
@@ -11,6 +9,9 @@ const sidebarMenuStyles = (theme) => ({
 		position: "relative",
 		transition: "0.4s ease-in-out",
 		borderRight: `1px solid ${theme.palette.neutral.medium}`,
+		[theme.breakpoints.down("sm")]: {
+			display: "none",
+		},
 	},
 	sidebarClosed: {
 		width: "80px",
@@ -33,15 +34,18 @@ const sidebarMenuStyles = (theme) => ({
 	logoWrap: {
 		width: "100%",
 		display: "flex",
-		justifyContent: "center",
 		alignItems: "center",
 		gap: "20px",
 		marginBottom: "50px",
-	},
-	logoText: {
+		paddingLeft: "30px",
 		fontSize: "20px",
 		fontWeight: "900",
 		letterSpacing: "1.5px",
+		transition: "0.4s ease-in-out",
+	},
+	logoWrapSmall: {
+		paddingLeft: "15px",
+		transition: "0.4s ease-in-out",
 	},
 	generalWrap: {
 		width: "100%",
@@ -61,15 +65,16 @@ const sidebarMenuStyles = (theme) => ({
 		fontWeight: "700",
 		color: theme.palette.neutral.main,
 		cursor: "pointer",
-		transition: "0.2s ease-in-out",
+		transition: "0.4s ease-in-out",
 		"&:hover": {
+			transition: "0.2s ease-in-out",
 			backgroundColor: `${theme.palette.primary.main}10`,
 			color: theme.palette.primary.main,
 		},
 	},
 	menuItemSmall: {
-		justifyContent: "center",
-		paddingLeft: 0,
+		paddingLeft: "30px",
+		transition: "0.4s ease-in-out",
 	},
 	activeItem: {
 		color: theme.palette.primary.main,
@@ -83,6 +88,32 @@ const sidebarMenuStyles = (theme) => ({
 		height: "30px",
 		borderTopRightRadius: "5px",
 		borderBottomRightRadius: "5px",
+	},
+	mobileMenuWrap: {
+		[theme.breakpoints.up("sm")]: {
+			display: "none",
+		},
+	},
+	menuBtn: {
+		width: "25px",
+		height: "25px",
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		cursor: "pointer",
+		left: 10,
+		top: 10,
+		position: "absolute",
+		zIndex: 100,
+	},
+	mobileMenu: {
+		position: "absolute",
+		backgroundColor: "#fff",
+		top: 0,
+		left: 0,
+		width: "100%",
+		height: "100%",
+		border: "5px solid red",
 	},
 });
 

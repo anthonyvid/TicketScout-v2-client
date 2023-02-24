@@ -1,6 +1,10 @@
 const dashboardStyles = (theme) => ({
-	test: {},
-
+	test: {
+		flexDirection: "row",
+		[theme.breakpoints.down("sm")]: {
+			flexDirection: "column",
+		},
+	},
 });
 
 export default dashboardStyles;

@@ -11,7 +11,7 @@ const Dashboard = () => {
 	const classes = useClasses(dashboardStyles);
 
 	return (
-		<FlexContainer page row styles={classes.test}>
+		<FlexContainer page styles={classes.test}>
 			<SidebarMenu />
 		</FlexContainer>
 	);

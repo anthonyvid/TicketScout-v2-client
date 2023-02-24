@@ -16,50 +16,9 @@ import { Grid } from "@mui/material";
 // Styles
 import headerStyles from "styles/components/Header.style.js";
 
-const Header = ({ showLogo, showMenu, showRegister, showLogin }) => {
+const Header = ({}) => {
 	const classes = useClasses(headerStyles);
-	return (
-		<FlexContainer styles={classes.headerContainer}>
-			<Grid className={classes.header} item xs={12}>
-				{/* <div>{showLogo && <Logo width={50} height={50} />}</div> */}
-
-				<div>{showMenu && ""}</div>
-
-				<div className={classes.registerWrap}>
-					{showRegister && (
-						<>
-							<p className={classes.registerText}>
-								New to TicketScout?
-							</p>
-							<LinkButton
-								className={classes.registerButton}
-								variant="light"
-								to="/account/register"
-								size="small"
-							>
-								Create an account
-							</LinkButton>
-						</>
-					)}
-					{showLogin && (
-						<>
-							<p className={classes.registerText}>
-								Have an account?
-							</p>
-							<LinkButton
-								className={classes.registerButton}
-								variant="light"
-								to="/account/login"
-								size="small"
-							>
-								Log in
-							</LinkButton>
-						</>
-					)}
-				</div>
-			</Grid>
-		</FlexContainer>
-	);
+	return <FlexContainer styles={classes.headerContainer}></FlexContainer>;
 };
 
 Header.defaultProps = {
