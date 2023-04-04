@@ -13,7 +13,7 @@ export const createOrganization = async (data) => {
 	}
 };
 
-export const getOrganizations = async (storeName) => {
+export const getOrganizations = async () => {
 	try {
 		const response = await getRequest("organizations");
 		return response;
@@ -22,4 +22,11 @@ export const getOrganizations = async (storeName) => {
 	}
 };
 
-
+export const getOrganizationById = async (id) => {
+	try {
+		const response = await getRequest(`organizations/${id}`);
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};

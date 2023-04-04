@@ -9,7 +9,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import registerStyles from "styles/pages/Register.style.js";
-import Header from "components/Header.jsx";
+
 import RegisterStepper from "components/RegisterStepper.jsx";
 import DefaultStep from "components/registerSteps/DefaultStep.jsx";
 import UserStep1 from "components/registerSteps/UserStep1.jsx";

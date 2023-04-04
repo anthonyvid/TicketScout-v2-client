@@ -11,7 +11,7 @@ const NotFound = () => {
 	const classes = useClasses(notFoundStyles);
 	const navigate = useNavigate();
 
-	let { token, user } = useSelector((state) => state);
+	let { token, user } = useSelector((state) => state.authReducer);
 	console.log(user);
 	return (
 		<FlexContainer col page justifyContentCenter alignItemsCenter>

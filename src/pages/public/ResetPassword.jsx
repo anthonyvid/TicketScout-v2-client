@@ -24,7 +24,7 @@ const ResetPassword = () => {
 	const classes = useClasses(resetPasswordStyles);
 	const navigate = useNavigate();
 	const params = useParams();
-	const { user, token } = useSelector((state) => state);
+	const { user, token } = useSelector((state) => state.authReducer);
 	const [loading, setLoading] = useState(false);
 	const [email, setEmail] = useState("");
 	const [isReset, setIsReset] = useState(false);

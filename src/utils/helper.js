@@ -8,6 +8,13 @@ export const isEmail = (email) => {
 
 export const getCached = (name) => {
 	const cache = JSON.parse(localStorage.getItem("persist:root"));
-	if (cache) return JSON.parse(cache[name]);
+	if (!cache) return null;
+
+	const authReducer = JSON.parse(cache.authReducer);
+	const resourceReducer = JSON.parse(cache.resourceReducer);
+
+	if (!authReducer || !resourceReducer) return null;
+
+	if (cache) return { ...authReducer, ...resourceReducer }[name];
 	return null;
 };

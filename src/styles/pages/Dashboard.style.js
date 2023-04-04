@@ -1,5 +1,6 @@
 const dashboardStyles = (theme) => ({
-	test: {
+	page: {
+		flexWrap: "wrap",
 		flexDirection: "row",
 		[theme.breakpoints.down("sm")]: {
 			flexDirection: "column",

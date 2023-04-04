@@ -6,7 +6,8 @@ import { BrowserTracing, Integrations } from "@sentry/tracing";
 import "./index.css";
 import App from "./App";
 import authReducer from "./reducers/auth/index.js";
-import { configureStore } from "@reduxjs/toolkit";
+import resourceReducer from "./reducers/resources/index.js";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import {
 	persistStore,
@@ -32,8 +33,14 @@ Sentry.init({
 	tracesSampleRate: 1.0, //lower the value in production
 });
 
+// Store all of my reducers here
+const rootReducer = combineReducers({
+	authReducer,
+	resourceReducer,
+});
+
 const persistConfig = { key: "root", storage, version: 1 };
-const persistedReducer = persistReducer(persistConfig, authReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
 	reducer: persistedReducer,
 	middleware: (getDefaultMiddleware) =>

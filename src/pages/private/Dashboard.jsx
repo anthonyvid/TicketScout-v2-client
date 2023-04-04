@@ -1,4 +1,5 @@
 import { cx } from "@emotion/css";
+import ContentSection from "components/ContentSection.jsx";
 import FlexContainer from "components/FlexContainer.jsx";
 import SidebarMenu from "components/SidebarMenu.jsx";
 import useClasses from "hooks/useClasses.js";
@@ -11,8 +12,9 @@ const Dashboard = () => {
 	const classes = useClasses(dashboardStyles);
 
 	return (
-		<FlexContainer page styles={classes.test}>
+		<FlexContainer page styles={classes.page}>
 			<SidebarMenu />
+			<ContentSection>asd</ContentSection>
 		</FlexContainer>
 	);
 };

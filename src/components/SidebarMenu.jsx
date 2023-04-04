@@ -18,11 +18,12 @@ const SidebarMenu = () => {
 	const location = useLocation();
 	const currentPage = location.pathname.split("/")[2];
 
-	const { user, sidebarState } = useSelector((state) => state);
+	const { user, sidebarState } = useSelector((state) => state.authReducer);
 
 	const dispatch = useDispatch();
 	const [activeItem, setActiveItem] = useState(currentPage);
 	const [mobileMenuState, setMobileMenuState] = useState(false);
+
 	const generalItems = [
 		{
 			name: "Dashboard",
@@ -45,17 +46,19 @@ const SidebarMenu = () => {
 					[classes.sidebarClosed]: !sidebarState,
 				})}
 			>
-				<div
-					className={classes.sidebarToggleWrap}
-					onClick={() => {
-						dispatch(toggleSidebarState(sidebarState));
-					}}
-				>
-					{!sidebarState ? (
-						<KeyboardArrowRightIcon />
-					) : (
-						<KeyboardArrowLeftIcon />
-					)}
+				<div className={classes.sidebarToggleBG}>
+					<div
+						className={classes.sidebarToggleWrap}
+						onClick={() => {
+							dispatch(toggleSidebarState(sidebarState));
+						}}
+					>
+						{!sidebarState ? (
+							<KeyboardArrowRightIcon />
+						) : (
+							<KeyboardArrowLeftIcon />
+						)}
+					</div>
 				</div>
 				<div
 					className={cx(classes.logoWrap, {
@@ -63,7 +66,7 @@ const SidebarMenu = () => {
 					})}
 				>
 					<Logo width="50px" height="50px" />
-					{sidebarState && "TicketScout"}
+					{sidebarState && <h3>TicketScout</h3>}
 				</div>
 				<div className={classes.generalWrap}>
 					{generalItems.map(({ name, icon, link, key }) => {
