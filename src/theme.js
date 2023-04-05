@@ -131,6 +131,7 @@ export const themeSettings = (mode) => {
 							mediumMain: colorTokens.grey[500],
 							medium: colorTokens.grey[400],
 							light: colorTokens.grey[300],
+							default: "#f6f6f6",
 						},
 						background: {
 							default: colorTokens.grey[50],

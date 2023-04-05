@@ -18,3 +18,27 @@ export const getCached = (name) => {
 	if (cache) return { ...authReducer, ...resourceReducer }[name];
 	return null;
 };
+
+export const getCurrentDate = () => {
+	let newDate = new Date();
+	let date = newDate.getDate();
+	let month = newDate.getMonth() + 1;
+	// let year = newDate.getFullYear();
+
+	const months = [
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec",
+	];
+
+	return `${date} ${months[month - 1]}`;
+};

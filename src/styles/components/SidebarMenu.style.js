@@ -29,6 +29,14 @@ const sidebarMenuStyles = (theme) => ({
 		top: 27,
 		position: "absolute",
 	},
+	arrowIcon: {
+		transition: "0.2s ease-in-out",
+		transform: "scale(1)",
+		"&:hover": {
+			transition: "0.2s ease-in-out",
+			transform: "scale(1.1)",
+		},
+	},
 	sidebarToggleWrap: {
 		width: "25px",
 		height: "25px",
@@ -41,6 +49,12 @@ const sidebarMenuStyles = (theme) => ({
 		top: 10,
 		backgroundColor: `${theme.palette.primary.mainLight}`,
 		color: `${theme.palette.primary.main}`,
+		transition: "0.2s ease-in-out",
+		transform: "scale(1)",
+		"&:hover": {
+			transition: "0.2s ease-in-out",
+			transform: "scale(1.1)",
+		},
 	},
 	logoWrap: {
 		width: "100%",

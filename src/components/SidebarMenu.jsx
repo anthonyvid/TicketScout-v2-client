@@ -54,9 +54,13 @@ const SidebarMenu = () => {
 						}}
 					>
 						{!sidebarState ? (
-							<KeyboardArrowRightIcon />
+							<KeyboardArrowRightIcon
+								className={classes.arrowIcon}
+							/>
 						) : (
-							<KeyboardArrowLeftIcon />
+							<KeyboardArrowLeftIcon
+								className={classes.arrowIcon}
+							/>
 						)}
 					</div>
 				</div>
