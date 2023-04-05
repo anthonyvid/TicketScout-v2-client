@@ -17,8 +17,15 @@ export const resourceSlice = createSlice({
 		setTickets: (state, action) => {
 			state.tickets = action.payload.tickets;
 		},
+		setCustomers: (state, action) => {
+			state.customers = action.payload.customers;
+		},
+		setPayments: (state, action) => {
+			state.payments = action.payload.payments;
+		},
 	},
 });
 
-export const { setOrganization, setTickets } = resourceSlice.actions;
+export const { setOrganization, setTickets, setCustomers, setPayments } =
+	resourceSlice.actions;
 export default resourceSlice.reducer;

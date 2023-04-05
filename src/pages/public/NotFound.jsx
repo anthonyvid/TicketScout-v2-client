@@ -12,7 +12,7 @@ const NotFound = () => {
 	const navigate = useNavigate();
 
 	let { token, user } = useSelector((state) => state.authReducer);
-	console.log(user);
+	
 	return (
 		<FlexContainer col page justifyContentCenter alignItemsCenter>
 			<div className={classes.lottieWrap}>

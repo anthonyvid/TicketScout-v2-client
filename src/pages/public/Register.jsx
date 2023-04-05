@@ -289,7 +289,7 @@ const Register = () => {
 
 		try {
 			const response = await createOrganization(storeData);
-			console.log(response);
+
 			if (response.status !== statusCodes.OK) {
 				setError2(
 					response.data.key,
@@ -306,7 +306,13 @@ const Register = () => {
 			if (planType !== planTypes.BASIC) {
 				handleCheckoutPage();
 			} else {
-				navigate(`${response.data.storeUrl}/dashboard`);
+				dispatch(
+					setLogin({
+						user: response.data.user,
+						token: response.data.token,
+					})
+				);
+				navigate(`/${response.data.organization.storeUrl}/dashboard`); //todo: not working
 			}
 		} catch (error) {
 			createNotification("error", error.message);

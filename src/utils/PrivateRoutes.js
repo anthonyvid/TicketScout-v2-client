@@ -3,16 +3,26 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { setLogin } from "reducers/auth/index.js";
-import { setOrganization, setTickets } from "reducers/resources/index.js";
+import {
+	setOrganization,
+	setTickets,
+	setPayments,
+	setCustomers,
+} from "reducers/resources/index.js";
 import { isAuthenticated } from "services/auth.service.js";
-import { getOrganizationById } from "services/organization.service.js";
+import { getCustomers } from "services/customer.service.js";
+import {
+	getOrganizationById,
+	getOrganizations,
+} from "services/organization.service.js";
+import { getPayments } from "services/payment.service.js";
 import { getTickets } from "services/ticket.service.js";
 import { getCached } from "./helper.js";
 import { createNotification } from "./notification.js";
 
 const PrivateRoutes = () => {
 	let { token, user } = useSelector((state) => state.authReducer);
-	let { organization, tickets } = useSelector(
+	let { organization, tickets, customers, payments } = useSelector(
 		(state) => state.resourceReducer
 	);
 
@@ -22,7 +32,7 @@ const PrivateRoutes = () => {
 	const runAuth = async () => {
 		try {
 			const response = await isAuthenticated({ user, token });
-
+			
 			if (response.status !== statusCodes.OK) {
 				dispatch(
 					setLogin({
@@ -34,12 +44,11 @@ const PrivateRoutes = () => {
 				//todo: call logout function maybe
 				throw new Error(response.data.message || response.statusText);
 			}
-			// Fetch organization data
-			console.log(organization);
-			console.log(tickets);
-            //todo: get payments, customers, any other data that an organization employee will need
+
 			if (!organization) fetchOrganization();
 			if (!tickets) fetchTickets();
+			if (!customers) fetchCustomers();
+			if (!payments) fetchPayments();
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
@@ -49,7 +58,6 @@ const PrivateRoutes = () => {
 	const fetchOrganization = async () => {
 		try {
 			const response = await getOrganizationById(user.organizationId);
-
 			if (response.status !== statusCodes.OK)
 				throw new Error(response.data.message || response.statusText);
 
@@ -65,11 +73,36 @@ const PrivateRoutes = () => {
 	const fetchTickets = async () => {
 		try {
 			const response = await getTickets();
-			console.log(response);
 			if (response.status !== statusCodes.OK)
 				throw new Error(response.data.message || response.statusText);
 
 			dispatch(setTickets({ tickets: response.data.tickets }));
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
+		}
+	};
+
+	const fetchCustomers = async () => {
+		try {
+			const response = await getCustomers();
+			if (response.status !== statusCodes.OK)
+				throw new Error(response.data.message || response.statusText);
+
+			dispatch(setCustomers({ customers: response.data.customers }));
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
+		}
+	};
+
+	const fetchPayments = async () => {
+		try {
+			const response = await getPayments();
+			if (response.status !== statusCodes.OK)
+				throw new Error(response.data.message || response.statusText);
+
+			dispatch(setPayments({ payments: response.data.payments }));
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);

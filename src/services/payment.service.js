@@ -1,17 +1,17 @@
 import { getRequest } from "config/axiosConfig.js";
 
-export const getTickets = async () => {
+export const getPayments = async () => {
 	try {
-		const response = await getRequest("tickets");
+		const response = await getRequest("payments");
 		return response;
 	} catch (error) {
 		return error.response;
 	}
 };
 
-export const getTicketById = async (id) => {
+export const getPaymentById = async (id) => {
 	try {
-		const response = await getRequest(`tickets/${id}`);
+		const response = await getRequest(`payments/${id}`);
 		return response;
 	} catch (error) {
 		return error.response;
