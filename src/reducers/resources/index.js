@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	organization: null,
-	customers: null,
-	tickets: null,
-	payments: null,
+	organization: {},
+	customers: {},
+	tickets: {},
+	payments: {},
 };
 
 export const resourceSlice = createSlice({

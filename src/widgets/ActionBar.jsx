@@ -13,12 +13,24 @@ const ActionBar = () => {
 		(state) => state.resourceReducer
 	);
 
+	const searchOptions = [
+		...Object.values(tickets).map((t) => ({ label: t.ticketId, id: t._id })),
+		...Object.values(customers).map((c) => ({
+			label: `${c.firstname} ${c.lastname}`,
+			id: c._id,
+		})),
+		...Object.values(payments).map((p) => ({
+			label: p.paymentId,
+			id: p._id,
+		})),
+	];
+
 	return (
 		<div className={classes.actionBar}>
 			<Autocomplete
 				disablePortal
 				id="combo-box-demo"
-				options={options}
+				options={searchOptions}
 				sx={{ width: 300 }}
 				renderInput={(params) => (
 					<TextField {...params} label="Movie" />

@@ -32,7 +32,7 @@ const PrivateRoutes = () => {
 	const runAuth = async () => {
 		try {
 			const response = await isAuthenticated({ user, token });
-			
+
 			if (response.status !== statusCodes.OK) {
 				dispatch(
 					setLogin({
@@ -45,10 +45,10 @@ const PrivateRoutes = () => {
 				throw new Error(response.data.message || response.statusText);
 			}
 
-			if (!organization) fetchOrganization();
-			if (!tickets) fetchTickets();
-			if (!customers) fetchCustomers();
-			if (!payments) fetchPayments();
+			if (!Object.values(organization).length) fetchOrganization();
+			if (!Object.values(tickets).length) fetchTickets();
+			if (!Object.values(customers).length) fetchCustomers();
+			if (!Object.values(payments).length) fetchPayments();
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
@@ -86,6 +86,7 @@ const PrivateRoutes = () => {
 	const fetchCustomers = async () => {
 		try {
 			const response = await getCustomers();
+
 			if (response.status !== statusCodes.OK)
 				throw new Error(response.data.message || response.statusText);
 
