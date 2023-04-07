@@ -1,16 +1,18 @@
-import { Autocomplete, Divider, TextField } from "@mui/material";
+import { Autocomplete, Avatar, Badge, Divider, TextField } from "@mui/material";
 import AutocompleteInput from "components/AutocompleteInput.jsx";
 import CalendarPreview from "components/CalendarPreview.jsx";
 import MessagePreview from "components/MessagePreview.jsx";
 import useClasses from "hooks/useClasses.js";
-import React from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import actionBarStyles from "styles/widgets/ActionBar.style.js";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { formatName, stringAvatar } from "utils/helper.js";
 // import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 const ActionBar = () => {
 	const classes = useClasses(actionBarStyles);
 	const { user } = useSelector((state) => state.authReducer);
+	const inputRef = useRef();
 
 	const { tickets, customers, payments } = useSelector(
 		(state) => state.resourceReducer
@@ -37,12 +39,28 @@ const ActionBar = () => {
 		})),
 	];
 
+	const handleKeyPress = useCallback((event) => {
+		let charCode = String.fromCharCode(event.which).toLowerCase();
+		if ((event.ctrlKey || event.metaKey) && charCode === "x") {
+			inputRef.current.focus();
+		}
+	}, []);
+
+	useEffect(() => {
+		document.addEventListener("keydown", handleKeyPress);
+
+		return () => {
+			document.removeEventListener("keydown", handleKeyPress);
+		};
+	}, [handleKeyPress]);
+
 	return (
 		<div className={classes.actionBar}>
 			<AutocompleteInput
 				options={options}
 				groupBy={"type"}
 				label={"Search for something"}
+				inputRef={inputRef}
 			/>
 			<div className={classes.infoWrap}>
 				<CalendarPreview />
@@ -50,10 +68,24 @@ const ActionBar = () => {
 				<Divider orientation="vertical" flexItem />
 				<div className={classes.userWrap}>
 					<div className={classes.nameWrap}>
-						<h4>Anthony Vidovic</h4>
+						<h4>{formatName(user.firstname, user.lastname)}</h4>
 						<p>Phone technician</p>
 					</div>
-					<div className={classes.profilePic}>{/* <p>{}</p> */}</div>
+					<Badge
+						className={classes.avatarBadge}
+						overlap="circular"
+						anchorOrigin={{
+							vertical: "bottom",
+							horizontal: "right",
+						}}
+						variant="dot"
+					>
+						<Avatar
+							{...stringAvatar(
+								`${user.firstname} ${user.lastname}`
+							)}
+						/>
+					</Badge>
 				</div>
 			</div>
 		</div>

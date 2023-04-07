@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import { Autocomplete, InputAdornment, TextField } from "@mui/material";
 import useClasses from "hooks/useClasses.js";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import autocompleteInputStyles from "styles/components/AutocompleteInput.style.js";
 import PropTypes from "prop-types";
 import SearchIcon from "@mui/icons-material/Search";
 
-const AutocompleteInput = ({ options, groupBy, label }) => {
+const AutocompleteInput = ({ options, groupBy, label, inputRef }) => {
 	const classes = useClasses(autocompleteInputStyles);
 	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
@@ -54,6 +54,7 @@ const AutocompleteInput = ({ options, groupBy, label }) => {
 							</InputAdornment>
 						),
 					}}
+					inputRef={inputRef}
 				/>
 			)}
 		/>
