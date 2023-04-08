@@ -1,8 +1,8 @@
 const sidebarMenuStyles = (theme) => ({
 	sidebar: {
-		width: "270px",
+		width: "240px",
 		height: "100%",
-		paddingTop: "30px",
+		paddingTop: "20px",
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
@@ -26,7 +26,7 @@ const sidebarMenuStyles = (theme) => ({
 		width: "40px",
 		height: "40px",
 		right: -30,
-		top: 27,
+		bottom: 70,
 		position: "absolute",
 	},
 	arrowIcon: {
@@ -57,12 +57,13 @@ const sidebarMenuStyles = (theme) => ({
 		},
 	},
 	logoWrap: {
+		height: "70px",
 		width: "100%",
 		display: "flex",
 		alignItems: "center",
-		gap: "20px",
+		justifyContent: "center",
+		gap: "10px",
 		marginBottom: "50px",
-		paddingLeft: "30px",
 		fontSize: "20px",
 		fontWeight: "900",
 		letterSpacing: "1.5px",
@@ -87,7 +88,8 @@ const sidebarMenuStyles = (theme) => ({
 		height: "50px",
 		gap: "15px",
 		width: "85%",
-		paddingLeft: "50px",
+		paddingLeft: "25px",
+		marginLeft: "13px",
 		fontSize: "16px",
 		fontWeight: "700",
 		color: theme.palette.neutral.main,
@@ -96,7 +98,7 @@ const sidebarMenuStyles = (theme) => ({
 		"&:hover": {
 			transition: "0.2s ease-in-out",
 			backgroundColor: `${theme.palette.primary.mainLight}`,
-			color: theme.palette.primary.main,
+			color: theme.palette.neutral.main,
 		},
 	},
 	menuItemSmall: {
@@ -106,7 +108,7 @@ const sidebarMenuStyles = (theme) => ({
 	},
 	activeItem: {
 		color: theme.palette.primary.main,
-		backgroundColor: `${theme.palette.primary.mainLight}`,
+		backgroundColor: `${theme.palette.primary.mainLight}90`,
 	},
 	activeIndicator: {
 		backgroundColor: theme.palette.primary.main,

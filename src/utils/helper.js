@@ -43,7 +43,7 @@ export const getCurrentDate = () => {
 	return `${date} ${months[month - 1]}`;
 };
 
-export const formatName = (firstname, lastname) => {
+export const formatName = (firstname = " ", lastname = " ") => {
 	return `${firstname[0].toUpperCase()}${firstname.substring(
 		1
 	)} ${lastname[0].toUpperCase()}${lastname.substring(1)}`;

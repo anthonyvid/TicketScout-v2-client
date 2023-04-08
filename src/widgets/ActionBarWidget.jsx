@@ -5,12 +5,13 @@ import MessagePreview from "components/MessagePreview.jsx";
 import useClasses from "hooks/useClasses.js";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import actionBarStyles from "styles/widgets/ActionBar.style.js";
+
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { formatName, stringAvatar } from "utils/helper.js";
+import actionBarWidgetStyles from "styles/widgets/ActionBarWidget.style.js";
 // import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
-const ActionBar = () => {
-	const classes = useClasses(actionBarStyles);
+const ActionBarWidget = () => {
+	const classes = useClasses(actionBarWidgetStyles);
 	const { user } = useSelector((state) => state.authReducer);
 	const inputRef = useRef();
 
@@ -69,7 +70,7 @@ const ActionBar = () => {
 				<div className={classes.userWrap}>
 					<div className={classes.nameWrap}>
 						<h4>{formatName(user.firstname, user.lastname)}</h4>
-						<p>Phone technician</p>
+						<p>Phone Technician</p>
 					</div>
 					<Badge
 						className={classes.avatarBadge}
@@ -92,4 +93,4 @@ const ActionBar = () => {
 	);
 };
 
-export default ActionBar;
+export default ActionBarWidget;

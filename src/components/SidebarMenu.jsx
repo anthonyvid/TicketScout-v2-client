@@ -69,7 +69,7 @@ const SidebarMenu = () => {
 						[classes.logoWrapSmall]: !sidebarState,
 					})}
 				>
-					<Logo width="50px" height="50px" />
+					<Logo width="40px" height="40px" />
 					{sidebarState && <h3>TicketScout</h3>}
 				</div>
 				<div className={classes.generalWrap}>

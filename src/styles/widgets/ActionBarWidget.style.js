@@ -1,6 +1,6 @@
-const actionBarStyles = (theme) => ({
+const actionBarWidgetStyles = (theme) => ({
 	actionBar: {
-		width: "95%",
+		width: "100%",
 		height: "70px",
 		backgroundColor: "white",
 		marginTop: "20px",
@@ -74,4 +74,4 @@ const actionBarStyles = (theme) => ({
 	},
 });
 
-export default actionBarStyles;
+export default actionBarWidgetStyles;
