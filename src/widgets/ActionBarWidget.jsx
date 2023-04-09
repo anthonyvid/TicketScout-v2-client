@@ -20,19 +20,19 @@ const ActionBarWidget = () => {
 	);
 
 	const options = [
-		...Object.values(tickets).map((t) => ({
+		...tickets.map((t) => ({
 			label: t.ticketId,
 			id: t._id,
 			link: `/tickets/${t.ticketId}`,
 			type: "Tickets",
 		})),
-		...Object.values(customers).map((c) => ({
+		...customers.map((c) => ({
 			label: `${c.firstname} ${c.lastname}`,
 			id: c._id,
 			link: `/customers/${c._id}`,
 			type: "Customers",
 		})),
-		...Object.values(payments).map((p) => ({
+		...payments.map((p) => ({
 			label: p.paymentId,
 			id: p._id,
 			link: `/payments/${p.paymentId}`,

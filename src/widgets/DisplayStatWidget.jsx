@@ -7,7 +7,8 @@ import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 const DisplayStatWidget = ({
 	title,
 	sparklineData,
-	todaysData,
+	count,
+	percentDifference,
 	width,
 	height,
 	icon,
@@ -21,10 +22,10 @@ const DisplayStatWidget = ({
 		>
 			<div className={classes.iconWrap}>{icon}</div>
 			<div className={classes.numberWrap}>
-				<h2>14</h2>
+				{/* <h2>{count}</h2> */}
 				<Chip
 					className={classes.chip}
-					label="1"
+					label={`${percentDifference}%`}
 					size="small"
 					icon={<TrendingUpOutlinedIcon color="success" />}
 				/>

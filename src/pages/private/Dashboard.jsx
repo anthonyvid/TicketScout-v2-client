@@ -17,6 +17,7 @@ import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 const Dashboard = () => {
 	const classes = useClasses(dashboardStyles);
 	const { user } = useSelector((state) => state.authReducer);
+	const { payments, tickets } = useSelector((state) => state.resourceReducer);
 
 	const getTimeOfDay = () => {
 		const today = new Date();
@@ -31,6 +32,9 @@ const Dashboard = () => {
 		}
 	};
 
+	const prevDayTicketsCount = tickets.filter((ticket) => ticket.createdAt);
+	const dailyTicketsCount = tickets.filter((ticket) => ticket.createdAt);
+
 	return (
 		<FlexContainer page styles={classes.page}>
 			<SidebarMenu />
@@ -42,9 +46,11 @@ const Dashboard = () => {
 				/>
 				<div className={classes.statWrap}>
 					<DisplayStatWidget
+						count={dailyTicketsCount}
+						percentDifference={1.5}
 						width={"33%"}
 						height={"200px"}
-						title={"Daily Sales"}
+						title={"Daily Tickets"}
 						icon={<PaidOutlinedIcon sx={{ fontSize: "25px" }} />}
 					/>
 					{/* <DisplayStatWidget

@@ -13,6 +13,7 @@ export function getRequest(URL) {
 				Authorization: `Bearer ${getCached("token") || ""}`,
 				"Content-Type": "application/json",
 				Accept: "application/json",
+				organizationId: getCached("organization")._id,
 			},
 		})
 		.then((response) => response);
@@ -25,6 +26,7 @@ export function postRequest(URL, payload) {
 				Authorization: `Bearer ${getCached("token") || ""}`,
 				"Content-Type": "application/json",
 				Accept: "application/json",
+				organizationId: getCached("organization")._id,
 			},
 		})
 		.then((response) => response);
@@ -37,6 +39,7 @@ export function patchRequest(URL, payload) {
 				Authorization: `Bearer ${getCached("token") || ""}`,
 				"Content-Type": "application/json",
 				Accept: "application/json",
+				organizationId: getCached("organization")._id,
 			},
 		})
 		.then((response) => response);
@@ -49,6 +52,7 @@ export function deleteRequest(URL) {
 				Authorization: `Bearer ${getCached("token") || ""}`,
 				"Content-Type": "application/json",
 				Accept: "application/json",
+				organizationId: getCached("organization")._id,
 			},
 		})
 		.then((response) => response);
