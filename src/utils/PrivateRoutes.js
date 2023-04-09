@@ -53,21 +53,7 @@ const PrivateRoutes = () => {
 			fetchTickets();
 			fetchCustomers();
 			fetchPayments();
-			// await createTicket({
-			// 	title: "test ticket title1",
-			// 	description: "test ticket description1.......",
-			// 	customerId: customers[0]._id,
-			// 	userId: user._id,
-			// });
-			// await createTicket({
-			// 	title: "test ticket title2",
-			// 	description: "test ticket description2.......",
-			// 	customerId: customers[1]._id,
-			// 	userId: user._id,
-			// });
-			//todo: when a ticket is created i need to add it to the users tickets array,
-			//see with chatgpt how to do
-			//todo see why its creating a counters collection in my db
+
 			//todo: add default sorting by most recent to my get calls, add other sorting options
 		} catch (error) {
 			createNotification("error", error.message);
