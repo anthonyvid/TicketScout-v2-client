@@ -13,6 +13,7 @@ import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 import DisplayStatWidget from "widgets/DisplayStatWidget.jsx";
 import AttachMoneyRoundedIcon from "@mui/icons-material/AttachMoneyRounded";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
+import moment from "moment";
 
 const Dashboard = () => {
 	const classes = useClasses(dashboardStyles);
@@ -32,8 +33,16 @@ const Dashboard = () => {
 		}
 	};
 
-	const prevDayTicketsCount = tickets.filter((ticket) => ticket.createdAt);
-	const dailyTicketsCount = tickets.filter((ticket) => ticket.createdAt);
+	const prevDayTickets = tickets.filter(
+		(ticket) =>
+			moment(ticket.createdAt).format("YYYY-MM-DD") ===
+			moment().subtract(1, "day").format("YYYY-MM-DD")
+	);
+	const dailyTicketsCount = tickets.filter(
+		(ticket) =>
+			moment(ticket.createdAt).format("YYYY-MM-DD") ===
+			moment().format("YYYY-MM-DD")
+	);
 
 	return (
 		<FlexContainer page styles={classes.page}>
@@ -46,8 +55,8 @@ const Dashboard = () => {
 				/>
 				<div className={classes.statWrap}>
 					<DisplayStatWidget
-						count={dailyTicketsCount}
-						percentDifference={1.5}
+						todaysCount={dailyTicketsCount.length + 1}
+						yesterdaysCount={prevDayTickets.length}
 						width={"33%"}
 						height={"200px"}
 						title={"Daily Tickets"}

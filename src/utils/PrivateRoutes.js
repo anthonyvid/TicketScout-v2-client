@@ -19,7 +19,7 @@ import {
 } from "services/organization.service.js";
 import { createPayment, getPayments } from "services/payment.service.js";
 import { createTicket, getTickets } from "services/ticket.service.js";
-import { getCached } from "./helper.js";
+import { getCached, logout } from "./helper.js";
 import { createNotification } from "./notification.js";
 
 const PrivateRoutes = () => {
@@ -36,20 +36,10 @@ const PrivateRoutes = () => {
 			const response = await isAuthenticated({ user, token });
 
 			if (response.status !== statusCodes.OK) {
-				dispatch(
-					setLogin({
-						user: null,
-						token: null,
-					})
-				);
-				navigate("account/login");
-				//todo: call logout function maybe
+				logout(dispatch, navigate);
 				throw new Error(response.data.message || response.statusText);
 			}
-			// if (isEmpty(organization)) fetchOrganization();
-			// if (isEmpty(tickets)) fetchTickets();
-			// if (isEmpty(customers)) fetchCustomers();
-			// if (isEmpty(payments)) fetchPayments();
+
 			fetchOrganization();
 			fetchTickets();
 			fetchCustomers();

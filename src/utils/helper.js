@@ -1,3 +1,5 @@
+import { setLogin } from "reducers/auth/index.js";
+
 export function isNumber(char) {
 	return /^\d$/.test(char);
 }
@@ -102,4 +104,14 @@ export const addSortAndFilters = (sort, filter, order) => {
 		}
 	}
 	return url;
+};
+
+export const logout = (dispatch, navigate) => {
+	dispatch(
+		setLogin({
+			user: null,
+			token: null,
+		})
+	);
+	navigate("account/login");
 };
