@@ -1,5 +1,6 @@
 import { statusCodes } from "constants/statusCodes.constants.js";
 import { isEmpty } from "lodash";
+import moment from "moment";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
@@ -53,8 +54,6 @@ const PrivateRoutes = () => {
 			fetchTickets();
 			fetchCustomers();
 			fetchPayments();
-
-			//todo: add default sorting by most recent to my get calls, add other sorting options
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
@@ -141,3 +140,42 @@ const PrivateRoutes = () => {
 };
 
 export default PrivateRoutes;
+
+// // example
+// const options = {
+// 	page: 1,
+// 	limit: 10,
+// 	sort: "date",
+// 	filter: {
+// 		status: "paid",
+// 		method: "credit_card",
+// 	},
+// };
+// const options = {
+// 	page: 1,
+// 	limit: 10,
+// 	sort: "name",
+// filter: {
+// 	createdAt: {
+// 		gte: "2022-01-01",
+// 		lte: "2022-01-31",
+// 	},
+// },
+// };
+
+// const date = moment("2023-04-10");
+// date.set("hour", 12);
+// date.set("minute", 30);
+
+// const options = {
+// 	page: 1,
+// 	limit: 25,
+// 	sort: "createdAt",
+// 	filter: {
+// 		createdAt: {
+// 			gt: date.toISOString(),
+// 		},
+// 	},
+// };
+// 	},
+// };

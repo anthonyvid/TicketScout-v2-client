@@ -1,6 +1,7 @@
 import { getRequest, postRequest } from "config/axiosConfig.js";
 
 import { isEmpty } from "lodash";
+import { addSortAndFilters } from "utils/helper.js";
 
 export const createOrganization = async (data) => {
 	if (isEmpty(data)) return new Error("Invalid Entry.");
@@ -13,9 +14,14 @@ export const createOrganization = async (data) => {
 	}
 };
 
-export const getOrganizations = async () => {
+export const getOrganizations = async (options) => {
+	const { page, limit, sort, filter, order } = options;
+
+	let url = `organizations?page=${page}&limit=${limit}`;
+	url += addSortAndFilters(sort, filter, order);
+
 	try {
-		const response = await getRequest("organizations");
+		const response = await getRequest(url);
 		return response;
 	} catch (error) {
 		return error.response;

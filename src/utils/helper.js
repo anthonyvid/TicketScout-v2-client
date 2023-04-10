@@ -80,4 +80,26 @@ export const stringAvatar = (name) => {
 	};
 };
 
+export const addSortAndFilters = (sort, filter, order) => {
+	let url = "";
+	if (sort) {
+		if (["createdAt", "updatedAt"].includes(sort)) {
+			url += `&sort=${sort}:${order === 1 ? "asc" : "desc"}`;
+		} else {
+			throw new Error("Invalid field to sort by");
+		}
+	}
 
+	if (filter) {
+		if (
+			typeof filter === "object" &&
+			Object.keys(filter).length > 0 &&
+			Object.keys(filter).every((key) => ["createdAt"].includes(key))
+		) {
+			url += `&filter=${encodeURIComponent(JSON.stringify(filter))}`;
+		} else {
+			throw new Error("Invalid filter object");
+		}
+	}
+	return url;
+};
