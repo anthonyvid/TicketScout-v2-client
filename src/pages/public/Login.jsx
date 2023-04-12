@@ -1,13 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-	Link,
-	useLocation,
-	useNavigate,
-	useSearchParams,
-} from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Services
@@ -21,25 +16,20 @@ import { setLogin } from "reducers/auth/index.js";
 // Components
 import Footer from "components/Footer.jsx";
 import FlexContainer from "components/FlexContainer.jsx";
-import LinkButton from "components/LinkButton.jsx";
+
 import TextInput from "components/TextInput.jsx";
 
 // Mui Components
-import { Button, CircularProgress, Grid, Typography } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 
 // Icons
 import Logo from "assets/svg/Logo.js";
 
 // Constants
-import { statusCodes } from "constants/statusCodes.constants.js";
+import { statusCodes, loginSchema } from "constants/client.constants.js";
 
 // Styles
 import loginStyles from "styles/pages/Login.style.js";
-import Header from "components/Header.jsx";
-import { loginSchema } from "constants/register.constants.js";
-
-import userLottie from "../../assets/lotties/login.json";
-import Lottie from "react-lottie-player";
 
 const Login = () => {
 	const classes = useClasses(loginStyles);

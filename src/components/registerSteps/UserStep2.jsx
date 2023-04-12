@@ -5,7 +5,7 @@ import useClasses from "hooks/useClasses.js";
 
 import OtpInput from "components/OtpInput.jsx";
 import { Button, CircularProgress } from "@mui/material";
-import { statusCodes } from "constants/statusCodes.constants.js";
+import { statusCodes } from "constants/client.constants.js";
 import { createNotification } from "utils/notification.js";
 import { verifySignUpCode } from "services/auth.service.js";
 

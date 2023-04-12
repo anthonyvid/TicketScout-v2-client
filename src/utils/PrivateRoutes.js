@@ -1,4 +1,4 @@
-import { statusCodes } from "constants/statusCodes.constants.js";
+import { statusCodes } from "constants/client.constants.js";
 import { isEmpty } from "lodash";
 import moment from "moment";
 import { useEffect } from "react";
@@ -62,6 +62,11 @@ const PrivateRoutes = () => {
 			fetchTickets();
 			fetchCustomers();
 			fetchPayments();
+			// createTicket({
+			// 	title: "adasd",
+			// 	userId: user._id,
+			// 	customerId: customers[0]._id,
+			// });
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);

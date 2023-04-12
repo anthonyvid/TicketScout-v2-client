@@ -1,9 +1,9 @@
-import { planTypes, registerTypes } from "constants/register.constants.js";
-import { debounce, isNumber } from "lodash";
+import React, { useEffect, useState } from "react";
+
+import { debounce } from "lodash";
 import { Button } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, { useEffect, useReducer, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,8 +19,11 @@ import { isEmpty } from "lodash";
 import { createCheckoutSession } from "services/stripe.service.js";
 import { createNotification } from "utils/notification.js";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { statusCodes } from "constants/statusCodes.constants.js";
-
+import {
+	statusCodes,
+	planTypes,
+	registerTypes,
+} from "constants/client.constants.js";
 import { createOrganization } from "services/organization.service.js";
 import OrganizationStep1 from "components/registerSteps/OrganizationStep1.jsx";
 import OrganizationStep2 from "components/registerSteps/OrganizationStep2.jsx";
@@ -29,7 +32,7 @@ import {
 	isUniqueEmail,
 	isUniqueStoreName,
 } from "services/auth.service.js";
-import { reducer } from "reducers/index.js";
+
 import { useDispatch } from "react-redux";
 import { setLogin } from "reducers/auth/index.js";
 

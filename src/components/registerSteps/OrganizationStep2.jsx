@@ -5,8 +5,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import OrganizationStep2Styles from "styles/components/registerSteps/OrganizationStep2.style.js";
-import { planTypes } from "constants/register.constants.js";
-import { planInfo } from "constants/register.constants.js";
+import { planInfo, planTypes } from "constants/client.constants.js";
 const OrganizationStep2 = ({ setPlanType, planType }) => {
 	const classes = useClasses(OrganizationStep2Styles);
 	return (

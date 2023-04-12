@@ -2,24 +2,23 @@ const displayStatWidgetStyles = (theme) => ({
 	container: {
 		borderRadius: "15px",
 		backgroundColor: "white",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-between",
 		boxShadow:
 			"rgba(27, 31, 35, 0.04) 0px 1px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px inset",
-		padding: "20px",
-	},
-	iconWrap: {
-		height: "35px",
-		width: "35px",
-		borderRadius: "50%",
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: theme.palette.neutral.light,
-		color: theme.palette.neutral.main,
+		padding: "18px",
+		"div:last-child": { bottom: "0px" },
 	},
 	numberWrap: {
 		display: "flex",
 		alignItems: "center",
 		gap: "20px",
+	},
+	chip: {
+		"&.MuiChip-root": {
+			borderRadius: "7px",
+		},
 	},
 	increase: {
 		"&.MuiChip-root": {
@@ -46,8 +45,13 @@ const displayStatWidgetStyles = (theme) => ({
 			color: theme.palette.warning.main,
 		},
 	},
-	sparklineWrap: {
-		width: "90%",
+	titleWrap: {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "space-between",
+		h4: {
+			color: theme.palette.neutral.main,
+		},
 	},
 });
 

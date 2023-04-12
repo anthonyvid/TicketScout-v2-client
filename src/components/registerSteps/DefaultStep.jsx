@@ -4,7 +4,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import defaultStepStyles from "styles/components/registerSteps/DefaultStep.style.js";
 import StoreIcon from "@mui/icons-material/Store";
 import CheckIcon from "@mui/icons-material/Check";
-import { registerTypes } from "constants/register.constants.js";
+import { registerTypes } from "constants/client.constants.js";
 
 const DefaultStep = ({ accountType, setAccountType }) => {
 	const userType = accountType === registerTypes.USER;

@@ -1,5 +1,5 @@
 import FlexContainer from "components/FlexContainer.jsx";
-import { statusCodes } from "constants/statusCodes.constants.js";
+import { statusCodes } from "constants/client.constants.js";
 import useClasses from "hooks/useClasses.js";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";

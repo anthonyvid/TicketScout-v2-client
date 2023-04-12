@@ -1,6 +1,6 @@
 import { Button, InputLabel, TextField } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
-import TextInput from "components/TextInput.jsx";
+
 import useClasses from "hooks/useClasses.js";
 import React, { useState } from "react";
 import Lottie from "react-lottie-player";
@@ -11,7 +11,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { createNotification } from "utils/notification.js";
 import { isEmail } from "utils/helper.js";
 import { forgotPassword } from "services/auth.service.js";
-import { statusCodes } from "constants/statusCodes.constants.js";
+import { statusCodes } from "constants/client.constants.js";
 import EmailIcon from "@mui/icons-material/Email";
 
 const ForgotPassword = () => {

@@ -1,5 +1,5 @@
 import { postRequest } from "config/axiosConfig.js";
-import { planTypes } from "constants/register.constants.js";
+import { planTypes } from "constants/client.constants.js";
 
 export const createCheckoutSession = async (planType, email) => {
 	if (planType === planTypes.BASIC) return;

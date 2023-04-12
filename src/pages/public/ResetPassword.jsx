@@ -1,4 +1,4 @@
-import { Button, InputLabel, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import FlexContainer from "components/FlexContainer.jsx";
 import TextInput from "components/TextInput.jsx";
 import useClasses from "hooks/useClasses.js";
@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { resetPassword } from "services/user.service.js";
-import { statusCodes } from "constants/statusCodes.constants.js";
+import { statusCodes } from "constants/client.constants.js";
 import { cx } from "@emotion/css";
 import LockIcon from "@mui/icons-material/Lock";
 
