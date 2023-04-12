@@ -1,11 +1,5 @@
 // color design tokens export
 export const colorTokens = {
-	status: {
-		// error: "#d32f2f",
-		error: "#ed4337",
-		warning: "#ffb13b",
-		success: "#55cb8a",
-	},
 	white: "#FFFFFF",
 	black: "000000",
 	grey: {
@@ -98,9 +92,6 @@ export const themeSettings = (mode) => {
 							dark: colorTokens.primary[200],
 							main: colorTokens.primary[500],
 							light: colorTokens.primary[800],
-							error: colorTokens.status.error,
-							success: colorTokens.status.success,
-							warning: colorTokens.status.warning,
 						},
 						neutral: {
 							dark: colorTokens.grey[100],
@@ -113,6 +104,29 @@ export const themeSettings = (mode) => {
 							default: colorTokens.grey[900],
 							alt: colorTokens.grey[800],
 						},
+						error: {
+							custom: "#ed4337",
+							light: "#ef5350",
+							main: "#d32f2f",
+							dark: "#c62828",
+						},
+						warning: {
+							custom: "#ffb13b",
+							light: "#ff9800",
+							main: "#ed6c02",
+							dark: "#e65100",
+						},
+						info: {
+							light: "#03a9f4",
+							main: "#0288d1",
+							dark: "#01579b",
+						},
+						success: {
+							custom: "#55cb8a",
+							light: "#4caf50",
+							main: "#2e7d32",
+							dark: "#1b5e20",
+						},
 				  }
 				: {
 						// palette values for light mode
@@ -121,9 +135,6 @@ export const themeSettings = (mode) => {
 							main: colorTokens.primary[500],
 							mainLight: colorTokens.primary[450],
 							light: colorTokens.primary[50],
-							error: colorTokens.status.error,
-							success: colorTokens.status.success,
-							warning: colorTokens.status.warning,
 						},
 						neutral: {
 							dark: colorTokens.grey[900],
@@ -137,6 +148,29 @@ export const themeSettings = (mode) => {
 							default: colorTokens.grey[50],
 							default1: "#f9f9fb",
 							alt: colorTokens.grey[0],
+						},
+						error: {
+							custom: "#ed4337",
+							light: "#ef5350",
+							main: "#d32f2f",
+							dark: "#c62828",
+						},
+						warning: {
+							custom: "#ffb13b",
+							light: "#ff9800",
+							main: "#ed6c02",
+							dark: "#e65100",
+						},
+						info: {
+							light: "#03a9f4",
+							main: "#0288d1",
+							dark: "#01579b",
+						},
+						success: {
+							custom: "#55cb8a",
+							light: "#4caf50",
+							main: "#2e7d32",
+							dark: "#1b5e20",
 						},
 				  }),
 		},

@@ -21,9 +21,34 @@ const displayStatWidgetStyles = (theme) => ({
 		alignItems: "center",
 		gap: "20px",
 	},
-	chip: {
-        
-    }
+	increase: {
+		"&.MuiChip-root": {
+			backgroundColor: `${theme.palette.success.custom}20`,
+		},
+		"& .MuiChip-label": {
+			color: theme.palette.success.custom,
+			filter: "brightness(0.65)",
+		},
+	},
+	decrease: {
+		"&.MuiChip-root": {
+			backgroundColor: `${theme.palette.error.custom}25`,
+		},
+		"& .MuiChip-label": {
+			color: theme.palette.error.custom,
+		},
+	},
+	neutral: {
+		"&.MuiChip-root": {
+			backgroundColor: `${theme.palette.warning.custom}25`,
+		},
+		"& .MuiChip-label": {
+			color: theme.palette.warning.main,
+		},
+	},
+	sparklineWrap: {
+		width: "90%",
+	},
 });
 
 export default displayStatWidgetStyles;

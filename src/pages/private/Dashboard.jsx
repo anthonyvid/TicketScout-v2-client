@@ -55,8 +55,8 @@ const Dashboard = () => {
 				/>
 				<div className={classes.statWrap}>
 					<DisplayStatWidget
-						todaysCount={dailyTicketsCount.length + 1}
-						yesterdaysCount={prevDayTickets.length}
+						todaysCount={dailyTicketsCount.length + 5}
+						yesterdaysCount={prevDayTickets.length + 6}
 						width={"33%"}
 						height={"200px"}
 						title={"Daily Tickets"}

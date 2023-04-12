@@ -151,7 +151,7 @@ const OrganizationStep3Styles = (theme) => ({
 		gap: "5px",
 	},
 	perkIcon: {
-		color: theme.palette.primary.success,
+		color: theme.palette.success.custom,
 	},
 });
 

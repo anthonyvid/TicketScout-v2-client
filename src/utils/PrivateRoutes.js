@@ -3,7 +3,13 @@ import { isEmpty } from "lodash";
 import moment from "moment";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import {
+	Navigate,
+	Outlet,
+	Route,
+	useLocation,
+	useNavigate,
+} from "react-router-dom";
 import { setLogin } from "reducers/auth/index.js";
 import {
 	setOrganization,
@@ -21,6 +27,7 @@ import { createPayment, getPayments } from "services/payment.service.js";
 import { createTicket, getTickets } from "services/ticket.service.js";
 import { getCached, logout } from "./helper.js";
 import { createNotification } from "./notification.js";
+import NotFound from "pages/public/NotFound.jsx";
 
 const PrivateRoutes = () => {
 	let { token, user } = useSelector((state) => state.authReducer);
@@ -30,14 +37,25 @@ const PrivateRoutes = () => {
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const runAuth = async () => {
 		try {
-			const response = await isAuthenticated({ user, token });
+			const response = await isAuthenticated({
+				user,
+				token,
+				storeNameFromUrl: location.pathname.split("/")[1],
+			});
 
 			if (response.status !== statusCodes.OK) {
-				logout(dispatch, navigate);
-				throw new Error(response.data.message || response.statusText);
+				if (response.status === statusCodes.NOT_FOUND) {
+					navigate("/404");
+				} else {
+					logout(dispatch, navigate);
+					throw new Error(
+						response.data.message || response.statusText
+					);
+				}
 			}
 
 			fetchOrganization();
