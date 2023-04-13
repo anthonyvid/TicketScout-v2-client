@@ -135,3 +135,8 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+
+//todo: fix up api so I can sort and filter my multiple fields, what is sorting? what is filtering? make it very dynamic
+//todo: add priority tickets widget to the dashboard
