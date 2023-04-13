@@ -56,37 +56,39 @@ const Dashboard = () => {
 			.reverse();
 	};
 
-	useEffect(() => {
-		(async () => {
-			const options = {
-				sortOrder: 1,
-				filter: {
-					createdAt: {
-						gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
-						lt: moment().add(1, "days").format("YYYY-MM-DD"),
-					},
-				},
-			};
-			const result = await getTickets(options);
-			setFilteredTickets(result.data.results);
-		})();
-	}, []);
+	// useEffect(() => {
+	// 	(async () => {
+	// 		const options = {
+	// 			sortOrder: 1,
+	// 			filter: {
+	// 				createdAt: {
+	// 					gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
+	// 					lt: moment().add(1, "days").format("YYYY-MM-DD"),
+	// 				},
+	// 			},
+	// 		};
+	// 		const result = await getTickets(options);
+	// 		setFilteredTickets(result.data.results);
+	// 	})();
+	// }, []);
 
-	useEffect(() => {
-		(async () => {
-			const options = {
-				sortOrder: 1,
-				filter: {
-					createdAt: {
-						gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
-						lt: moment().add(1, "days").format("YYYY-MM-DD"),
-					},
-				},
-			};
-			const result = await getPayments(options);
-			setFilteredPayments(result.data.results);
-		})();
-	}, []);
+	// useEffect(() => {
+	// 	(async () => {
+	// 		const options = {
+	// 			sort: {
+	// 				status: "asc",
+	// 			},
+	// 			filter: {
+	// 				createdAt: {
+	// 					gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
+	// 					lt: moment().add(1, "days").format("YYYY-MM-DD"),
+	// 				},
+	// 			},
+	// 		};
+	// 		const result = await getPayments(options);
+	// 		setFilteredPayments(result.data.results);
+	// 	})();
+	// }, []);
 
 	const weeklyTickets = getWeeklyDataCount(filteredTickets);
 	const weeklyPayments = getWeeklyDataCount(filteredPayments);
@@ -135,8 +137,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
 
 //todo: fix up api so I can sort and filter my multiple fields, what is sorting? what is filtering? make it very dynamic
 //todo: add priority tickets widget to the dashboard

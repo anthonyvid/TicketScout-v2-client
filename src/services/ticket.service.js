@@ -2,10 +2,10 @@ import { getRequest, postRequest } from "config/axiosConfig.js";
 import { addSortAndFilters } from "utils/helper.js";
 
 export const getTickets = async (options) => {
-	const { page, limit, sort, filter, order } = options;
-
+	const { page, limit, sort, filter } = options;
+	
 	let url = `tickets?page=${page}&limit=${limit}`;
-	url += addSortAndFilters(sort, filter, order);
+	url += addSortAndFilters(sort, filter);
 
 	try {
 		const response = await getRequest(url);

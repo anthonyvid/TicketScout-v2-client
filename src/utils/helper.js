@@ -82,22 +82,23 @@ export const stringAvatar = (name) => {
 	};
 };
 
-export const addSortAndFilters = (sort, filter, order) => {
+export const addSortAndFilters = (sort, filter) => {
 	let url = "";
+
 	if (sort) {
-		if (["createdAt", "updatedAt"].includes(sort)) {
-			url += `&sort=${sort}:${order === 1 ? "asc" : "desc"}`;
+		if (
+			typeof sort === "object" &&
+			Object.keys(sort).length > 0 &&
+			Object.values(sort).every((key) => key === "asc" || key === "desc")
+		) {
+			url += `&sort=${encodeURIComponent(JSON.stringify(sort))}`;
 		} else {
-			throw new Error("Invalid field to sort by");
+			throw new Error("Invalid sort fields");
 		}
 	}
-
+	
 	if (filter) {
-		if (
-			typeof filter === "object" &&
-			Object.keys(filter).length > 0 &&
-			Object.keys(filter).every((key) => ["createdAt"].includes(key))
-		) {
+		if (typeof filter === "object" && Object.keys(filter).length > 0) {
 			url += `&filter=${encodeURIComponent(JSON.stringify(filter))}`;
 		} else {
 			throw new Error("Invalid filter object");

@@ -2,10 +2,10 @@ import { getRequest, postRequest } from "config/axiosConfig.js";
 import { addSortAndFilters } from "utils/helper.js";
 
 export const getCustomers = async (options) => {
-	const { page, limit, sort, filter, order } = options;
+	const { page, limit, sort, filter } = options;
 
 	let url = `customers?page=${page}&limit=${limit}`;
-	url += addSortAndFilters(sort, filter, order);
+	url += addSortAndFilters(sort, filter);
 
 	try {
 		const response = await getRequest(url);
@@ -23,7 +23,6 @@ export const getCustomerById = async (id) => {
 		return error.response;
 	}
 };
-
 
 export const createCustomer = async (options) => {
 	try {

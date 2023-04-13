@@ -58,10 +58,10 @@ const PrivateRoutes = () => {
 				}
 			}
 
-			fetchOrganization();
+			// fetchOrganization();
 			fetchTickets();
-			fetchCustomers();
-			fetchPayments();
+			// fetchCustomers();
+			// fetchPayments();
 			// createTicket({
 			// 	title: "adasd",
 			// 	userId: user._id,
@@ -92,6 +92,15 @@ const PrivateRoutes = () => {
 		const options = {
 			page: 1,
 			limit: 25,
+			sort: {
+				createdAt: "asc",
+			},
+			filter: {
+				createdAt: {
+					gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
+					lt: moment().add(1, "days").format("YYYY-MM-DD"),
+				},
+			},
 		};
 		try {
 			const response = await getTickets(options);

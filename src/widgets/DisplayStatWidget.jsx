@@ -78,8 +78,8 @@ const DisplayStatWidget = ({
 						[classes.neutral]: difference === 0,
 					})}
 					label={`${
-						difference > 0 ? "+" : ""
-					}${difference} (${getPercentageChange()}) today`}
+						newData > 0 ? "+" : ""
+					}${newData} (${getPercentageChange()}) today`}
 					size="small"
 					icon={getTrendIcon()}
 				/>
