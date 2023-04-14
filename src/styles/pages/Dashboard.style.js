@@ -33,6 +33,16 @@ const dashboardStyles = (theme) => ({
 		width: "100%",
 		height: "100px",
 		background: "red",
+		display: "flex",
+		justifyContent: "space-evenly",
+		alignItems: "center",
+	},
+	ticketWrap: {
+		width: "100%",
+		height: "100%",
+		display: "flex",
+		flexDirection: "column",
+		gap: "15px",
 	},
 });
 

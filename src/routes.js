@@ -9,6 +9,7 @@ import Home from "./pages/public/Home.jsx";
 import Login from "./pages/public/Login.jsx";
 import Register from "./pages/public/Register.jsx";
 import PrivateRoutes from "./utils/PrivateRoutes.js";
+import Tickets from "pages/private/Tickets.jsx";
 
 const publicRoutes = [
 	{ component: <Home />, path: "/" },
@@ -24,6 +25,7 @@ const publicRoutes = [
 ];
 const privateRoutes = [
 	{ component: <Dashboard />, path: `/:organization/dashboard` },
+	{ component: <Tickets />, path: `/:organization/tickets` },
 ];
 
 const AppRoutes = () => {

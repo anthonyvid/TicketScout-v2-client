@@ -14,15 +14,21 @@ import moment from "moment";
 import { getTickets } from "services/ticket.service.js";
 import { getPayments } from "services/payment.service.js";
 import { ticketStatus } from "constants/client.constants.js";
+import { set } from "lodash";
+import { getCustomers } from "services/customer.service.js";
 
 const Dashboard = () => {
 	const classes = useClasses(dashboardStyles);
 	const { user } = useSelector((state) => state.authReducer);
-	const { payments, tickets } = useSelector((state) => state.resourceReducer);
-	const [filteredPayments, setFilteredPayments] = useState([]);
-	const [filteredTickets, setFilteredTickets] = useState([]);
+
+	const [customers, setCustomers] = useState([]);
+	const [sales, setSales] = useState([]);
+	const [tickets, setTickets] = useState([]);
 	const [customerReplies, setCustomerReplies] = useState([]);
 	const [priorityTickets, setPriorityTickets] = useState([]);
+	const [numberOfSales, setNumberOfSales] = useState(0);
+	const [numberOfTickets, setNumberOfTickets] = useState(0);
+	const [numberOfCustomers, setNumberOfCustomers] = useState(0);
 
 	const getTimeOfDay = () => {
 		const today = new Date();
@@ -67,8 +73,9 @@ const Dashboard = () => {
 					},
 				},
 			};
-			const result = await getTickets(options);
-			setFilteredTickets(result.data.results);
+			const result = await getPayments(options);
+			setNumberOfSales(result.data.total);
+			setSales(result.data.results);
 		})();
 	}, []);
 
@@ -82,25 +89,44 @@ const Dashboard = () => {
 					},
 				},
 			};
-			const result = await getPayments(options);
-			setFilteredPayments(result.data.results);
+			const result = await getTickets(options);
+			setNumberOfTickets(result.data.total);
+			setTickets(result.data.results);
 		})();
 	}, []);
 
 	useEffect(() => {
 		(async () => {
 			const options = {
+				filter: {
+					createdAt: {
+						gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
+						lt: moment().add(1, "days").format("YYYY-MM-DD"),
+					},
+				},
+			};
+			const result = await getCustomers(options);
+			setNumberOfCustomers(result.data.total);
+			setCustomers(result.data.results);
+		})();
+	}, []);
+
+	useEffect(() => {
+		(async () => {
+			const options = {
+				page: 1,
+				limit: 3,
 				sort: { createdAt: "asc" },
 				filter: { status: ticketStatus.PRIORITY },
 			};
 			const result = await getTickets(options);
-			console.log(result);
 			setPriorityTickets(result.data.results);
 		})();
 	}, []);
 
-	const weeklyTickets = getWeeklyDataCount(filteredTickets);
-	const weeklyPayments = getWeeklyDataCount(filteredPayments);
+	const weeklySales = getWeeklyDataCount(sales);
+	const weeklyTickets = getWeeklyDataCount(tickets);
+	const weeklyCustomers = getWeeklyDataCount(customers);
 
 	return (
 		<FlexContainer page styles={classes.page}>
@@ -113,17 +139,17 @@ const Dashboard = () => {
 				/>
 				<div className={classes.statWrap}>
 					<DisplayStatWidget
-						sparklineData={weeklyPayments}
-						totalData={payments.length}
-						newData={weeklyPayments[weeklyPayments.length - 1]}
-						oldData={weeklyPayments[weeklyPayments.length - 2]}
+						sparklineData={weeklySales}
+						totalData={numberOfSales}
+						newData={weeklySales[weeklySales.length - 1]}
+						oldData={weeklySales[weeklySales.length - 2]}
 						width={"33%"}
 						height={"auto"}
 						title={"Sales"}
 					/>
 					<DisplayStatWidget
 						sparklineData={weeklyTickets}
-						totalData={tickets.length}
+						totalData={numberOfTickets}
 						newData={weeklyTickets[weeklyTickets.length - 1]}
 						oldData={weeklyTickets[weeklyTickets.length - 2]}
 						width={"33%"}
@@ -131,10 +157,10 @@ const Dashboard = () => {
 						title={"Tickets"}
 					/>
 					<DisplayStatWidget
-						sparklineData={weeklyPayments}
-						totalData={payments.length}
-						newData={weeklyPayments[weeklyPayments.length - 1]}
-						oldData={weeklyPayments[weeklyPayments.length - 2]}
+						sparklineData={weeklyCustomers}
+						totalData={numberOfCustomers}
+						newData={weeklyCustomers[weeklyCustomers.length - 1]}
+						oldData={weeklyCustomers[weeklyCustomers.length - 2]}
 						width={"33%"}
 						height={"auto"}
 						title={"Customers"}
@@ -145,15 +171,17 @@ const Dashboard = () => {
 				</div>
 				<div className={classes.priorityTickets}>
 					<h3>Outstanding Priority Tickets</h3>
-					{priorityTickets.length > 0
-						? priorityTickets.map((ticket) => {
-								return (
-									<div className={classes.ticketRow}>
-										<h4>{ticket.title}</h4>
-									</div>
-								);
-						  })
-						: ""}
+					<div className={classes.ticketWrap}>
+						{priorityTickets.length > 0
+							? priorityTickets.map((ticket) => {
+									return (
+										<div className={classes.ticketRow}>
+											<h4>{ticket.title}</h4>
+										</div>
+									);
+							  })
+							: ""}
+					</div>
 				</div>
 			</div>
 		</FlexContainer>
