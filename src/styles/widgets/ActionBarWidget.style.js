@@ -3,7 +3,6 @@ const actionBarWidgetStyles = (theme) => ({
 		width: "100%",
 		height: "70px",
 		backgroundColor: "white",
-		marginTop: "20px",
 		borderRadius: "15px",
 		display: "flex",
 		alignItems: "center",

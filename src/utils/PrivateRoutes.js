@@ -58,17 +58,19 @@ const PrivateRoutes = () => {
 				}
 			}
 
-			// fetchOrganization();
+			fetchOrganization();
 			fetchTickets();
-			// fetchCustomers();
+			fetchCustomers();
 			// fetchPayments();
+
 			// createTicket({
-			// 	title: "adasd",
+			// 	title: "Iphone xe screen replacement",
 			// 	userId: user._id,
 			// 	customerId: customers[0]._id,
 			// });
 		} catch (error) {
 			createNotification("error", error.message);
+			console.log(error);
 			console.error(error.message);
 		}
 	};
@@ -92,15 +94,6 @@ const PrivateRoutes = () => {
 		const options = {
 			page: 1,
 			limit: 25,
-			sort: {
-				createdAt: "asc",
-			},
-			filter: {
-				createdAt: {
-					gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
-					lt: moment().add(1, "days").format("YYYY-MM-DD"),
-				},
-			},
 		};
 		try {
 			const response = await getTickets(options);

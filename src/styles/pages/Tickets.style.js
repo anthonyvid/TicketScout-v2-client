@@ -13,7 +13,7 @@ const ticketsStyles = (theme) => ({
 		flex: 1,
 		display: "flex",
 		flexDirection: "column",
-		padding: "0 20px",
+		padding: "20px",
 	},
 	tableWrap: {
 		width: "100%",
