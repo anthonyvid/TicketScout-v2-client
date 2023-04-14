@@ -17,13 +17,29 @@ const Tickets = () => {
 
 	const columns = useMemo(
 		() => [
-			{ field: "id", headerName: "Ticket Id", width: 65 },
-			{ field: "customer", headerName: "Customer", width: 110 },
-			{ field: "title", headerName: "Title", width: 250 },
+			{
+				field: "id",
+				headerName: "Ticket Id",
+				width: "max-content",
+				flex: 1,
+			},
+			{
+				field: "customer",
+				headerName: "Customer",
+				width: "max-content",
+				flex: 1,
+			},
+			{
+				field: "title",
+				headerName: "Title",
+				width: "max-content",
+				flex: 1,
+			},
 			{
 				field: "status",
 				headerName: "Status",
-				width: 65,
+				width: "max-content",
+				flex: 1,
 				type: "singleSelect",
 				valueOptions: ["new", "reply", "priority"],
 				editable: true,
@@ -31,14 +47,16 @@ const Tickets = () => {
 			{
 				field: "updatedAt",
 				headerName: "Last Updated",
-				width: 150,
+				width: "max-content",
+				flex: 1,
 				renderCell: (params) =>
 					moment(params.row.updatedAt).format("YYYY-MM-DD HH:MM:SS"),
 			},
 			{
 				field: "createdAt",
 				headerName: "Created At",
-				width: 150,
+				width: "max-content",
+				flex: 1,
 				renderCell: (params) =>
 					moment(params.row.createdAt).format("YYYY-MM-DD HH:MM:SS"),
 			},
@@ -68,21 +86,14 @@ const Tickets = () => {
 				/>
 				<div className={classes.tableWrap}>
 					<DataGrid
+						className={classes.grid}
 						columns={columns}
 						rows={rows}
 						getRowId={(row) => row.id}
-						rowsPerPageOptions={[5, 10, 20]}
-						pageSize={pageSize}
-						// autoPageSize
-						// editMode="row"
-						onPageSizeChange={(newPageSize) =>
-							setPageSize(newPageSize)
-						}
-						getRowSpacing={(params) => ({
-							top: params.isFirstVisible ? 0 : 5,
-							bottom: params.isLastVisible ? 0 : 5,
-						})}
 						onCellEditCommit={(params) => setRowId(params.id)}
+						onRowsScrollEnd={() => console.log("asd")}
+						// checkboxSelection
+						// loading
 					/>
 				</div>
 			</div>
