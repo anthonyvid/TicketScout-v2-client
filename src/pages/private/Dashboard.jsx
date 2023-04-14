@@ -21,6 +21,7 @@ const Dashboard = () => {
 	const { payments, tickets } = useSelector((state) => state.resourceReducer);
 	const [filteredPayments, setFilteredPayments] = useState([]);
 	const [filteredTickets, setFilteredTickets] = useState([]);
+	const [customerReplies, setCustomerReplies] = useState([]);
 	const [priorityTickets, setPriorityTickets] = useState([]);
 
 	const getTimeOfDay = () => {
@@ -56,39 +57,47 @@ const Dashboard = () => {
 			.reverse();
 	};
 
-	// useEffect(() => {
-	// 	(async () => {
-	// 		const options = {
-	// 			sortOrder: 1,
-	// 			filter: {
-	// 				createdAt: {
-	// 					gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
-	// 					lt: moment().add(1, "days").format("YYYY-MM-DD"),
-	// 				},
-	// 			},
-	// 		};
-	// 		const result = await getTickets(options);
-	// 		setFilteredTickets(result.data.results);
-	// 	})();
-	// }, []);
+	useEffect(() => {
+		(async () => {
+			const options = {
+				filter: {
+					createdAt: {
+						gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
+						lt: moment().add(1, "days").format("YYYY-MM-DD"),
+					},
+				},
+			};
+			const result = await getTickets(options);
+			setFilteredTickets(result.data.results);
+		})();
+	}, []);
 
-	// useEffect(() => {
-	// 	(async () => {
-	// 		const options = {
-	// 			sort: {
-	// 				status: "asc",
-	// 			},
-	// 			filter: {
-	// 				createdAt: {
-	// 					gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
-	// 					lt: moment().add(1, "days").format("YYYY-MM-DD"),
-	// 				},
-	// 			},
-	// 		};
-	// 		const result = await getPayments(options);
-	// 		setFilteredPayments(result.data.results);
-	// 	})();
-	// }, []);
+	useEffect(() => {
+		(async () => {
+			const options = {
+				filter: {
+					createdAt: {
+						gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
+						lt: moment().add(1, "days").format("YYYY-MM-DD"),
+					},
+				},
+			};
+			const result = await getPayments(options);
+			setFilteredPayments(result.data.results);
+		})();
+	}, []);
+
+	useEffect(() => {
+		(async () => {
+			const options = {
+				sort: { createdAt: "asc" },
+				filter: { status: ticketStatus.PRIORITY },
+			};
+			const result = await getTickets(options);
+			console.log(result);
+			setPriorityTickets(result.data.results);
+		})();
+	}, []);
 
 	const weeklyTickets = getWeeklyDataCount(filteredTickets);
 	const weeklyPayments = getWeeklyDataCount(filteredPayments);
@@ -110,7 +119,7 @@ const Dashboard = () => {
 						oldData={weeklyPayments[weeklyPayments.length - 2]}
 						width={"33%"}
 						height={"auto"}
-						title={"Total Sales"}
+						title={"Sales"}
 					/>
 					<DisplayStatWidget
 						sparklineData={weeklyTickets}
@@ -121,15 +130,30 @@ const Dashboard = () => {
 						height={"auto"}
 						title={"Tickets"}
 					/>
-					{/* <DisplayStatWidget
+					<DisplayStatWidget
 						sparklineData={weeklyPayments}
 						totalData={payments.length}
 						newData={weeklyPayments[weeklyPayments.length - 1]}
 						oldData={weeklyPayments[weeklyPayments.length - 2]}
 						width={"33%"}
 						height={"auto"}
-						title={"Priority Tickets"}
-					/> */}
+						title={"Customers"}
+					/>
+				</div>
+				<div className={classes.priorityTickets}>
+					<h3>Customer Replies</h3>
+				</div>
+				<div className={classes.priorityTickets}>
+					<h3>Outstanding Priority Tickets</h3>
+					{priorityTickets.length > 0
+						? priorityTickets.map((ticket) => {
+								return (
+									<div className={classes.ticketRow}>
+										<h4>{ticket.title}</h4>
+									</div>
+								);
+						  })
+						: ""}
 				</div>
 			</div>
 		</FlexContainer>
@@ -137,6 +161,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-//todo: fix up api so I can sort and filter my multiple fields, what is sorting? what is filtering? make it very dynamic
-//todo: add priority tickets widget to the dashboard

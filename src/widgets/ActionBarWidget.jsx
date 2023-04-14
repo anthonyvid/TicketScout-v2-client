@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { formatName, stringAvatar } from "utils/helper.js";
+import { formatName, formatPhone, stringAvatar } from "utils/helper.js";
 import actionBarWidgetStyles from "styles/widgets/ActionBarWidget.style.js";
 // import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 const ActionBarWidget = () => {
@@ -27,7 +27,7 @@ const ActionBarWidget = () => {
 			type: "Tickets",
 		})),
 		...customers.map((c) => ({
-			label: `${c.firstname} ${c.lastname}`,
+			label: `${c.firstname} ${c.lastname} (${c.phone})`,
 			id: c._id,
 			link: `/customers/${c._id}`,
 			type: "Customers",

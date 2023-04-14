@@ -17,6 +17,7 @@ const DisplayStatWidget = ({
 	width,
 	height,
 	totalData,
+	showGraph,
 }) => {
 	const classes = useClasses(displayStatWidgetStyles);
 	const difference = newData - oldData;
@@ -86,12 +87,14 @@ const DisplayStatWidget = ({
 			</div>
 			<h2>{totalData}</h2>
 			<div>
-				<Graph
-					data={sparklineData}
-					color={getSparklineColor()}
-					type="curve"
-					xAxisLabels={getXAxisLabels()}
-				/>
+				{showGraph && (
+					<Graph
+						data={sparklineData}
+						color={getSparklineColor()}
+						type="curve"
+						xAxisLabels={getXAxisLabels()}
+					/>
+				)}
 			</div>
 		</div>
 	);
@@ -100,6 +103,7 @@ const DisplayStatWidget = ({
 DisplayStatWidget.defaultProps = {
 	height: "auto",
 	width: "100%",
+	showGraph: true,
 };
 
 DisplayStatWidget.propTypes = {
@@ -110,6 +114,7 @@ DisplayStatWidget.propTypes = {
 	oldData: PropTypes.number.isRequired,
 	width: PropTypes.string,
 	height: PropTypes.string,
+	showGraph: PropTypes.bool,
 };
 
 export default DisplayStatWidget;

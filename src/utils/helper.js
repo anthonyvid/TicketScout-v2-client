@@ -96,7 +96,7 @@ export const addSortAndFilters = (sort, filter) => {
 			throw new Error("Invalid sort fields");
 		}
 	}
-	
+
 	if (filter) {
 		if (typeof filter === "object" && Object.keys(filter).length > 0) {
 			url += `&filter=${encodeURIComponent(JSON.stringify(filter))}`;
@@ -115,4 +115,11 @@ export const logout = (dispatch, navigate) => {
 		})
 	);
 	navigate("account/login");
+};
+
+export const formatPhone = (phone) => {
+	const cleaned = ("" + phone).replace(/\D/g, "");
+	const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+	if (match) return "(" + match[1] + ") " + match[2] + "-" + match[3];
+	return null;
 };
