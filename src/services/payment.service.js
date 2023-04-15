@@ -32,3 +32,16 @@ export const createPayment = async (options) => {
 		return error.response;
 	}
 };
+
+export const getWeeklyPaymentCount = async (options) => {
+	const { page, limit, sort, filter } = options;
+	let url = `payments/week-count?page=${page}&limit=${limit}`;
+	url += addSortAndFilters(sort, filter);
+
+	try {
+		const response = await getRequest(url);
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};

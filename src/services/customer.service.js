@@ -32,3 +32,16 @@ export const createCustomer = async (options) => {
 		return error.response;
 	}
 };
+
+export const getWeeklyCustomerCount = async (options) => {
+	const { page, limit, sort, filter } = options;
+	let url = `customers/week-count?page=${page}&limit=${limit}`;
+	url += addSortAndFilters(sort, filter);
+
+	try {
+		const response = await getRequest(url);
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};

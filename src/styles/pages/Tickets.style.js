@@ -11,7 +11,7 @@ const ticketsStyles = (theme) => ({
 		height: "100%",
 		gap: "20px",
 		flex: 1,
-		display: "flex",
+    display: "flex",
 		flexDirection: "column",
 		padding: "20px",
 	},
@@ -21,6 +21,12 @@ const ticketsStyles = (theme) => ({
 		overflow: "auto",
 	},
 	grid: {
+		"&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+			outline: "none",
+		},
+		"&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within": {
+			outline: "none",
+		},
 		"&.MuiDataGrid-root": {
 			// border: "1px solid transparent",
 			// borderRadius: "15px",

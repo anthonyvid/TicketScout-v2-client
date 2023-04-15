@@ -11,11 +11,26 @@ import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 import DisplayStatWidget from "widgets/DisplayStatWidget.jsx";
 
 import moment from "moment";
-import { getTickets } from "services/ticket.service.js";
-import { getPayments } from "services/payment.service.js";
+import { getTickets, getWeeklyTicketCount } from "services/ticket.service.js";
+import {
+	getPayments,
+	getWeeklyPaymentCount,
+} from "services/payment.service.js";
 import { ticketStatus } from "constants/client.constants.js";
 import { set } from "lodash";
-import { getCustomers } from "services/customer.service.js";
+import {
+	getCustomers,
+	getWeeklyCustomerCount,
+} from "services/customer.service.js";
+
+const previousWeekOptions = {
+	filter: {
+		createdAt: {
+			gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
+			lt: moment().add(1, "days").format("YYYY-MM-DD"),
+		},
+	},
+};
 
 const Dashboard = () => {
 	const classes = useClasses(dashboardStyles);
@@ -43,37 +58,9 @@ const Dashboard = () => {
 		}
 	};
 
-	const getWeeklyDataCount = (data) => {
-		return [...Array(7)]
-			.map((_, i) => {
-				const date = moment().subtract(i, "days");
-				const dateString = date.format("L");
-
-				const count = data.reduce((total, d) => {
-					const dataDate = moment(d.createdAt).format("L");
-					if (dataDate === dateString) {
-						return total + 1;
-					} else {
-						return total;
-					}
-				}, 0);
-
-				return count;
-			})
-			.reverse();
-	};
-
 	useEffect(() => {
 		(async () => {
-			const options = {
-				filter: {
-					createdAt: {
-						gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
-						lt: moment().add(1, "days").format("YYYY-MM-DD"),
-					},
-				},
-			};
-			const result = await getPayments(options);
+			const result = await getWeeklyPaymentCount(previousWeekOptions);
 			setNumberOfSales(result.data.total);
 			setSales(result.data.results);
 		})();
@@ -81,15 +68,7 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		(async () => {
-			const options = {
-				filter: {
-					createdAt: {
-						gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
-						lt: moment().add(1, "days").format("YYYY-MM-DD"),
-					},
-				},
-			};
-			const result = await getTickets(options);
+			const result = await getWeeklyTicketCount(previousWeekOptions);
 			setNumberOfTickets(result.data.total);
 			setTickets(result.data.results);
 		})();
@@ -97,36 +76,24 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		(async () => {
-			const options = {
-				filter: {
-					createdAt: {
-						gte: moment().subtract(6, "days").format("YYYY-MM-DD"),
-						lt: moment().add(1, "days").format("YYYY-MM-DD"),
-					},
-				},
-			};
-			const result = await getCustomers(options);
+			const result = await getWeeklyCustomerCount(previousWeekOptions);
 			setNumberOfCustomers(result.data.total);
 			setCustomers(result.data.results);
 		})();
 	}, []);
 
-	useEffect(() => {
-		(async () => {
-			const options = {
-				page: 1,
-				limit: 3,
-				sort: { createdAt: "asc" },
-				filter: { status: ticketStatus.PRIORITY },
-			};
-			const result = await getTickets(options);
-			setPriorityTickets(result.data.results);
-		})();
-	}, []);
-
-	const weeklySales = getWeeklyDataCount(sales);
-	const weeklyTickets = getWeeklyDataCount(tickets);
-	const weeklyCustomers = getWeeklyDataCount(customers);
+	// useEffect(() => {
+	// 	(async () => {
+	// 		const options = {
+	// 			page: 1,
+	// 			limit: 3,
+	// 			sort: { createdAt: "asc" },
+	// 			filter: { status: ticketStatus.PRIORITY },
+	// 		};
+	// 		const result = await getTickets(options);
+	// 		setPriorityTickets(result.data.results);
+	// 	})();
+	// }, []);
 
 	return (
 		<FlexContainer page styles={classes.page}>
@@ -139,28 +106,40 @@ const Dashboard = () => {
 				/>
 				<div className={classes.statWrap}>
 					<DisplayStatWidget
-						sparklineData={weeklySales}
+						sparklineData={sales}
 						totalData={numberOfSales}
-						newData={weeklySales[weeklySales.length - 1]}
-						oldData={weeklySales[weeklySales.length - 2]}
+						newData={sales.length > 0 ? sales[sales.length - 1] : 0}
+						oldData={sales.length > 0 ? sales[sales.length - 2] : 0}
 						width={"33%"}
 						height={"auto"}
 						title={"Sales"}
 					/>
 					<DisplayStatWidget
-						sparklineData={weeklyTickets}
+						sparklineData={tickets}
 						totalData={numberOfTickets}
-						newData={weeklyTickets[weeklyTickets.length - 1]}
-						oldData={weeklyTickets[weeklyTickets.length - 2]}
+						newData={
+							tickets.length > 0 ? tickets[tickets.length - 1] : 0
+						}
+						oldData={
+							tickets.length > 0 ? tickets[tickets.length - 2] : 0
+						}
 						width={"33%"}
 						height={"auto"}
 						title={"Tickets"}
 					/>
 					<DisplayStatWidget
-						sparklineData={weeklyCustomers}
+						sparklineData={customers}
 						totalData={numberOfCustomers}
-						newData={weeklyCustomers[weeklyCustomers.length - 1]}
-						oldData={weeklyCustomers[weeklyCustomers.length - 2]}
+						newData={
+							customers.length > 0
+								? customers[customers.length - 1]
+								: 0
+						}
+						oldData={
+							customers.length > 0
+								? customers[customers.length - 2]
+								: 0
+						}
 						width={"33%"}
 						height={"auto"}
 						title={"Customers"}
@@ -175,7 +154,10 @@ const Dashboard = () => {
 						{priorityTickets.length > 0
 							? priorityTickets.map((ticket) => {
 									return (
-										<div className={classes.ticketRow}>
+										<div
+											key={ticket._id}
+											className={classes.ticketRow}
+										>
 											<h4>{ticket.title}</h4>
 										</div>
 									);

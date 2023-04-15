@@ -59,8 +59,8 @@ const PrivateRoutes = () => {
 			}
 
 			fetchOrganization();
-			fetchTickets();
-			fetchCustomers();
+			// fetchTickets();
+			// fetchCustomers();
 			// fetchPayments();
 
 			// createTicket({
