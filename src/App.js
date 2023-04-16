@@ -5,6 +5,9 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme.js";
 import Routes from "./routes.js";
 import { ToastContainer } from "react-toastify";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
 	const mode = useSelector((state) => state.authReducer.mode);
@@ -12,11 +15,13 @@ function App() {
 
 	return (
 		<div className="App">
-			<ThemeProvider theme={theme}>
-				<ToastContainer />
-				<CssBaseline />
-				<Routes />
-			</ThemeProvider>
+			<QueryClientProvider client={queryClient}>
+				<ThemeProvider theme={theme}>
+					<ToastContainer />
+					<CssBaseline />
+					<Routes />
+				</ThemeProvider>
+			</QueryClientProvider>
 		</div>
 	);
 }

@@ -1,4 +1,5 @@
 import { setLogin } from "reducers/auth/index.js";
+import { createNotification } from "./notification.js";
 
 export function isNumber(char) {
 	return /^\d$/.test(char);
@@ -122,4 +123,10 @@ export const formatPhone = (phone) => {
 	const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
 	if (match) return "(" + match[1] + ") " + match[2] + "-" + match[3];
 	return null;
+};
+
+export const handleError = (error) => {
+	const errMsg = error.response.data.message || error.response.statusText;
+	console.error(errMsg);
+	createNotification("error", errMsg);
 };

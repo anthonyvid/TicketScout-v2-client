@@ -2,27 +2,40 @@ import FlexContainer from "components/FlexContainer.jsx";
 import PageTitle from "components/PageTitle.jsx";
 import SidebarMenu from "components/SidebarMenu.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useMemo, useState } from "react";
 import ticketsStyles from "styles/pages/Tickets.style.js";
 import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { getTickets } from "services/ticket.service.js";
-import { statusCodes } from "constants/client.constants.js";
-import { setTickets } from "reducers/resources/index.js";
-import { createNotification } from "utils/notification.js";
+import { useQuery } from "react-query";
+import { handleError } from "utils/helper.js";
 
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
-	const { tickets } = useSelector((state) => state.resourceReducer);
+
 	const [paginationModel, setPaginationModel] = useState({
 		pageSize: 25,
 		page: 0,
 	});
-	const [totalTickets, setTotalTickets] = useState(0);
 	const [rowId, setRowId] = useState(null);
-	const dispatch = useDispatch();
+
+	const { data, isFetching, error, isError, isLoading } = useQuery(
+		["tickets", paginationModel.page],
+		() =>
+			getTickets({
+				page: paginationModel.page + 1,
+				limit: paginationModel.pageSize,
+			}),
+		{
+			keepPreviousData: true,
+			staleTime: 60000, // milliseconds
+			onError: (err) => handleError(err),
+		}
+	);
+
+	const tickets = data?.data?.results || [];
+	const total = data?.data?.total || 0;
 
 	const columns = useMemo(
 		() => [
@@ -86,44 +99,6 @@ const Tickets = () => {
 		});
 	}, [tickets]);
 
-	const fetchTickets = async (modal) => {
-		const options = {
-			page: modal.page + 1,
-			limit: modal.pageSize,
-		};
-
-		try {
-			const response = await getTickets(options);
-			if (response.status !== statusCodes.OK)
-				throw new Error(response.data.message || response.statusText);
-
-			dispatch(setTickets({ tickets: response.data.results }));
-			setTotalTickets(response.data.total);
-		} catch (error) {
-			createNotification("error", error.message);
-			console.error(error.message);
-		}
-	};
-
-	const handlePageChange = useCallback((modal) => {
-		setPaginationModel(modal);
-		fetchTickets(modal);
-	}, []);
-
-	useEffect(() => {
-		fetchTickets(paginationModel.page);
-	}, []);
-
-	const MemoizedDataGrid = React.memo(DataGrid, (prevProps, nextProps) => {
-		return (
-			prevProps.paginationModel.page === nextProps.paginationModel.page &&
-			prevProps.paginationModel.pageSize ===
-				nextProps.paginationModel.pageSize &&
-			prevProps.rows === nextProps.rows &&
-			prevProps.totalTickets === nextProps.totalTickets
-		);
-	});
-
 	return (
 		<FlexContainer page styles={classes.page}>
 			<SidebarMenu />
@@ -134,7 +109,7 @@ const Tickets = () => {
 					subtitle={"View your recent tickets"}
 				/>
 				<div className={classes.tableWrap}>
-					<MemoizedDataGrid
+					<DataGrid
 						className={classes.grid}
 						columns={columns}
 						paginationMode="server"
@@ -143,10 +118,11 @@ const Tickets = () => {
 						paginationModel={paginationModel}
 						getRowId={(row) => row.id}
 						onCellEditCommit={(params) => setRowId(params.id)}
-						rowCount={totalTickets}
-						onPaginationModelChange={(modal) =>
-							handlePageChange(modal)
+						rowCount={total}
+						onPaginationModelChange={(model) =>
+							setPaginationModel(model)
 						}
+						loading={isLoading || isFetching}
 					/>
 				</div>
 			</div>

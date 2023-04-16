@@ -6,13 +6,8 @@ export const getTickets = async (options) => {
 
 	let url = `tickets?page=${page}&limit=${limit}`;
 	url += addSortAndFilters(sort, filter);
-
-	try {
-		const response = await getRequest(url);
-		return response;
-	} catch (error) {
-		return error.response;
-	}
+	const response = await getRequest(url);
+	return response;
 };
 
 export const getTicketById = async (id) => {
