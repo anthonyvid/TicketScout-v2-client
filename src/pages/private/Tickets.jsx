@@ -10,6 +10,7 @@ import moment from "moment";
 import { getTickets } from "services/ticket.service.js";
 import { useQuery } from "react-query";
 import { handleError } from "utils/helper.js";
+import useTickets from "hooks/useTickets.js";
 
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
@@ -20,22 +21,8 @@ const Tickets = () => {
 	});
 	const [rowId, setRowId] = useState(null);
 
-	const { data, isFetching, error, isError, isLoading } = useQuery(
-		["tickets", paginationModel.page],
-		() =>
-			getTickets({
-				page: paginationModel.page + 1,
-				limit: paginationModel.pageSize,
-			}),
-		{
-			keepPreviousData: true,
-			staleTime: 60000, // milliseconds
-			onError: (err) => handleError(err),
-		}
-	);
-
-	const tickets = data?.data?.results || [];
-	const total = data?.data?.total || 0;
+	const { tickets, total, isFetching, error, isError, isLoading } =
+		useTickets(paginationModel);
 
 	const columns = useMemo(
 		() => [
