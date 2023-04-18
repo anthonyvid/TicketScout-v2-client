@@ -60,14 +60,14 @@ const PrivateRoutes = () => {
 
 			fetchOrganization();
 			// fetchTickets();
-			// fetchCustomers();
+			fetchCustomers();
 			// fetchPayments();
 
-			// createTicket({
-			// 	title: "Iphone xe screen replacement",
-			// 	userId: user._id,
-			// 	customerId: customers[0]._id,
-			// });
+			createTicket({
+				title: "Iphone xe screen replacement",
+				userId: user._id,
+				customerId: customers[0]._id,
+			});
 		} catch (error) {
 			createNotification("error", error.message);
 			console.log(error);

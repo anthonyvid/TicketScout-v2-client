@@ -6,8 +6,16 @@ import { themeSettings } from "./theme.js";
 import Routes from "./routes.js";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { handleError } from "utils/helper.js";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			staleTime: Infinity,
+			onError: (err) => handleError(err),
+		},
+	},
+});
 
 function App() {
 	const mode = useSelector((state) => state.authReducer.mode);

@@ -2,7 +2,7 @@ import FlexContainer from "components/FlexContainer.jsx";
 import PageTitle from "components/PageTitle.jsx";
 import SidebarMenu from "components/SidebarMenu.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ticketsStyles from "styles/pages/Tickets.style.js";
 import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 import { DataGrid } from "@mui/x-data-grid";
@@ -11,6 +11,7 @@ import { getTickets } from "services/ticket.service.js";
 import { useQuery } from "react-query";
 import { handleError } from "utils/helper.js";
 import useTickets from "hooks/useTickets.js";
+import { socket } from "socket.js";
 
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
@@ -85,6 +86,10 @@ const Tickets = () => {
 			};
 		});
 	}, [tickets]);
+
+	useEffect(() => {
+		socket.emit("test", { data: "hello" });
+	}, []);
 
 	return (
 		<FlexContainer page styles={classes.page}>

@@ -1,10 +1,14 @@
-import { useQuery } from "react-query";
+import { useEffect } from "react";
+import { useQuery, useQueryClient } from "react-query";
 import { getTickets } from "services/ticket.service.js";
-import { handleError } from "utils/helper.js";
+import { socket } from "socket.js";
 
 const useTickets = (key) => {
-	const data = useQuery(
-		["tickets", key.page],
+	const queryClient = useQueryClient();
+	const QUERY_KEY = ["tickets", key.page];
+
+	const cachedData = useQuery(
+		QUERY_KEY,
 		() =>
 			getTickets({
 				page: key.page + 1,
@@ -12,13 +16,34 @@ const useTickets = (key) => {
 			}),
 		{
 			keepPreviousData: true,
-			staleTime: 60000, // milliseconds
-			onError: (err) => handleError(err),
 		}
 	);
-	data.tickets = data?.data?.data?.results || [];
-	data.total = data?.data?.data?.total || 0;
+	cachedData.tickets = cachedData?.data?.data?.results || [];
+	cachedData.total = cachedData?.data?.data?.total || 0;
 
-	return data;
+	useEffect(() => {
+		socket.on("new-ticket", (data) => {
+			const { ticket } = data;
+
+			queryClient.setQueryData(QUERY_KEY, (existingData) => {
+				const tickets = existingData?.data?.results;
+				const total = existingData?.data?.total;
+
+				const newTickets = [...tickets, ticket];
+				const newTotal = total + 1;
+
+				const newData = existingData;
+				existingData.data.results = newTickets;
+				existingData.data.total = newTotal;
+				return newData;
+			});
+		});
+		return () => {
+			socket.off("new-ticket");
+		};
+	}, []);
+
+	return cachedData;
 };
+
 export default useTickets;
