@@ -5,7 +5,7 @@ import { socket } from "socket.js";
 
 const useTickets = (key) => {
 	const queryClient = useQueryClient();
-	const QUERY_KEY = ["tickets", key.page];
+	const QUERY_KEY = ["tickets", key];
 
 	const cachedData = useQuery(
 		QUERY_KEY,
@@ -24,6 +24,7 @@ const useTickets = (key) => {
 	useEffect(() => {
 		socket.on("new-ticket", (data) => {
 			const { ticket } = data;
+			ticket.incomingWS = true; // This is what allows the new ticket to have a UI effect when its added
 
 			queryClient.setQueryData(QUERY_KEY, (existingData) => {
 				const tickets = existingData?.data?.results;

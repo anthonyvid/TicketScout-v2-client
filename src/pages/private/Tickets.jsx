@@ -12,6 +12,7 @@ import { useQuery } from "react-query";
 import { handleError } from "utils/helper.js";
 import useTickets from "hooks/useTickets.js";
 import { socket } from "socket.js";
+import Table from "components/Table.jsx";
 
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
@@ -20,6 +21,7 @@ const Tickets = () => {
 		pageSize: 25,
 		page: 0,
 	});
+
 	const [rowId, setRowId] = useState(null);
 
 	const { tickets, total, isFetching, error, isError, isLoading } =
@@ -83,13 +85,10 @@ const Tickets = () => {
 				status: t.status,
 				updatedAt: t.updatedAt,
 				createdAt: t.createdAt,
+				incomingWS: t?.incomingWS || false,
 			};
 		});
 	}, [tickets]);
-
-	useEffect(() => {
-		socket.emit("test", { data: "hello" });
-	}, []);
 
 	return (
 		<FlexContainer page styles={classes.page}>
@@ -101,19 +100,17 @@ const Tickets = () => {
 					subtitle={"View your recent tickets"}
 				/>
 				<div className={classes.tableWrap}>
-					<DataGrid
-						className={classes.grid}
+					<Table
 						columns={columns}
-						paginationMode="server"
 						rows={rows}
-						pageSizeOptions={[100, 50, 25]}
 						paginationModel={paginationModel}
 						getRowId={(row) => row.id}
 						onCellEditCommit={(params) => setRowId(params.id)}
 						rowCount={total}
-						onPaginationModelChange={(model) =>
-							setPaginationModel(model)
-						}
+						onPaginationModelChange={(model) => {
+							console.log(model);
+							setPaginationModel(model);
+						}}
 						loading={isLoading || isFetching}
 					/>
 				</div>

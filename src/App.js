@@ -11,7 +11,7 @@ import { handleError } from "utils/helper.js";
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			staleTime: Infinity,
+			staleTime: 600000,
 			onError: (err) => handleError(err),
 		},
 	},
