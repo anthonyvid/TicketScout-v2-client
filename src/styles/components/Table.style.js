@@ -16,20 +16,10 @@ const tableStyles = (theme) => ({
 			// backgroundColor: "white",
 		},
 	},
-	"@keyframes highlight": {
-		"0%": {
-			backgroundColor: "red",
-		},
-		"50%": {
-			backgroundColor: "yellow",
-		},
-		"100%": {
-			backgroundColor: "red",
-		},
-	},
 	highlightedRow: {
-		backgroundColor: "red",
-		animation: "highlight 3s ease-in-out",
+		// backgroundColor: "#fff",
+		filter: "brightness(100%)",
+		animation: "incomingTableItem 2s ease",
 	},
 });
 

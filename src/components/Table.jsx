@@ -16,12 +16,11 @@ const Table = ({
 	onCellEditCommit,
 	onPaginationModelChange,
 	loading,
-	onSortModelChange,
 	queryKey,
 }) => {
 	const classes = useClasses(tableStyles);
-	// const [tableRows, setTableRows] = useState([...rows]);
-	// const queryClient = useQueryClient();
+	const [tableRows, setTableRows] = useState([...rows]);
+	const queryClient = useQueryClient();
 	const [sortModel, setSortModel] = useState([
 		{
 			field: "updatedAt",
@@ -29,36 +28,45 @@ const Table = ({
 		},
 	]);
 
-	// const getRowClassName = (params) => {
-	// 	const { incomingWS } = params.row;
+	const getRowClassName = (params) => {
+		const { incomingWS } = params.row;
 
-	// 	if (incomingWS) {
-	// 		setTimeout(() => {
-	// 			// Remove the "incomingWS" field after 3 seconds
-	// 			const updatedRows = [...tableRows];
-	// 			const rowIndex = updatedRows.findIndex(
-	// 				(row) => row.id === params.row.id
-	// 			);
-	// 			updatedRows[rowIndex] = {
-	// 				...updatedRows[rowIndex],
-	// 				incomingWS: false,
-	// 			};
-	// 			// setTableRows(updatedRows);
-	// 			// queryClient.setQueryData(queryKey, updatedRows);
-	// 		}, 3000);
+		if (incomingWS) {
+			setTimeout(() => {
+				// Remove the "incomingWS" field after 3 seconds
+				const updatedRows = [...tableRows];
+				const rowIndex = updatedRows.findIndex(
+					(row) => row.id === params.row.id
+				);
+				updatedRows[rowIndex] = {
+					...updatedRows[rowIndex],
+					incomingWS: false,
+				};
 
-	// 		return classes.highlightedRow;
-	// 	}
-	// 	return "";
-	// };
+				setTableRows(updatedRows);
 
-	// useEffect(() => setTableRows(rows), [rows]);
+				// Update the ticket in cache
+				queryClient.setQueryData(queryKey, (existingData) => {
+					const newData = existingData;
+					newData.data.results = updatedRows;
+					return newData;
+				});
+			}, 3000);
+
+			return classes.highlightedRow;
+		}
+		return "";
+	};
+
+	useEffect(() => {
+		setTableRows(rows);
+	}, [rows]);
 
 	return (
 		<DataGrid
 			className={classes.grid}
 			columns={columns}
-			rows={rows} // rows={tableRows}
+			rows={tableRows}
 			paginationMode={paginationMode}
 			pageSizeOptions={pageSizeOptions}
 			rowCount={rowCount}
@@ -66,7 +74,7 @@ const Table = ({
 			getRowId={getRowId}
 			onPaginationModelChange={onPaginationModelChange}
 			loading={loading}
-			// getRowClassName={getRowClassName}
+			getRowClassName={getRowClassName}
 			sortModel={sortModel}
 			onSortModelChange={setSortModel}
 			onCellEditCommit={onCellEditCommit}
@@ -82,8 +90,6 @@ Table.defaultProps = {
 	getRowId: () => {},
 	onCellEditCommit: () => {},
 	onPaginationModelChange: () => {},
-	onSortModelChange: () => {},
-	queryKey: () => {},
 };
 
 Table.propTypes = {
@@ -92,12 +98,11 @@ Table.propTypes = {
 	paginationMode: PropTypes.string,
 	paginationModel: PropTypes.object,
 	pageSizeOptions: PropTypes.array,
-	// queryKey: PropTypes.array,
+	queryKey: PropTypes.array,
 	rowCount: PropTypes.number,
 	getRowId: PropTypes.func,
 	onCellEditCommit: PropTypes.func,
 	onPaginationModelChange: PropTypes.func,
-	onSortModelChange: PropTypes.func,
 	loading: PropTypes.bool,
 };
 

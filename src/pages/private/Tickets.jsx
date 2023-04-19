@@ -79,8 +79,8 @@ const Tickets = () => {
 	const rows = useMemo(() => {
 		return tickets.map((t) => {
 			return {
-				id: t.ticketId,
-				customer: "test",
+				id: t.ticketId || t.id,
+				customer: t.customer,
 				title: t.title,
 				status: t.status,
 				updatedAt: t.updatedAt,
@@ -111,6 +111,7 @@ const Tickets = () => {
 							setPaginationModel(model)
 						}
 						loading={isLoading || isFetching}
+						queryKey={["tickets", paginationModel]}
 					/>
 				</div>
 			</div>

@@ -23,19 +23,21 @@ const useTickets = (key) => {
 
 	useEffect(() => {
 		socket.on("new-ticket", (data) => {
-			const { ticket } = data;
-			ticket.incomingWS = true; // This is what allows the new ticket to have a UI effect when its added
+			let { ticket } = data;
 
+			ticket.incomingWS = true; // This is what allows the new ticket to have a UI effect when its added
 			queryClient.setQueryData(QUERY_KEY, (existingData) => {
 				const tickets = existingData?.data?.results;
 				const total = existingData?.data?.total;
 
-				const newTickets = [...tickets, ticket];
+				tickets.pop(); // Remove the oldest ticket so we can keep the 25 ticket size when adding the new one
+				const newTickets = [ticket, ...tickets];
 				const newTotal = total + 1;
 
 				const newData = existingData;
 				existingData.data.results = newTickets;
 				existingData.data.total = newTotal;
+
 				return newData;
 			});
 		});
