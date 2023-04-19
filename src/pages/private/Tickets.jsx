@@ -107,10 +107,9 @@ const Tickets = () => {
 						getRowId={(row) => row.id}
 						onCellEditCommit={(params) => setRowId(params.id)}
 						rowCount={total}
-						onPaginationModelChange={(model) => {
-							console.log(model);
-							setPaginationModel(model);
-						}}
+						onPaginationModelChange={(model) =>
+							setPaginationModel(model)
+						}
 						loading={isLoading || isFetching}
 					/>
 				</div>
