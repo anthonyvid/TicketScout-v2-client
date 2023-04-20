@@ -15,12 +15,16 @@ import { socket } from "socket.js";
 import Table from "components/Table.jsx";
 import { Link } from "react-router-dom";
 import PageLayout from "components/PageLayout.jsx";
-
+import { useSelector } from "react-redux";
+import { defaultTicketStatuses } from "constants/client.constants.js";
+import { Chip } from "@mui/material";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { createNotification } from "utils/notification.js";
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
 
 	const [paginationModel, setPaginationModel] = useState({
-		pageSize: 25,
+		pageSize: 5,
 		page: 0,
 	});
 
@@ -28,6 +32,8 @@ const Tickets = () => {
 
 	const { tickets, total, isFetching, error, isError, isLoading } =
 		useTickets(paginationModel);
+
+	const { organization } = useSelector((state) => state.resourceReducer);
 
 	const columns = useMemo(
 		() => [
@@ -52,29 +58,57 @@ const Tickets = () => {
 			{
 				field: "title",
 				headerName: "Title",
-				width: "200",
+				width: "250",
 			},
 			{
 				field: "status",
 				headerName: "Status",
-				width: "80",
+				width: "130",
 				type: "singleSelect",
-				valueOptions: ["new", "reply", "priority"],
+				valueOptions: () => {
+					const statuses =
+						organization?.settings?.ticketStatuses ||
+						defaultTicketStatuses;
+					console.log([
+						...statuses.map((status) => status.split(",")[0]),
+					]);
+					return [...statuses.map((status) => status.split(",")[0])];
+				},
 				editable: true,
+				renderCell: (params) => {
+					const statusInfo = params.row.status.split(",");
+					const [label, color] = statusInfo;
+					return (
+						<Chip
+							size="small"
+							icon={
+								<FiberManualRecordIcon
+									style={{
+										color: color,
+									}}
+								/>
+							}
+							style={{
+								color: color,
+								backgroundColor: `${color}17`,
+							}}
+							label={label}
+						/>
+					);
+				},
 			},
 			{
 				field: "updatedAt",
 				headerName: "Last Updated",
-				width: "200",
-				renderCell: (params) =>
-					moment(params.row.updatedAt).format("YYYY-MM-DD HH:MM:SS"),
+				width: "130",
+				renderCell: (params) => moment(params.row.updatedAt).fromNow(),
 			},
 			{
 				field: "createdAt",
 				headerName: "Created On",
-				width: "200",
+				width: "130",
 				renderCell: (params) =>
-					moment(params.row.createdAt).format("YYYY-MM-DD HH:MM:SS"),
+					moment(params.row.createdAt).format("MMM Do YYYY"),
 			},
 		],
 		[rowId]

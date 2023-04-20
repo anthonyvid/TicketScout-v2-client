@@ -22,24 +22,24 @@ const displayStatWidgetStyles = (theme) => ({
 	},
 	increase: {
 		"&.MuiChip-root": {
-			backgroundColor: `${theme.palette.success.custom}20`,
+			backgroundColor: `${theme.palette.success.main}20`,
 		},
 		"& .MuiChip-label": {
-			color: theme.palette.success.custom,
+			color: theme.palette.success.main,
 			filter: "brightness(0.65)",
 		},
 	},
 	decrease: {
 		"&.MuiChip-root": {
-			backgroundColor: `${theme.palette.error.custom}25`,
+			backgroundColor: `${theme.palette.error.main}25`,
 		},
 		"& .MuiChip-label": {
-			color: theme.palette.error.custom,
+			color: theme.palette.error.main,
 		},
 	},
 	neutral: {
 		"&.MuiChip-root": {
-			backgroundColor: `${theme.palette.warning.custom}25`,
+			backgroundColor: `${theme.palette.warning.main}25`,
 		},
 		"& .MuiChip-label": {
 			color: theme.palette.warning.main,

@@ -107,24 +107,24 @@ export const themeSettings = (mode) => {
 						error: {
 							custom: "#ed4337",
 							light: "#ef5350",
-							main: "#d32f2f",
+							main: "#e74c3c",
 							dark: "#c62828",
 						},
 						warning: {
 							custom: "#ffb13b",
 							light: "#ff9800",
-							main: "#ed6c02",
+							main: "#f1c40f",
 							dark: "#e65100",
 						},
 						info: {
 							light: "#03a9f4",
-							main: "#0288d1",
+							main: "#3498db",
 							dark: "#01579b",
 						},
 						success: {
 							custom: "#55cb8a",
 							light: "#4caf50",
-							main: "#2e7d32",
+							main: "#07bc0c",
 							dark: "#1b5e20",
 						},
 				  }

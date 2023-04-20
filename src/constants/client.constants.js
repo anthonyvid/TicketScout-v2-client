@@ -95,6 +95,8 @@ export const ticketStatus = Object.freeze({
 	//todo: add more
 });
 
+export const defaultTicketStatuses = ["new,#07bc0c", "reply,#ffb13b"];
+
 export const roles = Object.freeze({
 	BASIC: 0,
 	MANAGER: 1,

@@ -1,10 +1,10 @@
 const checkoutSuccessStyles = (theme) => ({
 	successHeader: {
-		color: theme.palette.success.custom,
+		color: theme.palette.success.main,
 		fontSize: "46px",
 	},
 	failHeader: {
-		color: theme.palette.error.custom,
+		color: theme.palette.error.main,
 		fontSize: "46px",
 	},
 	description: {

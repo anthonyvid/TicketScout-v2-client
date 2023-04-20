@@ -29,7 +29,7 @@ const textInputStyles = (theme) => ({
 	errorText: {
 		marginTop: "3px",
 		marginBottom: "-17px",
-		color: theme.palette.error.custom,
+		color: theme.palette.error.main,
 		textAlign: "left",
 	},
 	textInputWrap: {
@@ -42,10 +42,10 @@ const textInputStyles = (theme) => ({
 		justifyContent: "space-between",
 	},
 	errorIcon: {
-		color: theme.palette.error.custom,
+		color: theme.palette.error.main,
 	},
 	successIcon: {
-		color: theme.palette.success.custom,
+		color: theme.palette.success.main,
 	},
 
 	input: {
@@ -56,7 +56,7 @@ const textInputStyles = (theme) => ({
 		marginRight: "7px",
 	},
 	// error: {
-	// 	background: `${theme.palette.error.custom}20`,
+	// 	background: `${theme.palette.error.main}20`,
 	// },
 	// success: {
 	// 	background: `${theme.palette.primary.main}20`,

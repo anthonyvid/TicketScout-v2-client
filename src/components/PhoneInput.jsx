@@ -14,7 +14,7 @@ const PhoneInputStyles = (theme) => ({
 	errorText: {
 		marginTop: "3px",
 		marginBottom: "-17px",
-		color: theme.palette.error.custom,
+		color: theme.palette.error.main,
 		textAlign: "left",
 	},
 	PhoneInputWrap: {
