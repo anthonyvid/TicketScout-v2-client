@@ -94,3 +94,10 @@ export const ticketStatus = Object.freeze({
 	PRIORITY: 2,
 	//todo: add more
 });
+
+export const roles = Object.freeze({
+	BASIC: 0,
+	MANAGER: 1,
+	ADMIN: 2,
+	SUPER_USER: 3,
+});

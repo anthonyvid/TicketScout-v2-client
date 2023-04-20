@@ -32,26 +32,22 @@ const Tickets = () => {
 			{
 				field: "id",
 				headerName: "Ticket Id",
-				width: "max-content",
-				flex: 1,
+				width: "60",
 			},
 			{
 				field: "customer",
 				headerName: "Customer",
-				width: "max-content",
-				flex: 1,
+				width: "200",
 			},
 			{
 				field: "title",
 				headerName: "Title",
-				width: "max-content",
-				flex: 1,
+				width: "200",
 			},
 			{
 				field: "status",
 				headerName: "Status",
-				width: "max-content",
-				flex: 1,
+				width: "50",
 				type: "singleSelect",
 				valueOptions: ["new", "reply", "priority"],
 				editable: true,
@@ -59,16 +55,14 @@ const Tickets = () => {
 			{
 				field: "updatedAt",
 				headerName: "Last Updated",
-				width: "max-content",
-				flex: 1,
+				width: "200",
 				renderCell: (params) =>
 					moment(params.row.updatedAt).format("YYYY-MM-DD HH:MM:SS"),
 			},
 			{
 				field: "createdAt",
-				headerName: "Created At",
-				width: "max-content",
-				flex: 1,
+				headerName: "Created On",
+				width: "200",
 				renderCell: (params) =>
 					moment(params.row.createdAt).format("YYYY-MM-DD HH:MM:SS"),
 			},
@@ -89,6 +83,8 @@ const Tickets = () => {
 			};
 		});
 	}, [tickets]);
+
+	const createTicket = () => {};
 
 	return (
 		<FlexContainer page styles={classes.page}>
@@ -112,6 +108,7 @@ const Tickets = () => {
 						}
 						loading={isLoading || isFetching}
 						queryKey={["tickets", paginationModel]}
+						handleNewRow={() => createTicket()}
 					/>
 				</div>
 			</div>
