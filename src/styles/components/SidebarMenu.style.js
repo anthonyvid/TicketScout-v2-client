@@ -1,8 +1,9 @@
 const sidebarMenuStyles = (theme) => ({
 	sidebar: {
-		width: "240px",
-		height: "100%",
+		width: "280px",
+		height: "100vh",
 		paddingTop: "20px",
+		paddingRight: "10px",
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
@@ -25,7 +26,7 @@ const sidebarMenuStyles = (theme) => ({
 		borderRadius: "50%",
 		width: "40px",
 		height: "40px",
-		right: -30,
+		right: -20,
 		bottom: 70,
 		position: "absolute",
 	},

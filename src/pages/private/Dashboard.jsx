@@ -22,6 +22,7 @@ import {
 	getCustomers,
 	getWeeklyCustomerCount,
 } from "services/customer.service.js";
+import PageLayout from "components/PageLayout.jsx";
 
 const previousWeekOptions = {
 	filter: {
@@ -96,77 +97,74 @@ const Dashboard = () => {
 	// }, []);
 
 	return (
-		<FlexContainer page styles={classes.page}>
-			<SidebarMenu />
-			<div className={classes.container}>
-				<ActionBarWidget />
-				<PageTitle
-					title={`${getTimeOfDay()}, ${formatName(user.firstname)}`}
-					subtitle={"Let's get back to work"}
+		<PageLayout>
+			<ActionBarWidget />
+			<PageTitle
+				title={"Tickets"}
+				subtitle={"View your recent tickets"}
+			/>
+			<div className={classes.statWrap}>
+				<DisplayStatWidget
+					sparklineData={sales}
+					totalData={numberOfSales}
+					newData={sales.length > 0 ? sales[sales.length - 1] : 0}
+					oldData={sales.length > 0 ? sales[sales.length - 2] : 0}
+					width={"33%"}
+					height={"auto"}
+					title={"Sales"}
 				/>
-				<div className={classes.statWrap}>
-					<DisplayStatWidget
-						sparklineData={sales}
-						totalData={numberOfSales}
-						newData={sales.length > 0 ? sales[sales.length - 1] : 0}
-						oldData={sales.length > 0 ? sales[sales.length - 2] : 0}
-						width={"33%"}
-						height={"auto"}
-						title={"Sales"}
-					/>
-					<DisplayStatWidget
-						sparklineData={tickets}
-						totalData={numberOfTickets}
-						newData={
-							tickets.length > 0 ? tickets[tickets.length - 1] : 0
-						}
-						oldData={
-							tickets.length > 0 ? tickets[tickets.length - 2] : 0
-						}
-						width={"33%"}
-						height={"auto"}
-						title={"Tickets"}
-					/>
-					<DisplayStatWidget
-						sparklineData={customers}
-						totalData={numberOfCustomers}
-						newData={
-							customers.length > 0
-								? customers[customers.length - 1]
-								: 0
-						}
-						oldData={
-							customers.length > 0
-								? customers[customers.length - 2]
-								: 0
-						}
-						width={"33%"}
-						height={"auto"}
-						title={"Customers"}
-					/>
-				</div>
-				<div className={classes.priorityTickets}>
-					<h3>Customer Replies</h3>
-				</div>
-				<div className={classes.priorityTickets}>
-					<h3>Outstanding Priority Tickets</h3>
-					<div className={classes.ticketWrap}>
-						{priorityTickets.length > 0
-							? priorityTickets.map((ticket) => {
-									return (
-										<div
-											key={ticket._id}
-											className={classes.ticketRow}
-										>
-											<h4>{ticket.title}</h4>
-										</div>
-									);
-							  })
-							: ""}
-					</div>
+				<DisplayStatWidget
+					sparklineData={tickets}
+					totalData={numberOfTickets}
+					newData={
+						tickets.length > 0 ? tickets[tickets.length - 1] : 0
+					}
+					oldData={
+						tickets.length > 0 ? tickets[tickets.length - 2] : 0
+					}
+					width={"33%"}
+					height={"auto"}
+					title={"Tickets"}
+				/>
+				<DisplayStatWidget
+					sparklineData={customers}
+					totalData={numberOfCustomers}
+					newData={
+						customers.length > 0
+							? customers[customers.length - 1]
+							: 0
+					}
+					oldData={
+						customers.length > 0
+							? customers[customers.length - 2]
+							: 0
+					}
+					width={"33%"}
+					height={"auto"}
+					title={"Customers"}
+				/>
+			</div>
+			<div className={classes.priorityTickets}>
+				<h3>Customer Replies</h3>
+			</div>
+			<div className={classes.priorityTickets}>
+				<h3>Outstanding Priority Tickets</h3>
+				<div className={classes.ticketWrap}>
+					{priorityTickets.length > 0
+						? priorityTickets.map((ticket) => {
+								return (
+									<div
+										key={ticket._id}
+										className={classes.ticketRow}
+									>
+										<h4>{ticket.title}</h4>
+									</div>
+								);
+						  })
+						: ""}
 				</div>
 			</div>
-		</FlexContainer>
+		</PageLayout>
 	);
 };
 

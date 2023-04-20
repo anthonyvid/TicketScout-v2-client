@@ -13,6 +13,8 @@ import { handleError } from "utils/helper.js";
 import useTickets from "hooks/useTickets.js";
 import { socket } from "socket.js";
 import Table from "components/Table.jsx";
+import { Link } from "react-router-dom";
+import PageLayout from "components/PageLayout.jsx";
 
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
@@ -32,12 +34,20 @@ const Tickets = () => {
 			{
 				field: "id",
 				headerName: "Ticket Id",
-				width: "60",
+				width: "80",
+				renderCell: (params) => (
+					<Link to={`/tickets/${params.value}`}>{params.value}</Link>
+				),
 			},
 			{
 				field: "customer",
 				headerName: "Customer",
 				width: "200",
+				renderCell: (params) => (
+					<Link to={`/customers/${params.value}`}>
+						{params.value}
+					</Link>
+				),
 			},
 			{
 				field: "title",
@@ -47,7 +57,7 @@ const Tickets = () => {
 			{
 				field: "status",
 				headerName: "Status",
-				width: "50",
+				width: "80",
 				type: "singleSelect",
 				valueOptions: ["new", "reply", "priority"],
 				editable: true,
@@ -85,34 +95,33 @@ const Tickets = () => {
 	}, [tickets]);
 
 	const createTicket = () => {};
+	const deleteTicket = () => {};
 
 	return (
-		<FlexContainer page styles={classes.page}>
-			<SidebarMenu />
-			<div className={classes.container}>
-				<ActionBarWidget />
-				<PageTitle
-					title={"Tickets"}
-					subtitle={"View your recent tickets"}
+		<PageLayout>
+			<ActionBarWidget />
+			<PageTitle
+				title={"Tickets"}
+				subtitle={"View your recent tickets"}
+			/>
+			<div className={classes.tableWrap}>
+				<Table
+					columns={columns}
+					rows={rows}
+					paginationModel={paginationModel}
+					getRowId={(row) => row.id}
+					onCellEditCommit={(params) => setRowId(params.id)}
+					rowCount={total}
+					onPaginationModelChange={(model) =>
+						setPaginationModel(model)
+					}
+					loading={isLoading || isFetching}
+					queryKey={["tickets", paginationModel]}
+					handleNewRow={() => createTicket()}
+					handleDeleteRow={() => deleteTicket()}
 				/>
-				<div className={classes.tableWrap}>
-					<Table
-						columns={columns}
-						rows={rows}
-						paginationModel={paginationModel}
-						getRowId={(row) => row.id}
-						onCellEditCommit={(params) => setRowId(params.id)}
-						rowCount={total}
-						onPaginationModelChange={(model) =>
-							setPaginationModel(model)
-						}
-						loading={isLoading || isFetching}
-						queryKey={["tickets", paginationModel]}
-						handleNewRow={() => createTicket()}
-					/>
-				</div>
 			</div>
-		</FlexContainer>
+		</PageLayout>
 	);
 };
 

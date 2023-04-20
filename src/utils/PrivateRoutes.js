@@ -28,6 +28,7 @@ import { createTicket, getTickets } from "services/ticket.service.js";
 import { getCached, logout } from "./helper.js";
 import { createNotification } from "./notification.js";
 import NotFound from "pages/public/NotFound.jsx";
+import SidebarMenu from "components/SidebarMenu.jsx";
 
 const PrivateRoutes = () => {
 	let { token, user } = useSelector((state) => state.authReducer);
@@ -148,7 +149,10 @@ const PrivateRoutes = () => {
 	}, [token, user]);
 
 	return token && token !== null && token !== undefined ? (
-		<Outlet />
+		<div style={{ display: "flex", flexDirection: "row" }}>
+			<SidebarMenu />
+			<Outlet />
+		</div>
 	) : (
 		<Navigate to="/account/login" />
 	);

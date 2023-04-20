@@ -42,12 +42,28 @@ const tableStyles = (theme) => ({
 		},
 		"&.MuiDataGrid-root": {
 			// border: "1px solid transparent",
-			// borderRadius: "15px",
+			borderRadius: "15px",
+			width: "100%",
+			// overflow: "auto",
 		},
 		"& .MuiDataGrid-main": {
-			// boxShadow:
-			// 	"rgba(27, 31, 35, 0.04) 0px 1px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px inset",
-			// backgroundColor: "white",
+			boxShadow:
+				"rgba(27, 31, 35, 0.04) 0px 1px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px inset",
+			backgroundColor: "white",
+		},
+		a: {
+			color: "rgba(0, 0, 0, 0.87)",
+		},
+		"& .MuiDataGrid-footerContainer": {
+			boxShadow:
+				"rgba(27, 31, 35, 0.04) 0px 1px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px inset",
+			backgroundColor: "white",
+			borderBottomLeftRadius: "15px",
+			borderBottomRightRadius: "15px",
+		},
+		"& .MuiDataGrid-columnHeaders": {
+			color: "black",
+			fontSize: "14px",
 		},
 	},
 	highlightedRow: {
@@ -58,9 +74,20 @@ const tableStyles = (theme) => ({
 		// animation: `${bounce} 2s ease`,
 	},
 	toolbar: {
+		borderTopLeftRadius: "15px",
+		borderTopRightRadius: "15px",
+		boxShadow:
+			"rgba(27, 31, 35, 0.04) 0px 1px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px inset",
+		backgroundColor: "white",
 		display: "flex",
 		justifyContent: "space-between",
 		alignItems: "center",
+		"& .MuiButtonBase-root": {
+			color: theme.palette.neutral.main,
+		},
+		"& .MuiIconButton-colorError": {
+			color: theme.palette.error.light,
+		},
 	},
 });
 

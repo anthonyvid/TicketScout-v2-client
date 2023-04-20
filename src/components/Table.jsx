@@ -1,6 +1,7 @@
 import {
 	DataGrid,
 	GridFooter,
+	GridPagination,
 	GridToolbarColumnsButton,
 	GridToolbarContainer,
 	GridToolbarDensitySelector,
@@ -32,6 +33,7 @@ const Table = ({
 	queryKey,
 	handleNewRow,
 	showToolbar,
+	handleDeleteRow,
 }) => {
 	const classes = useClasses(tableStyles);
 	const [tableRows, setTableRows] = useState([...rows]);
@@ -58,21 +60,21 @@ const Table = ({
 					>
 						New
 					</Button>
-					{isAdmin && selectedRows.length > 0 && (
-						<IconButton
-							aria-label="delete"
-							color="primary"
-							onClick={() => {}}
-						>
-							<DeleteIcon />
-						</IconButton>
-					)}
 				</div>
 				<div>
 					<GridToolbarColumnsButton />
 					<GridToolbarFilterButton />
 					<GridToolbarDensitySelector />
 					<GridToolbarExport />
+					{isAdmin && selectedRows.length > 0 && (
+						<IconButton
+							aria-label="delete"
+							color="error"
+							onClick={handleDeleteRow}
+						>
+							<DeleteIcon />
+						</IconButton>
+					)}
 				</div>
 			</GridToolbarContainer>
 		);
@@ -148,13 +150,14 @@ const Table = ({
 
 Table.defaultProps = {
 	paginationMode: "server",
-	pageSizeOptions: [100, 50, 25],
+	pageSizeOptions: [25, 50, 100],
 	rowCount: 0,
 	loading: false,
 	getRowId: () => {},
 	onCellEditCommit: () => {},
 	onPaginationModelChange: () => {},
 	handleNewRow: () => {},
+	handleDeleteRow: () => {},
 	showToolbar: true,
 };
 
@@ -170,6 +173,7 @@ Table.propTypes = {
 	onCellEditCommit: PropTypes.func,
 	onPaginationModelChange: PropTypes.func,
 	handleNewRow: PropTypes.func,
+	handleDeleteRow: PropTypes.func,
 	loading: PropTypes.bool,
 	showToolbar: PropTypes.bool,
 };
