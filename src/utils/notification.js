@@ -1,9 +1,9 @@
+import { Alert, Snackbar } from "@mui/material";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const CLOSE_TIME = 6000;
 export const createNotification = (type = "success", msg = "") => {
-	const INTERNAL_ERROR = msg.includes("ERROR:");
-
+	const INTERNAL_ERROR = msg?.includes("ERROR:");
 	if (INTERNAL_ERROR) toast.dismiss();
 
 	const showToastMessage = () => {

@@ -34,12 +34,19 @@ const Table = ({
 	handleNewRow,
 	showToolbar,
 	handleDeleteRow,
+	onEditCellPropsChange,
+	onEditCellChange,
+	onCellEditStop,
+	onCellEditStart,
+	processRowUpdate,
+	onProcessRowUpdateError,
 }) => {
 	const classes = useClasses(tableStyles);
 	const [tableRows, setTableRows] = useState([...rows]);
 	const [selectedRows, setSelectedRows] = useState([]);
 	const [checkboxSelection, setCheckboxSelection] = useState(true);
 	const queryClient = useQueryClient();
+	const [cellModesModel, setCellModesModel] = useState({});
 	const [sortModel, setSortModel] = useState([
 		{
 			field: "updatedAt",
@@ -144,6 +151,14 @@ const Table = ({
 				noRowsOverlay: CustomNoRowsOverlay,
 				loadingOverlay: LinearProgress,
 			}}
+			onEditCellPropsChange={onEditCellPropsChange}
+			onEditCellChange={onEditCellChange}
+			onCellEditStop={onCellEditStop}
+			onCellEditStart={onCellEditStart}
+			onCellModesModelChange={(model) => setCellModesModel(model)}
+			cellModesModel={cellModesModel}
+			processRowUpdate={processRowUpdate}
+			onProcessRowUpdateError={onProcessRowUpdateError}
 		/>
 	);
 };
@@ -158,6 +173,12 @@ Table.defaultProps = {
 	onPaginationModelChange: () => {},
 	handleNewRow: () => {},
 	handleDeleteRow: () => {},
+	onEditCellPropsChange: () => {},
+	onEditCellChange: () => {},
+	onCellEditStop: () => {},
+	onCellEditStart: () => {},
+	processRowUpdate: () => {},
+	onProcessRowUpdateError: () => {},
 	showToolbar: true,
 };
 
@@ -174,6 +195,12 @@ Table.propTypes = {
 	onPaginationModelChange: PropTypes.func,
 	handleNewRow: PropTypes.func,
 	handleDeleteRow: PropTypes.func,
+	onEditCellPropsChange: PropTypes.func,
+	onEditCellChange: PropTypes.func,
+	onCellEditStop: PropTypes.func,
+	processRowUpdate: PropTypes.func,
+	onCellEditStart: PropTypes.func,
+	onProcessRowUpdateError: PropTypes.func,
 	loading: PropTypes.bool,
 	showToolbar: PropTypes.bool,
 };
