@@ -67,7 +67,7 @@ const useTickets = (key) => {
 			// });
 		});
 		return () => {
-			socket.off("new-ticket");
+			socket.off("delete-ticket");
 		};
 	}, []);
 
