@@ -7,7 +7,11 @@ import ticketsStyles from "styles/pages/Tickets.style.js";
 import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
-import { deleteTicket, getTickets } from "services/ticket.service.js";
+import {
+	deleteTicket,
+	deleteTickets,
+	getTickets,
+} from "services/ticket.service.js";
 import { useQuery, useQueryClient } from "react-query";
 import { handleError } from "utils/helper.js";
 import useTickets from "hooks/useTickets.js";
@@ -16,7 +20,10 @@ import Table from "components/Table.jsx";
 import { Link } from "react-router-dom";
 import PageLayout from "components/PageLayout.jsx";
 import { useSelector } from "react-redux";
-import { defaultTicketStatuses } from "constants/client.constants.js";
+import {
+	defaultTicketStatuses,
+	statusCodes,
+} from "constants/client.constants.js";
 import { Alert, Chip, Snackbar } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { createNotification } from "utils/notification.js";
@@ -26,7 +33,7 @@ const Tickets = () => {
 	const queryClient = useQueryClient();
 
 	const [paginationModel, setPaginationModel] = useState({
-		pageSize: 5,
+		pageSize: 25,
 		page: 0,
 	});
 
@@ -137,10 +144,22 @@ const Tickets = () => {
 	}, [tickets]);
 
 	const handleCreateTicket = () => {};
+
 	const handleDeleteTicket = async (ids) => {
+		if (!ids || ids.length < 1) return;
 		try {
-			const response = await deleteTicket(ids);
-			console.log(response);
+			let response = null;
+
+			if (ids.length === 1) {
+				response = await deleteTicket(ids);
+			} else {
+				response = await deleteTickets(ids);
+			}
+
+			if (response.status !== statusCodes.NO_CONTENT)
+				throw new Error(response.data.message || response.statusText);
+
+			createNotification("success", "Successfully deleted ticket(s)");
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);

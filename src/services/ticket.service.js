@@ -42,8 +42,20 @@ export const createTicket = async (options) => {
 	}
 };
 
-export const deleteTicket = async (ids) => {
-	let url = `tickets/${JSON.stringify(ids)}`;
+export const deleteTicket = async (id) => {
+	let url = `tickets/${id}`;
+
+	try {
+		const response = await deleteRequest(url);
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};
+
+export const deleteTickets = async (ids) => {
+	let url = `tickets?ids=${JSON.stringify(ids)}`;
+
 	try {
 		const response = await deleteRequest(url);
 		return response;
