@@ -1,3 +1,4 @@
+import { deleteRequest } from "config/axiosConfig.js";
 import { getRequest, postRequest } from "config/axiosConfig.js";
 import { addSortAndFilters } from "utils/helper.js";
 
@@ -35,6 +36,16 @@ export const getWeeklyTicketCount = async (options) => {
 export const createTicket = async (options) => {
 	try {
 		const response = await postRequest(`tickets`, options);
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};
+
+export const deleteTicket = async (ids) => {
+	let url = `tickets/${JSON.stringify(ids)}`;
+	try {
+		const response = await deleteRequest(url);
 		return response;
 	} catch (error) {
 		return error.response;

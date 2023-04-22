@@ -7,7 +7,7 @@ import ticketsStyles from "styles/pages/Tickets.style.js";
 import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
-import { getTickets } from "services/ticket.service.js";
+import { deleteTicket, getTickets } from "services/ticket.service.js";
 import { useQuery, useQueryClient } from "react-query";
 import { handleError } from "utils/helper.js";
 import useTickets from "hooks/useTickets.js";
@@ -47,16 +47,16 @@ const Tickets = () => {
 					<Link to={`/tickets/${params.value}`}>{params.value}</Link>
 				),
 			},
-			// {
-			// 	field: "customer",
-			// 	headerName: "Customer",
-			// 	width: "200",
-			// 	renderCell: (params) => (
-			// 		<Link to={`/customers/${params.value}`}>
-			// 			{params.value}
-			// 		</Link>
-			// 	),
-			// },
+			{
+				field: "customer",
+				headerName: "Customer",
+				width: "200",
+				renderCell: (params) => (
+					<Link to={`/customers/${params.value}`}>
+						{params.value}
+					</Link>
+				),
+			},
 			{
 				field: "title",
 				headerName: "Title",
@@ -67,58 +67,57 @@ const Tickets = () => {
 					return { ...params.props, error: hasError };
 				},
 			},
-			// {
-			// 	field: "status",
-			// 	headerName: "Status",
-			// 	width: "130",
-			// 	type: "singleSelect",
-			// 	valueOptions: () => {
-			// 		const statuses =
-			// 			organization?.settings?.ticketStatuses ||
-			// 			defaultTicketStatuses;
-			// 		return statuses.map((status) => ({
-			// 			value: status.split(",")[0],
-			// 			data: status,
-			// 		}));
-			// 	},
-			// 	getOptionLabel: (params) => params.value,
-			// 	getOptionValue: (params) => params.data,
-			// 	editable: true,
-			// 	// valueGetter: (value) => console.log(value),
-			// 	renderCell: (params) => {
-			// 		const [label, color] = params.value.split(",");
-			// 		return (
-			// 			<Chip
-			// 				size="small"
-			// 				icon={
-			// 					<FiberManualRecordIcon
-			// 						style={{
-			// 							color: color,
-			// 						}}
-			// 					/>
-			// 				}
-			// 				style={{
-			// 					color: color,
-			// 					backgroundColor: `${color}17`,
-			// 				}}
-			// 				label={label}
-			// 			/>
-			// 		);
-			// 	},
-			// },
-			// {
-			// 	field: "updatedAt",
-			// 	headerName: "Last Updated",
-			// 	width: "130",
-			// 	renderCell: (params) => moment(params.row.updatedAt).fromNow(),
-			// },
-			// {
-			// 	field: "createdAt",
-			// 	headerName: "Created On",
-			// 	width: "130",
-			// 	renderCell: (params) =>
-			// 		moment(params.row.createdAt).format("MMM Do YYYY"),
-			// },
+			{
+				field: "status",
+				headerName: "Status",
+				width: "130",
+				type: "singleSelect",
+				valueOptions: () => {
+					const statuses =
+						organization?.settings?.ticketStatuses ||
+						defaultTicketStatuses;
+					return statuses.map((status) => ({
+						value: status.split(",")[0],
+						data: status,
+					}));
+				},
+				getOptionLabel: (params) => params.value,
+				getOptionValue: (params) => params.data,
+				editable: true,
+				renderCell: (params) => {
+					const [label, color] = params.value.split(",");
+					return (
+						<Chip
+							size="small"
+							icon={
+								<FiberManualRecordIcon
+									style={{
+										color: color,
+									}}
+								/>
+							}
+							style={{
+								color: color,
+								backgroundColor: `${color}17`,
+							}}
+							label={label}
+						/>
+					);
+				},
+			},
+			{
+				field: "updatedAt",
+				headerName: "Last Updated",
+				width: "130",
+				renderCell: (params) => moment(params.row.updatedAt).fromNow(),
+			},
+			{
+				field: "createdAt",
+				headerName: "Created On",
+				width: "130",
+				renderCell: (params) =>
+					moment(params.row.createdAt).format("MMM Do YYYY"),
+			},
 		],
 		[rowId]
 	);
@@ -127,35 +126,47 @@ const Tickets = () => {
 		return tickets.map((t) => {
 			return {
 				id: t.ticketId || t.id,
-				// customer: t.customer,
+				customer: t.customer,
 				title: t.title,
-				// status: t.status,
-				// updatedAt: t.updatedAt,
-				// createdAt: t.createdAt,
-				// incomingWS: t?.incomingWS || false,
+				status: t.status,
+				updatedAt: t.updatedAt,
+				createdAt: t.createdAt,
+				incomingWS: t?.incomingWS || false,
 			};
 		});
 	}, [tickets]);
 
-	useEffect(() => console.log(rows), [rows]);
+	const handleCreateTicket = () => {};
+	const handleDeleteTicket = async (ids) => {
+		try {
+			const response = await deleteTicket(ids);
+			console.log(response);
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
+		}
+	};
 
-	const createTicket = () => {};
-	const deleteTicket = () => {};
+	const onRowUpdate = useCallback(async (newRow, oldRow) => {
+		// Update the ticket in cache
+		queryClient.setQueryData(
+			["tickets", paginationModel],
+			(existingData) => {
+				const newData = existingData;
+				const tickets = [...newData?.data?.results];
+				const index = tickets.findIndex((obj) => obj.id === newRow.id);
+				newRow.updatedAt = new Date().toISOString();
+				tickets[index] = newRow;
+				newData.data.results = tickets;
+				return newData;
+			}
+		);
 
-	// const onRowUpdate = useCallback(async (row) => {
-	// 	// Update the ticket in cache
-	// 	queryClient.setQueryData(
-	// 		["tickets", paginationModel],
-	// 		(existingData) => {
-	// 			const newData = existingData;
-	// 			const tickets = [...newData?.data?.results];
-	// 			const index = tickets.findIndex((obj) => obj.id === row.id);
-	// 			tickets[index] = row;
-	// 			newData.data.results = tickets;
-	// 			return newData;
-	// 		}
-	// 	);
-	// }, []);
+		// Update the ticket on server
+
+		// Return new row to the table
+		return newRow;
+	}, []);
 
 	const onRowUpdateError = (error) => {
 		console.log(error);
@@ -180,10 +191,11 @@ const Tickets = () => {
 					}
 					loading={isLoading || isFetching}
 					queryKey={["tickets", paginationModel]}
-					handleNewRow={() => createTicket()}
-					handleDeleteRow={() => deleteTicket()}
-					// processRowUpdate={onRowUpdate}
+					handleNewRow={() => handleCreateTicket()}
+					handleDeleteRow={handleDeleteTicket}
+					processRowUpdate={onRowUpdate}
 					onProcessRowUpdateError={onRowUpdateError}
+					onCellEditCommit={(params) => setRowId(params.id)}
 				/>
 			</div>
 		</PageLayout>

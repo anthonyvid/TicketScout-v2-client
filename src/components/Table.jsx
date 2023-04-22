@@ -77,7 +77,7 @@ const Table = ({
 						<IconButton
 							aria-label="delete"
 							color="error"
-							onClick={handleDeleteRow}
+							onClick={() => handleDeleteRow(selectedRows)}
 						>
 							<DeleteIcon />
 						</IconButton>
