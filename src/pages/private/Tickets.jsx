@@ -11,9 +11,10 @@ import {
 	deleteTicket,
 	deleteTickets,
 	getTickets,
+	updateTicket,
 } from "services/ticket.service.js";
 import { useQuery, useQueryClient } from "react-query";
-import { handleError } from "utils/helper.js";
+import { deepDiff, handleError } from "utils/helper.js";
 import useTickets from "hooks/useTickets.js";
 import { socket } from "socket.js";
 import Table from "components/Table.jsx";
@@ -166,22 +167,20 @@ const Tickets = () => {
 		}
 	};
 
-	const onRowUpdate = useCallback(async (newRow, oldRow) => {
-		// Update the ticket in cache
-		queryClient.setQueryData(
-			["tickets", paginationModel],
-			(existingData) => {
-				const newData = existingData;
-				const tickets = [...newData?.data?.results];
-				const index = tickets.findIndex((obj) => obj.id === newRow.id);
-				newRow.updatedAt = new Date().toISOString();
-				tickets[index] = newRow;
-				newData.data.results = tickets;
-				return newData;
-			}
-		);
+	const handleUpdateTicket = useCallback(async (newRow, oldRow) => {
+		const data = deepDiff(oldRow, newRow);
+		data.new.updatedAt = new Date().toISOString();
 
-		// Update the ticket on server
+		try {
+			const response = await updateTicket(newRow.id, data.new);
+			if (response.status !== statusCodes.OK)
+				throw new Error(response.data.message || response.statusText);
+
+			createNotification("success", "Successfully updated ticket(s)");
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
+		}
 
 		// Return new row to the table
 		return newRow;
@@ -212,7 +211,7 @@ const Tickets = () => {
 					queryKey={["tickets", paginationModel]}
 					handleNewRow={() => handleCreateTicket()}
 					handleDeleteRow={handleDeleteTicket}
-					processRowUpdate={onRowUpdate}
+					processRowUpdate={handleUpdateTicket}
 					onProcessRowUpdateError={onRowUpdateError}
 					onCellEditCommit={(params) => setRowId(params.id)}
 				/>

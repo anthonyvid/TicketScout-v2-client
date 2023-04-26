@@ -47,24 +47,48 @@ const useTickets = (key) => {
 	}, []);
 
 	useEffect(() => {
+		socket.on("update-ticket", (newData) => {
+			let { id, data } = newData;
+
+			// Update the ticket in cache
+			queryClient.setQueryData(QUERY_KEY, (existingData) => {
+				const newData = existingData;
+				const tickets = [...newData?.data?.results];
+				const index = tickets.findIndex((obj) => obj.ticketId == id);
+				tickets[index] = {
+					...tickets[index],
+					...data,
+					updatedAt: new Date().toISOString(),
+				};
+				newData.data.results = tickets;
+				return newData;
+			});
+		});
+		return () => {
+			socket.off("update-ticket");
+		};
+	}, []);
+
+	useEffect(() => {
 		socket.on("delete-ticket", (data) => {
 			let { ids } = data;
 			console.log(ids);
+			// Update the ticket in cache
+			queryClient.setQueryData(QUERY_KEY, (existingData) => {
+				const newData = existingData;
+				const tickets = [...newData?.data?.results];
 
-			// queryClient.setQueryData(QUERY_KEY, (existingData) => {
-			// 	const tickets = existingData?.data?.results;
-			// 	const total = existingData?.data?.total;
+				const newTickets = tickets.filter(
+					(obj) => !ids.some((obj2) => obj.ticketId === obj2)
+				);
 
-			// 	tickets.pop(); // Remove the oldest ticket so we can keep the 25 ticket size when adding the new one
-			// 	const newTickets = [ticket, ...tickets];
-			// 	const newTotal = total - ids.length;
+				//todo: need to remove the ticket(s) form cache and update it
+				console.log(tickets);
+				console.log(newTickets);
 
-			// 	const newData = existingData;
-			// 	existingData.data.results = newTickets;
-			// 	existingData.data.total = newTotal;
-
-			// 	return newData;
-			// });
+				newData.data.results = newTickets;
+				return newData;
+			});
 		});
 		return () => {
 			socket.off("delete-ticket");

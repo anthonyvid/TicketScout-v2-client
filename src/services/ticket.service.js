@@ -63,3 +63,14 @@ export const deleteTickets = async (ids) => {
 		return error.response;
 	}
 };
+
+export const updateTicket = async (id, data) => {
+	let url = `tickets/${id}`;
+
+	try {
+		const response = await postRequest(url, data);
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};

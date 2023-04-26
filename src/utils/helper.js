@@ -1,5 +1,6 @@
 import { setLogin } from "reducers/auth/index.js";
 import { createNotification } from "./notification.js";
+import { isEqual, pickBy } from "lodash";
 
 export function isNumber(char) {
 	return /^\d$/.test(char);
@@ -129,4 +130,15 @@ export const handleError = (error) => {
 	const errMsg = error.response.data.message || error.response.statusText;
 	console.error(errMsg);
 	createNotification("error", errMsg);
+};
+
+export const deepDiff = (oldObject, newObject) => {
+	return {
+		old: pickBy(oldObject, (value, key) => {
+			return !isEqual(value, newObject[key]);
+		}),
+		new: pickBy(newObject, (value, key) => {
+			return !isEqual(oldObject[key], value);
+		}),
+	};
 };
