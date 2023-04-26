@@ -7,6 +7,7 @@ import Routes from "./routes.js";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { handleError } from "utils/helper.js";
+import { SnackbarProvider } from "context/Snackbar.js";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -25,9 +26,11 @@ function App() {
 		<div className="App">
 			<QueryClientProvider client={queryClient}>
 				<ThemeProvider theme={theme}>
-					<ToastContainer />
-					<CssBaseline />
-					<Routes />
+					<SnackbarProvider>
+						<ToastContainer />
+						<CssBaseline />
+						<Routes />
+					</SnackbarProvider>
 				</ThemeProvider>
 			</QueryClientProvider>
 		</div>

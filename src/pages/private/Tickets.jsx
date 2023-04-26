@@ -1,22 +1,19 @@
-import FlexContainer from "components/FlexContainer.jsx";
 import PageTitle from "components/PageTitle.jsx";
-import SidebarMenu from "components/SidebarMenu.jsx";
 import useClasses from "hooks/useClasses.js";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ticketsStyles from "styles/pages/Tickets.style.js";
 import ActionBarWidget from "widgets/ActionBarWidget.jsx";
-import { DataGrid } from "@mui/x-data-grid";
+
 import moment from "moment";
 import {
 	deleteTicket,
 	deleteTickets,
-	getTickets,
 	updateTicket,
 } from "services/ticket.service.js";
-import { useQuery, useQueryClient } from "react-query";
-import { deepDiff, handleError } from "utils/helper.js";
+import { useQueryClient } from "react-query";
+import { deepDiff, formatName } from "utils/helper.js";
 import useTickets from "hooks/useTickets.js";
-import { socket } from "socket.js";
+
 import Table from "components/Table.jsx";
 import { Link } from "react-router-dom";
 import PageLayout from "components/PageLayout.jsx";
@@ -25,13 +22,16 @@ import {
 	defaultTicketStatuses,
 	statusCodes,
 } from "constants/client.constants.js";
-import { Alert, Chip, Snackbar } from "@mui/material";
+import { Chip } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { createNotification } from "utils/notification.js";
-import SnackBar from "components/SnackBar.jsx";
+
+import { useSnackbar } from "context/Snackbar.js";
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
 	const queryClient = useQueryClient();
+
+	const createSnackbar = useSnackbar();
 
 	const [paginationModel, setPaginationModel] = useState({
 		pageSize: 25,
@@ -60,8 +60,11 @@ const Tickets = () => {
 				headerName: "Customer",
 				width: "200",
 				renderCell: (params) => (
-					<Link to={`/customers/${params.value}`}>
-						{params.value}
+					<Link to={`/customers/${params.value._id}`}>
+						{formatName(
+							params.value.firstname,
+							params.value.lastname
+						)}
 					</Link>
 				),
 			},
@@ -160,7 +163,8 @@ const Tickets = () => {
 			if (response.status !== statusCodes.NO_CONTENT)
 				throw new Error(response.data.message || response.statusText);
 
-			createNotification("success", "Successfully deleted ticket(s)");
+			// createNotification("success", "Successfully deleted ticket(s)");
+			// createSnackbar("");
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
@@ -175,14 +179,10 @@ const Tickets = () => {
 			const response = await updateTicket(newRow.id, data.new);
 			if (response.status !== statusCodes.OK)
 				throw new Error(response.data.message || response.statusText);
-
-			createNotification("success", "Successfully updated ticket(s)");
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
 		}
-
-		// Return new row to the table
 		return newRow;
 	}, []);
 

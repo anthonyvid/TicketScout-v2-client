@@ -72,21 +72,18 @@ const useTickets = (key) => {
 	useEffect(() => {
 		socket.on("delete-ticket", (data) => {
 			let { ids } = data;
-			console.log(ids);
+
 			// Update the ticket in cache
 			queryClient.setQueryData(QUERY_KEY, (existingData) => {
 				const newData = existingData;
 				const tickets = [...newData?.data?.results];
 
 				const newTickets = tickets.filter(
-					(obj) => !ids.some((obj2) => obj.ticketId === obj2)
+					(obj) => !ids.includes(obj.ticketId)
 				);
 
-				//todo: need to remove the ticket(s) form cache and update it
-				console.log(tickets);
-				console.log(newTickets);
-
 				newData.data.results = newTickets;
+				newData.data.total -= ids.length;
 				return newData;
 			});
 		});
