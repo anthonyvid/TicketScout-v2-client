@@ -27,9 +27,12 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { createNotification } from "utils/notification.js";
 
 import { useSnackbar } from "context/Snackbar.js";
+import CustomDialog from "components/CustomDialog.jsx";
+import useDialog from "hooks/useDialog.js";
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
 	const queryClient = useQueryClient();
+	const { isShowing, toggle } = useDialog();
 
 	const createSnackbar = useSnackbar();
 
@@ -147,7 +150,9 @@ const Tickets = () => {
 		});
 	}, [tickets]);
 
-	const handleCreateTicket = () => {};
+	const handleCreateTicket = () => {
+		toggle();
+	};
 
 	const handleDeleteTicket = async (ids) => {
 		if (!ids || ids.length < 1) return;
@@ -216,6 +221,11 @@ const Tickets = () => {
 					onCellEditCommit={(params) => setRowId(params.id)}
 				/>
 			</div>
+			<CustomDialog
+				isOpen={isShowing}
+				handleClose={toggle}
+				title={"Test Modal"}
+			></CustomDialog>
 		</PageLayout>
 	);
 };
