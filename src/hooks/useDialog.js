@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 const useDialog = () => {
-	const [isShowing, setIsShowing] = useState(false);
+	const [isOpen, setisOpen] = useState(false);
 
 	function toggle() {
-		setIsShowing(!isShowing);
+		setisOpen(!isOpen);
 	}
 
 	return {
-		isShowing,
+		isOpen,
 		toggle,
 	};
 };

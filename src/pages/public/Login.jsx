@@ -39,7 +39,6 @@ const Login = () => {
 	const [width, setWidth] = useState(window.innerWidth);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const isMobile = width <= 768;
-	const [play, setPlay] = useState(false);
 
 	const handleWindowSizeChange = () => {
 		setWidth(window.innerWidth);

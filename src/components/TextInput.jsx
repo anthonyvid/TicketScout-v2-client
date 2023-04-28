@@ -86,6 +86,7 @@ const TextInput = ({
 	uniqueDataValidation,
 	isDataUnique,
 	uniqueData,
+	multiline,
 }) => {
 	const classes = useClasses(textInputStyles);
 	const [showPassword, setShowPassword] = useState(false);
@@ -139,6 +140,7 @@ const TextInput = ({
 							[classes.error]: errors[name],
 							[classes.success]: !errors[name] && value,
 						})}
+						multiline={multiline}
 						onBlur={onBlur}
 						onChange={(value) => {
 							onChange(value);
@@ -233,6 +235,7 @@ TextInput.defaultProps = {
 	autoFocus: false,
 	fullWidth: false,
 	peekPassword: false,
+	multiline: false,
 	disabled: false,
 	uniqueDataValidation: false,
 	uniqueData: "",
@@ -253,6 +256,7 @@ TextInput.propTypes = {
 	peekPassword: PropTypes.bool,
 	disabled: PropTypes.bool,
 	altLabel: PropTypes.bool,
+	multiline: PropTypes.bool,
 	rules: PropTypes.object,
 	errors: PropTypes.object,
 	control: PropTypes.object,
