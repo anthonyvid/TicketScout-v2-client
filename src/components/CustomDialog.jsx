@@ -19,10 +19,19 @@ const CustomDialog = ({
 	subtitle,
 	children,
 	showCloseBtn,
+	width,
 }) => {
 	return (
 		<>
-			<Dialog fullWidth maxWidth="md" open={isOpen} onClose={handleClose}>
+			<Dialog
+				fullWidth
+				maxWidth={width}
+				open={isOpen}
+				onClose={handleClose}
+				PaperProps={{
+					style: { borderRadius: 12 },
+				}}
+			>
 				<DialogTitle>
 					<Box display="flex" alignItems="center">
 						<Box flexGrow={1}>{title}</Box>
@@ -49,6 +58,7 @@ const CustomDialog = ({
 
 CustomDialog.defaultProps = {
 	showCloseBtn: false,
+	width: "sm",
 };
 
 CustomDialog.propTypes = {
@@ -57,6 +67,7 @@ CustomDialog.propTypes = {
 	handleClose: PropTypes.func,
 	title: PropTypes.string,
 	subtitle: PropTypes.string,
+	width: PropTypes.string,
 };
 
 export default CustomDialog;

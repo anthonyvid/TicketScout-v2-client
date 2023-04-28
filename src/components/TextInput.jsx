@@ -225,6 +225,7 @@ const TextInput = ({
 };
 
 TextInput.defaultProps = {
+	type: "text",
 	placeholder: "",
 	inputText: "",
 	name: "",

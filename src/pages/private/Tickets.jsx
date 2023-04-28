@@ -29,6 +29,7 @@ import { createNotification } from "utils/notification.js";
 import { useSnackbar } from "context/Snackbar.js";
 import CustomDialog from "components/CustomDialog.jsx";
 import useDialog from "hooks/useDialog.js";
+import TextInput from "components/TextInput.jsx";
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
 	const queryClient = useQueryClient();
@@ -225,7 +226,9 @@ const Tickets = () => {
 				isOpen={isShowing}
 				handleClose={toggle}
 				title={"Test Modal"}
-			></CustomDialog>
+			>
+				<TextInput placeholder="title"/>
+			</CustomDialog>
 		</PageLayout>
 	);
 };
