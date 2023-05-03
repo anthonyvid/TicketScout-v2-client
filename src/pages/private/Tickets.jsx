@@ -161,10 +161,6 @@ const Tickets = () => {
 		});
 	}, [tickets]);
 
-	const handleCreateTicket = () => {
-		dispatch(openModal("CREATE_TICKET"));
-	};
-
 	const handleDeleteTicket = async (ids) => {
 		if (!ids || ids.length < 1) return;
 		try {
@@ -225,7 +221,7 @@ const Tickets = () => {
 					}
 					loading={isLoading || isFetching}
 					queryKey={["tickets", paginationModel]}
-					handleNewRow={() => handleCreateTicket()}
+					handleNewRow={() => dispatch(openModal("CREATE_TICKET"))}
 					handleDeleteRow={handleDeleteTicket}
 					processRowUpdate={handleUpdateTicket}
 					onProcessRowUpdateError={onRowUpdateError}

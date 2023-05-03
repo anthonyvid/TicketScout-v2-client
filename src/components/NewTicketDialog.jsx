@@ -11,6 +11,9 @@ import { ticketStatus } from "constants/client.constants.js";
 import SelectInput from "./SelectInput.jsx";
 import { useSelector } from "react-redux";
 import { deepDiff } from "utils/helper.js";
+import { createTicket } from "services/ticket.service.js";
+import { statusCodes } from "constants/client.constants.js";
+import { createNotification } from "utils/notification.js";
 
 const TYPE = "CREATE_TICKET";
 
@@ -23,6 +26,7 @@ const defaultValues = {
 const NewTicketDialog = ({ isOpen, handleClose }) => {
 	const classes = useClasses(newTicketDialogStyles);
 	const { modalData } = useSelector((state) => state.modalReducer);
+	const { user } = useSelector((state) => state.authReducer);
 
 	const ticketSchema = yup.object().shape({
 		title: yup.string().required("Ticket title is required"),
@@ -56,7 +60,23 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 		}
 	}, []);
 
-	const createNewTicket = (data) => {};
+	const createNewTicket = async (data) => {
+		try {
+			const options = {
+				...data,
+				userId: user.id,
+			};
+			console.log(options);
+			const response = null;
+			// const response = await createTicket();
+
+			if (response.status !== statusCodes.CREATED)
+				throw new Error(response.data.message || response.statusText);
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
+		}
+	};
 
 	return (
 		<CustomDialog
@@ -111,3 +131,7 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 };
 
 export default NewTicketDialog;
+
+//todo: need to add customer input in the create tiucket model, 
+//todo: should be able to search by phone or name and it will show the results, 
+//todo: The Text will be the name and value will be their ID
