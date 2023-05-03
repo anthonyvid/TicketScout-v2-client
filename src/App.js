@@ -7,7 +7,9 @@ import Routes from "./routes.js";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { handleError } from "utils/helper.js";
-import { SnackbarProvider } from "context/Snackbar.js";
+import SnackbarProvider from "context/SnackbarContext.js";
+import Modal from "components/Modal.jsx";
+import useShortcuts from "hooks/useShortcut.js";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -21,6 +23,7 @@ const queryClient = new QueryClient({
 function App() {
 	const mode = useSelector((state) => state.authReducer.mode);
 	const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+	useShortcuts();
 
 	return (
 		<div className="App">
@@ -29,6 +32,7 @@ function App() {
 					<SnackbarProvider>
 						<ToastContainer />
 						<CssBaseline />
+						<Modal />
 						<Routes />
 					</SnackbarProvider>
 				</ThemeProvider>

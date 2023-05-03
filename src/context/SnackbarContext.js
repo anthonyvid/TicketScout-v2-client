@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
 
-const SnackbarContext = createContext();
+export const SnackbarContext = createContext();
 
 const SnackbarProvider = ({ children }) => {
 	const [open, setOpen] = useState(false);
@@ -43,9 +43,4 @@ const SnackbarProvider = ({ children }) => {
 	);
 };
 
-const useSnackbar = () => {
-	const { handleSnackbar } = useContext(SnackbarContext);
-	return handleSnackbar;
-};
-
-export { SnackbarProvider, useSnackbar };
+export default SnackbarProvider;

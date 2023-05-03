@@ -12,6 +12,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
+import { useDispatch } from "react-redux";
+import { resetModalData, saveModalData } from "reducers/modal.js";
+import WarnDialog from "./WarnDialog.jsx";
 const CustomDialog = ({
 	isOpen,
 	handleClose,
@@ -24,16 +27,34 @@ const CustomDialog = ({
 	warnTitle,
 	warnSubtitle,
 	onWarnSubmit,
+	form,
+	warnCloseText,
+	warnSubmitText,
+	warnIcon,
 }) => {
 	const [isWarnOpen, setIsWarnOpen] = useState(false);
 
 	const onWarnClose = () => setIsWarnOpen(false);
+	const dispatch = useDispatch();
+
+	const isFormEdited = () => Object.keys(form.data).length > 0;
 
 	const onClose = (event, reason) => {
-		if (reason && reason !== "backdropClick") {
+		if (
+			reason &&
+			reason !== "backdropClick" &&
+			reason !== "escapeKeyDown"
+		) {
 			setIsWarnOpen(true);
 		} else {
+			saveFormData();
 			handleClose();
+		}
+	};
+
+	const saveFormData = () => {
+		if (isFormEdited()) {
+			dispatch(saveModalData(form));
 		}
 	};
 
@@ -73,76 +94,26 @@ const CustomDialog = ({
 					{showCloseBtn && <Button onClick={onClose}>Close</Button>}
 				</DialogActions>
 			</Dialog>
-			<Dialog
-				fullWidth
-				maxWidth={"xs"}
-				sx={{
-					textAlign: "center",
+			<WarnDialog
+				isOpen={isWarnOpen}
+				onClose={onWarnClose}
+				icon={
+					warnIcon || (
+						<DeleteSweepTwoToneIcon sx={{ fontSize: "80px" }} />
+					)
+				}
+				title={warnTitle}
+				subtitle={warnSubtitle}
+				closeText={warnCloseText || "Cancel"}
+				submitText={warnSubmitText || "Delete"}
+				onSubmit={() => {
+					setIsWarnOpen(false);
+					dispatch(resetModalData(form.type));
+					onClose();
+					onWarnSubmit();
 				}}
-				open={isWarnOpen}
-				onClose={(event, reason) => {
-					if (reason && reason == "backdropClick") return;
-					onWarnClose();
-				}}
-				PaperProps={{
-					style: { borderRadius: 12 },
-				}}
-			>
-				<DialogTitle sx={{ fontSize: "20px", fontWeight: 700 }}>
-					<Box
-						display="flex"
-						alignItems="center"
-						flexDirection="column"
-					>
-						<Box>
-							<DeleteSweepTwoToneIcon sx={{ fontSize: "80px" }} />
-						</Box>
-						<Box
-							flexGrow={1}
-							sx={{ fontSize: "20px", fontWeight: 700 }}
-						>
-							{warnTitle}
-						</Box>
-					</Box>
-				</DialogTitle>
-				<DialogContent>
-					<DialogContentText
-						sx={{ fontSize: "15px", fontWeight: 500 }}
-					>
-						{warnSubtitle}
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions
-					sx={{
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						gap: "10px",
-						width: "100%",
-						padding: "25px",
-					}}
-				>
-					<Button
-						variant="light"
-						onClick={() => setIsWarnOpen(false)}
-						sx={{ width: "50%", height: "45px" }}
-					>
-						Cancel
-					</Button>
-					<Button
-						color="error"
-						variant="contained"
-						sx={{ width: "50%", height: "45px" }}
-						onClick={() => {
-							setIsWarnOpen(false);
-							onClose();
-							onWarnSubmit();
-						}}
-					>
-						Delete
-					</Button>
-				</DialogActions>
-			</Dialog>
+				onCancel={() => setIsWarnOpen(false)}
+			/>
 		</>
 	);
 };
@@ -150,6 +121,9 @@ const CustomDialog = ({
 CustomDialog.defaultProps = {
 	showCloseBtn: false,
 	warnOnClose: false,
+	warnCloseText: "",
+	warnSubmitText: "",
+	form: { type: "", data: {} },
 	width: "sm",
 	warnSubtitle: "",
 	onWarnSubmit: () => {},
@@ -163,9 +137,12 @@ CustomDialog.propTypes = {
 	onWarnSubmit: PropTypes.func,
 	title: PropTypes.string.isRequired,
 	subtitle: PropTypes.string,
+	warnCloseText: PropTypes.string,
+	warnSubmitText: PropTypes.string,
 	width: PropTypes.string,
 	warnTitle: PropTypes.string.isRequired,
 	warnSubtitle: PropTypes.string,
+	form: PropTypes.object,
 };
 
 export default CustomDialog;

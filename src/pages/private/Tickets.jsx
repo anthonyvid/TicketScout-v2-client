@@ -1,6 +1,12 @@
 import PageTitle from "components/PageTitle.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import ticketsStyles from "styles/pages/Tickets.style.js";
 import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 
@@ -17,7 +23,7 @@ import useTickets from "hooks/useTickets.js";
 import Table from "components/Table.jsx";
 import { Link } from "react-router-dom";
 import PageLayout from "components/PageLayout.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	defaultTicketStatuses,
 	statusCodes,
@@ -26,15 +32,18 @@ import { Chip } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { createNotification } from "utils/notification.js";
 
-import { useSnackbar } from "context/Snackbar.js";
 import CustomDialog from "components/CustomDialog.jsx";
 import useDialog from "hooks/useDialog.js";
 import TextInput from "components/TextInput.jsx";
 import NewTicketDialog from "components/NewTicketDialog.jsx";
+import useSnackbar from "hooks/useSnackbar.js";
+
+import { openModal } from "reducers/modal.js";
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
 	const queryClient = useQueryClient();
 	const { isOpen, toggle } = useDialog();
+	const dispatch = useDispatch();
 
 	const createSnackbar = useSnackbar();
 
@@ -153,7 +162,7 @@ const Tickets = () => {
 	}, [tickets]);
 
 	const handleCreateTicket = () => {
-		toggle();
+		dispatch(openModal("CREATE_TICKET"));
 	};
 
 	const handleDeleteTicket = async (ids) => {
@@ -223,7 +232,7 @@ const Tickets = () => {
 					onCellEditCommit={(params) => setRowId(params.id)}
 				/>
 			</div>
-			<NewTicketDialog isOpen={isOpen} handleClose={toggle} />
+			{/* <NewTicketDialog isOpen={isOpen} handleClose={toggle} /> */}
 		</PageLayout>
 	);
 };

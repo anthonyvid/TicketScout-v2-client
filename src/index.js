@@ -7,6 +7,7 @@ import "./index.css";
 import App from "./App";
 import authReducer from "./reducers/auth/index.js";
 import resourceReducer from "./reducers/resources/index.js";
+import modalReducer from "./reducers/modal.js";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import {
@@ -37,6 +38,7 @@ Sentry.init({
 const rootReducer = combineReducers({
 	authReducer,
 	resourceReducer,
+	modalReducer,
 });
 
 const persistConfig = { key: "root", storage, version: 1 };
