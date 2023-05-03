@@ -37,6 +37,7 @@
 		"react-sparklines": "^1.7.0",
 		"react-stripe-checkout": "^2.6.3",
 		"react-toastify": "^9.1.1",
+		"react-virtualized": "^9.22.5",
 		"redux-persist": "^6.0.0",
 		"socket.io-client": "^4.6.1",
 		"use-keyboard-shortcut": "^1.1.6",

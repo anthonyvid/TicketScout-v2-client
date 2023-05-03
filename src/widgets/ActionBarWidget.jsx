@@ -1,17 +1,15 @@
-import { Autocomplete, Avatar, Badge, Divider, TextField } from "@mui/material";
+import { Avatar, Badge, Divider } from "@mui/material";
 import AutocompleteInput from "components/AutocompleteInput.jsx";
 import CalendarPreview from "components/CalendarPreview.jsx";
 import MessagePreview from "components/MessagePreview.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, { useCallback, useContext, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { formatName, formatPhone, stringAvatar } from "utils/helper.js";
+import { formatName, stringAvatar } from "utils/helper.js";
 import actionBarWidgetStyles from "styles/widgets/ActionBarWidget.style.js";
 import { useHotkeys } from "react-hotkeys-hook";
-import { openModal } from "reducers/modal.js";
-// import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
+import { socket } from "socket.js";
 const ActionBarWidget = () => {
 	const classes = useClasses(actionBarWidgetStyles);
 	const { user } = useSelector((state) => state.authReducer);
@@ -26,9 +24,13 @@ const ActionBarWidget = () => {
 		(state) => state.resourceReducer
 	);
 
+	// console.log(tickets);
+	// console.log(customers);
+	// console.log(payments);
+
 	const options = [
 		...tickets.map((t) => ({
-			label: t.ticketId,
+			label: `${t.ticketId}`,
 			id: t._id,
 			link: `/tickets/${t.ticketId}`,
 			type: "Tickets",
@@ -46,13 +48,6 @@ const ActionBarWidget = () => {
 			type: "Payments",
 		})),
 	];
-
-	// const handleKeyPress = useCallback((event) => {
-	// 	let charCode = String.fromCharCode(event.which).toLowerCase();
-	// 	if ((event.ctrlKey || event.metaKey) && charCode === "x") {
-	// 		inputRef.current.focus();
-	// 	}
-	// }, []);
 
 	return (
 		<div className={classes.actionBar}>

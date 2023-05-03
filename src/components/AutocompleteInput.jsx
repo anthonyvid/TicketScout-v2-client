@@ -6,11 +6,20 @@ import { useNavigate } from "react-router-dom";
 import autocompleteInputStyles from "styles/components/AutocompleteInput.style.js";
 import PropTypes from "prop-types";
 import SearchIcon from "@mui/icons-material/Search";
+import { socket } from "socket.js";
 
 const AutocompleteInput = ({ options, groupBy, label, inputRef }) => {
 	const classes = useClasses(autocompleteInputStyles);
 	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
+
+	const handleInputChange = (_, value) => {
+		if (value.length === 0) {
+			if (open) setOpen(false);
+		} else {
+			if (!open) setOpen(true);
+		}
+	};
 
 	return (
 		<Autocomplete
@@ -20,13 +29,7 @@ const AutocompleteInput = ({ options, groupBy, label, inputRef }) => {
 			onChange={(event, option) => {
 				navigate(option.link);
 			}}
-			onInputChange={(_, value) => {
-				if (value.length === 0) {
-					if (open) setOpen(false);
-				} else {
-					if (!open) setOpen(true);
-				}
-			}}
+			onInputChange={handleInputChange}
 			onClose={() => setOpen(false)}
 			groupBy={groupBy && ((option) => option[groupBy])}
 			className={classes.autocomplete}

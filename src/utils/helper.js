@@ -16,10 +16,12 @@ export const getCached = (name) => {
 
 	const authReducer = JSON.parse(cache.authReducer);
 	const resourceReducer = JSON.parse(cache.resourceReducer);
+	const modalReducer = JSON.parse(cache.modalReducer);
 
 	if (!authReducer || !resourceReducer) return null;
 
-	if (cache) return { ...authReducer, ...resourceReducer }[name];
+	if (cache)
+		return { ...authReducer, ...resourceReducer, ...modalReducer }[name];
 	return null;
 };
 
