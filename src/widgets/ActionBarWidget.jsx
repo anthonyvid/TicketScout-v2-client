@@ -3,13 +3,13 @@ import AutocompleteInput from "components/AutocompleteInput.jsx";
 import CalendarPreview from "components/CalendarPreview.jsx";
 import MessagePreview from "components/MessagePreview.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { useSelector } from "react-redux";
 
 import { formatName, stringAvatar } from "utils/helper.js";
 import actionBarWidgetStyles from "styles/widgets/ActionBarWidget.style.js";
 import { useHotkeys } from "react-hotkeys-hook";
-import { socket } from "socket.js";
+
 const ActionBarWidget = () => {
 	const classes = useClasses(actionBarWidgetStyles);
 	const { user } = useSelector((state) => state.authReducer);
@@ -23,10 +23,6 @@ const ActionBarWidget = () => {
 	const { tickets, customers, payments } = useSelector(
 		(state) => state.resourceReducer
 	);
-
-	// console.log(tickets);
-	// console.log(customers);
-	// console.log(payments);
 
 	const options = [
 		...tickets.map((t) => ({
@@ -56,6 +52,7 @@ const ActionBarWidget = () => {
 				groupBy={"type"}
 				label={"Search for something"}
 				inputRef={inputRef}
+				// onChangeHandler={fetchDataOnSearch}
 			/>
 			<div className={classes.infoWrap}>
 				<CalendarPreview />
