@@ -27,6 +27,28 @@ const autocompleteInputStyles = (theme) => ({
 			border: "1px solid transparent",
 		},
 	},
+	autocompleteInputWrap: {
+		width: "100%",
+		marginBottom: "10px",
+	},
+	labelWrap: {
+		display: "flex",
+		marginBottom: "5px",
+		justifyContent: "space-between",
+	},
+	errorIcon: {
+		color: theme.palette.error.main,
+	},
+	successIcon: {
+		color: theme.palette.success.main,
+	},
+	input: {
+		borderRadius: "10px",
+	},
+	startIcon: {
+		color: theme.palette.neutral.main,
+		marginRight: "7px",
+	},
 });
 
 export default autocompleteInputStyles;

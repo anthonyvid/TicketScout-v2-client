@@ -41,8 +41,6 @@ import useSnackbar from "hooks/useSnackbar.js";
 import { openModal } from "reducers/modal.js";
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
-	const queryClient = useQueryClient();
-	const { isOpen, toggle } = useDialog();
 	const dispatch = useDispatch();
 
 	const createSnackbar = useSnackbar();

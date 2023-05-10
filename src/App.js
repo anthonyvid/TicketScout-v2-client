@@ -10,6 +10,7 @@ import { handleError } from "utils/helper.js";
 import SnackbarProvider from "context/SnackbarContext.js";
 import Modal from "components/Modal.jsx";
 import useShortcuts from "hooks/useShortcut.js";
+import { BrowserRouter } from "react-router-dom";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -32,7 +33,9 @@ function App() {
 					<SnackbarProvider>
 						<ToastContainer />
 						<CssBaseline />
-						<Modal />
+						<BrowserRouter>
+							<Modal />
+						</BrowserRouter>
 						<Routes />
 					</SnackbarProvider>
 				</ThemeProvider>

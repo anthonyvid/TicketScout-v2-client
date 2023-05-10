@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CustomDialog from "./CustomDialog.jsx";
 import TextInput from "./TextInput.jsx";
-import { useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import useClasses from "hooks/useClasses.js";
 import newTicketDialogStyles from "styles/components/NewTicketDialog.style.js";
-
+import PersonIcon from "@mui/icons-material/Person";
 import { ticketStatus } from "constants/client.constants.js";
 import SelectInput from "./SelectInput.jsx";
 import { useSelector } from "react-redux";
@@ -14,6 +14,8 @@ import { deepDiff } from "utils/helper.js";
 import { createTicket } from "services/ticket.service.js";
 import { statusCodes } from "constants/client.constants.js";
 import { createNotification } from "utils/notification.js";
+import AutocompleteInput from "./AutocompleteInput.jsx";
+import { search } from "services/search.service.js";
 
 const TYPE = "CREATE_TICKET";
 
@@ -21,12 +23,14 @@ const defaultValues = {
 	title: "",
 	description: "",
 	status: "new",
+	customer: "",
 };
 
 const NewTicketDialog = ({ isOpen, handleClose }) => {
 	const classes = useClasses(newTicketDialogStyles);
 	const { modalData } = useSelector((state) => state.modalReducer);
 	const { user } = useSelector((state) => state.authReducer);
+	const [options, setOptions] = useState([]);
 
 	const ticketSchema = yup.object().shape({
 		title: yup.string().required("Ticket title is required"),
@@ -50,6 +54,33 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 	});
 
 	const currentForm = watch();
+
+	const fetchCustomerOnSearch = async (value) => {
+		const options = {
+			customers: true,
+			value,
+		};
+		try {
+			const response = await search(options);
+
+			const {
+				data: { customers },
+			} = response;
+
+			if (response.status !== statusCodes.OK)
+				throw new Error(response.data.message || response.statusText);
+
+			setOptions([
+				...customers.map((c) => ({
+					label: `${c.firstname} ${c.lastname} (${c.phone})`,
+					id: c._id,
+				})),
+			]);
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
+		}
+	};
 
 	useEffect(() => {
 		if (modalData[TYPE]) {
@@ -116,6 +147,18 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 					control={control}
 					errors={errors}
 				/>
+				<AutocompleteInput
+					options={options}
+					staticLabel
+					inForm
+					fullWidth
+					label="Customer"
+					name="customer"
+					control={control}
+					errors={errors}
+					icon={<PersonIcon />}
+					onChangeHandler={fetchCustomerOnSearch}
+				/>
 				<SelectInput
 					staticLabel
 					fullWidth
@@ -132,6 +175,4 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 
 export default NewTicketDialog;
 
-//todo: need to add customer input in the create tiucket model, 
-//todo: should be able to search by phone or name and it will show the results, 
-//todo: The Text will be the name and value will be their ID
+//todo: style create ticket modal, finish it

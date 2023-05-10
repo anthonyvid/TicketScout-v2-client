@@ -3,47 +3,70 @@ import AutocompleteInput from "components/AutocompleteInput.jsx";
 import CalendarPreview from "components/CalendarPreview.jsx";
 import MessagePreview from "components/MessagePreview.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { formatName, stringAvatar } from "utils/helper.js";
 import actionBarWidgetStyles from "styles/widgets/ActionBarWidget.style.js";
 import { useHotkeys } from "react-hotkeys-hook";
+import { search } from "services/search.service.js";
+import { createNotification } from "utils/notification.js";
+import { statusCodes } from "constants/client.constants.js";
 
 const ActionBarWidget = () => {
 	const classes = useClasses(actionBarWidgetStyles);
 	const { user } = useSelector((state) => state.authReducer);
 	const inputRef = useRef();
+	const [options, setOptions] = useState([]);
 
 	useHotkeys("ctrl+s", (e) => {
 		e.preventDefault();
 		inputRef.current.focus();
 	});
 
-	const { tickets, customers, payments } = useSelector(
-		(state) => state.resourceReducer
-	);
+	const fetchData = async (value) => {
+		const options = {
+			tickets: true,
+			customers: true,
+			payments: true,
+			value,
+		};
 
-	const options = [
-		...tickets.map((t) => ({
-			label: `${t.ticketId}`,
-			id: t._id,
-			link: `/tickets/${t.ticketId}`,
-			type: "Tickets",
-		})),
-		...customers.map((c) => ({
-			label: `${c.firstname} ${c.lastname} (${c.phone})`,
-			id: c._id,
-			link: `/customers/${c._id}`,
-			type: "Customers",
-		})),
-		...payments.map((p) => ({
-			label: p.paymentId,
-			id: p._id,
-			link: `/payments/${p.paymentId}`,
-			type: "Payments",
-		})),
-	];
+		try {
+			const response = await search(options);
+
+			const {
+				data: { tickets, customers, payments },
+			} = response;
+
+			if (response.status !== statusCodes.OK)
+				throw new Error(response.data.message || response.statusText);
+
+			setOptions([
+				...tickets.map((t) => ({
+					label: `${t.ticketId}`,
+					id: t._id,
+					link: `/tickets/${t.ticketId}`,
+					type: "Tickets",
+				})),
+				...customers.map((c) => ({
+					label: `${c.firstname} ${c.lastname} (${c.phone})`,
+					id: c._id,
+					link: `/customers/${c._id}`,
+					type: "Customers",
+				})),
+				...payments.map((p) => ({
+					label: p.paymentId,
+					id: p._id,
+					link: `/payments/${p.paymentId}`,
+					type: "Payments",
+				})),
+			]);
+		} catch (error) {
+			createNotification("error", error.message);
+			console.error(error.message);
+		}
+	};
 
 	return (
 		<div className={classes.actionBar}>
@@ -52,7 +75,7 @@ const ActionBarWidget = () => {
 				groupBy={"type"}
 				label={"Search for something"}
 				inputRef={inputRef}
-				// onChangeHandler={fetchDataOnSearch}
+				onChangeHandler={fetchData}
 			/>
 			<div className={classes.infoWrap}>
 				<CalendarPreview />
