@@ -1,7 +1,5 @@
 import {
 	DataGrid,
-	GridFooter,
-	GridPagination,
 	GridToolbarColumnsButton,
 	GridToolbarContainer,
 	GridToolbarDensitySelector,
@@ -19,6 +17,9 @@ import IconButton from "@mui/material/IconButton";
 import { useHasRoles } from "hooks/useHasRoles.js";
 import { roles } from "constants/client.constants.js";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { openModal } from "reducers/modal.js";
+import { useDispatch } from "react-redux";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 const Table = ({
 	rows,
 	columns,
@@ -53,6 +54,7 @@ const Table = ({
 			sort: "desc",
 		},
 	]);
+	const dispatch = useDispatch();
 	const isAdmin = useHasRoles(roles.ADMIN);
 
 	function CustomToolbar() {
@@ -88,7 +90,26 @@ const Table = ({
 	}
 
 	function CustomNoRowsOverlay() {
-		return <div></div>;
+		return (
+			<div className={classes.emptyTable}>
+				<ConfirmationNumberIcon
+					color="primary"
+					sx={{ fontSize: "60px" }}
+				/>
+				<h2>No tickets yet</h2>
+				<p>
+					quick tip: you can create a ticket using the using the "Ctrl + T" shortcut.
+				</p>
+				<Button
+					size="small"
+					variant="outlined"
+					startIcon={<AddIcon />}
+					onClick={() => dispatch(openModal("CREATE_TICKET"))}
+				>
+					Create ticket
+				</Button>
+			</div>
+		);
 	}
 
 	const handleRowSelection = (ids) => setSelectedRows(ids);

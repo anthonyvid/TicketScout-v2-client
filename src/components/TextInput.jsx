@@ -1,5 +1,4 @@
 import {
-	CircularProgress,
 	IconButton,
 	InputAdornment,
 	InputLabel,
@@ -12,8 +11,6 @@ import useClasses from "hooks/useClasses.js";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import KeyboardCapslockIcon from "@mui/icons-material/KeyboardCapslock";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import EmailIcon from "@mui/icons-material/Email";
@@ -69,6 +66,7 @@ const textInputStyles = (theme) => ({
 });
 
 const TextInput = ({
+	required,
 	type,
 	placeholder,
 	errors,
@@ -124,7 +122,9 @@ const TextInput = ({
 	return (
 		<div className={classes.textInputWrap}>
 			<div className={classes.labelWrap}>
-				{staticLabel && <InputLabel>{label}</InputLabel>}
+				{staticLabel && (
+					<InputLabel required={required}>{label}</InputLabel>
+				)}
 				{altLabel && (
 					<Link tabIndex="-1" to="/account/forgot-password">
 						<InputLabel>Forgot Password</InputLabel>
@@ -136,6 +136,7 @@ const TextInput = ({
 				rules={rules}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<TextField
+						required={required}
 						className={cx(classes.input, {
 							[classes.error]: errors[name],
 							[classes.success]: !errors[name] && value,
@@ -230,6 +231,7 @@ TextInput.defaultProps = {
 	type: "text",
 	placeholder: "",
 	inputText: "",
+	required: false,
 	name: "",
 	staticLabel: false,
 	autoFocus: false,
@@ -252,6 +254,7 @@ TextInput.propTypes = {
 	staticLabel: PropTypes.bool,
 	autoFocus: PropTypes.bool,
 	uniqueDataValidation: PropTypes.bool,
+	required: PropTypes.bool,
 	fullWidth: PropTypes.bool,
 	peekPassword: PropTypes.bool,
 	disabled: PropTypes.bool,

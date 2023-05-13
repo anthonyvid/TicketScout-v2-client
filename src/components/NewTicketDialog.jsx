@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import CustomDialog from "./CustomDialog.jsx";
 import TextInput from "./TextInput.jsx";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import useClasses from "hooks/useClasses.js";
 import newTicketDialogStyles from "styles/components/NewTicketDialog.style.js";
 import PersonIcon from "@mui/icons-material/Person";
-import { ticketStatus } from "constants/client.constants.js";
 import SelectInput from "./SelectInput.jsx";
 import { useSelector } from "react-redux";
-import { deepDiff } from "utils/helper.js";
-import { createTicket } from "services/ticket.service.js";
+import { deepDiff, formatPhone } from "utils/helper.js";
 import { statusCodes } from "constants/client.constants.js";
 import { createNotification } from "utils/notification.js";
 import AutocompleteInput from "./AutocompleteInput.jsx";
 import { search } from "services/search.service.js";
+import { Button } from "@mui/material";
+import { createTicket } from "services/ticket.service.js";
+import { useNavigate } from "react-router-dom";
 
 const TYPE = "CREATE_TICKET";
 
@@ -28,6 +29,7 @@ const defaultValues = {
 
 const NewTicketDialog = ({ isOpen, handleClose }) => {
 	const classes = useClasses(newTicketDialogStyles);
+	const navigate = useNavigate();
 	const { modalData } = useSelector((state) => state.modalReducer);
 	const { user } = useSelector((state) => state.authReducer);
 	const [options, setOptions] = useState([]);
@@ -36,14 +38,13 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 		title: yup.string().required("Ticket title is required"),
 		description: yup.string(),
 		status: yup.string().required("Ticket status is required"),
+		customer: yup.object().required("Customer is required"),
 	});
 
 	const {
 		control,
 		handleSubmit,
 		reset,
-		getValues,
-		setFocus,
 		watch,
 		setValue,
 		formState: { errors, isDirty },
@@ -72,8 +73,11 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 
 			setOptions([
 				...customers.map((c) => ({
-					label: `${c.firstname} ${c.lastname} (${c.phone})`,
+					label: `${c.firstname} ${c.lastname} ${formatPhone(
+						c.phone
+					)}`,
 					id: c._id,
+					data: { ...c },
 				})),
 			]);
 		} catch (error) {
@@ -82,27 +86,20 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 		}
 	};
 
-	useEffect(() => {
-		if (modalData[TYPE]) {
-			const data = deepDiff(currentForm, modalData[TYPE]).new;
-			if (Object.keys(data).length > 0) {
-				reset({ ...defaultValues, ...data });
-			}
-		}
-	}, []);
-
 	const createNewTicket = async (data) => {
 		try {
 			const options = {
 				...data,
-				userId: user.id,
+				customerId: data.customer._id,
+				createdBy: user._id,
 			};
-			console.log(options);
-			const response = null;
-			// const response = await createTicket();
+			const response = await createTicket(options);
 
 			if (response.status !== statusCodes.CREATED)
 				throw new Error(response.data.message || response.statusText);
+
+			handleClose();
+			navigate(`/customers/${data.customer._id}`);
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
@@ -130,11 +127,13 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 				className={classes.formWrap}
 			>
 				<TextInput
+					required
 					staticLabel
 					autoFocus
 					fullWidth
 					label="Title"
 					name="title"
+					placeholder="iPhone 11 Pro broken screen"
 					control={control}
 					errors={errors}
 				/>
@@ -142,6 +141,7 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 					staticLabel
 					fullWidth
 					multiline
+					placeholder="Customer dropped and shattered screen..."
 					label="Description"
 					name="description"
 					control={control}
@@ -150,29 +150,33 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 				<AutocompleteInput
 					options={options}
 					staticLabel
+					required
 					inForm
 					fullWidth
 					label="Customer"
 					name="customer"
 					control={control}
 					errors={errors}
-					icon={<PersonIcon />}
+					placeholder={"Search a customer"}
 					onChangeHandler={fetchCustomerOnSearch}
+					onSelect={(value) => setValue("customer", value)}
 				/>
 				<SelectInput
 					staticLabel
 					fullWidth
+					required
 					options={["new", "reply"]}
 					name="status"
 					label="status"
 					control={control}
 					errors={errors}
 				/>
+				<Button type="submit" variant="contained">
+					Create
+				</Button>
 			</form>
 		</CustomDialog>
 	);
 };
 
 export default NewTicketDialog;
-
-//todo: style create ticket modal, finish it

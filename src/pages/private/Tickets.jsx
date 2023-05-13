@@ -1,12 +1,6 @@
 import PageTitle from "components/PageTitle.jsx";
 import useClasses from "hooks/useClasses.js";
-import React, {
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useState,
-} from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import ticketsStyles from "styles/pages/Tickets.style.js";
 import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 
@@ -16,7 +10,6 @@ import {
 	deleteTickets,
 	updateTicket,
 } from "services/ticket.service.js";
-import { useQueryClient } from "react-query";
 import { deepDiff, formatName } from "utils/helper.js";
 import useTickets from "hooks/useTickets.js";
 
@@ -31,11 +24,6 @@ import {
 import { Chip } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { createNotification } from "utils/notification.js";
-
-import CustomDialog from "components/CustomDialog.jsx";
-import useDialog from "hooks/useDialog.js";
-import TextInput from "components/TextInput.jsx";
-import NewTicketDialog from "components/NewTicketDialog.jsx";
 import useSnackbar from "hooks/useSnackbar.js";
 
 import { openModal } from "reducers/modal.js";
@@ -172,9 +160,6 @@ const Tickets = () => {
 
 			if (response.status !== statusCodes.NO_CONTENT)
 				throw new Error(response.data.message || response.statusText);
-
-			// createNotification("success", "Successfully deleted ticket(s)");
-			// createSnackbar("");
 		} catch (error) {
 			createNotification("error", error.message);
 			console.error(error.message);
@@ -195,10 +180,6 @@ const Tickets = () => {
 		}
 		return newRow;
 	}, []);
-
-	const onRowUpdateError = (error) => {
-		console.log(error);
-	};
 
 	return (
 		<PageLayout>
@@ -222,11 +203,9 @@ const Tickets = () => {
 					handleNewRow={() => dispatch(openModal("CREATE_TICKET"))}
 					handleDeleteRow={handleDeleteTicket}
 					processRowUpdate={handleUpdateTicket}
-					onProcessRowUpdateError={onRowUpdateError}
 					onCellEditCommit={(params) => setRowId(params.id)}
 				/>
 			</div>
-			{/* <NewTicketDialog isOpen={isOpen} handleClose={toggle} /> */}
 		</PageLayout>
 	);
 };

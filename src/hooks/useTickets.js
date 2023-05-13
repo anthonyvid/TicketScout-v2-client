@@ -30,14 +30,13 @@ const useTickets = (key) => {
 				const tickets = existingData?.data?.results;
 				const total = existingData?.data?.total;
 
-				tickets.pop(); // Remove the oldest ticket so we can keep the 25 ticket size when adding the new one
+				if (total > 24) tickets.pop(); // Remove the oldest ticket so we can keep the 25 ticket size when adding the new one
 				const newTickets = [ticket, ...tickets];
 				const newTotal = total + 1;
 
 				const newData = existingData;
 				existingData.data.results = newTickets;
 				existingData.data.total = newTotal;
-
 				return newData;
 			});
 		});

@@ -5,8 +5,8 @@ import MessagePreview from "components/MessagePreview.jsx";
 import useClasses from "hooks/useClasses.js";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-
-import { formatName, stringAvatar } from "utils/helper.js";
+import SearchIcon from "@mui/icons-material/Search";
+import { formatName, formatPhone, stringAvatar } from "utils/helper.js";
 import actionBarWidgetStyles from "styles/widgets/ActionBarWidget.style.js";
 import { useHotkeys } from "react-hotkeys-hook";
 import { search } from "services/search.service.js";
@@ -50,7 +50,9 @@ const ActionBarWidget = () => {
 					type: "Tickets",
 				})),
 				...customers.map((c) => ({
-					label: `${c.firstname} ${c.lastname} (${c.phone})`,
+					label: `${c.firstname} ${c.lastname} ${formatPhone(
+						c.phone
+					)}`,
 					id: c._id,
 					link: `/customers/${c._id}`,
 					type: "Customers",
@@ -71,9 +73,12 @@ const ActionBarWidget = () => {
 	return (
 		<div className={classes.actionBar}>
 			<AutocompleteInput
+				className={classes.searchInput}
+				icon={<SearchIcon />}
+				placeholder={"Search for something"}
 				options={options}
 				groupBy={"type"}
-				label={"Search for something"}
+				popupIcon=""
 				inputRef={inputRef}
 				onChangeHandler={fetchData}
 			/>

@@ -2,7 +2,7 @@ const calendarPreviewStyles = (theme) => ({
 	calendarPreview: {
 		borderRadius: "25px",
 		backgroundColor: theme.palette.neutral.default,
-		width: "90px",
+		width: "100px",
 		height: "40px",
 		display: "flex",
 		alignItems: "center",

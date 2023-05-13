@@ -18,12 +18,15 @@ const SelectInput = ({
 	autoFocus,
 	disabled,
 	options,
+	required,
 }) => {
 	const classes = useClasses(selectInputStyles);
 	return (
 		<div className={classes.selectInputWrap}>
 			<div className={classes.labelWrap}>
-				{staticLabel && <InputLabel>{label}</InputLabel>}
+				{staticLabel && (
+					<InputLabel required={required}>{label}</InputLabel>
+				)}
 			</div>
 
 			<Controller
@@ -31,6 +34,7 @@ const SelectInput = ({
 				rules={rules}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<Select
+						required={required}
 						autoFocus={autoFocus}
 						fullWidth={fullWidth}
 						onBlur={onBlur}
@@ -70,11 +74,13 @@ SelectInput.defaultProps = {
 	onChangeHandler: () => {},
 	autoFocus: false,
 	disabled: false,
+	required: false,
 };
 
 SelectInput.propTypes = {
 	staticLabel: PropTypes.bool,
 	fullWidth: PropTypes.bool,
+	required: PropTypes.bool,
 	autoFocus: PropTypes.bool,
 	disabled: PropTypes.bool,
 	rules: PropTypes.object,

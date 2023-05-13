@@ -10,7 +10,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import autocompleteInputStyles from "styles/components/AutocompleteInput.style.js";
 import PropTypes from "prop-types";
-import SearchIcon from "@mui/icons-material/Search";
 import { Controller } from "react-hook-form";
 
 const AutocompleteInput = ({
@@ -26,6 +25,11 @@ const AutocompleteInput = ({
 	icon,
 	errors,
 	staticLabel,
+	placeholder,
+	popupIcon,
+	className,
+	required,
+	onSelect,
 }) => {
 	const classes = useClasses(autocompleteInputStyles);
 	const navigate = useNavigate();
@@ -35,18 +39,22 @@ const AutocompleteInput = ({
 		return (
 			<div className={classes.autocompleteInputWrap}>
 				<div className={classes.labelWrap}>
-					{staticLabel && <InputLabel>{label}</InputLabel>}
+					{staticLabel && (
+						<InputLabel required={required}>{label}</InputLabel>
+					)}
 				</div>
 
 				<Controller
 					render={({ onChange, ...props }) => (
 						<Autocomplete
+							required={required}
 							fullWidth={fullWidth}
 							open={open}
 							disablePortal
 							options={options.map((option) => option)}
 							onChange={(event, option) => {
 								if (option?.link) navigate(option.link);
+								onSelect(option.data);
 							}}
 							onInputChange={(_, value) => {
 								if (value.length === 0) {
@@ -58,8 +66,8 @@ const AutocompleteInput = ({
 							}}
 							onClose={() => setOpen(false)}
 							groupBy={groupBy && ((option) => option[groupBy])}
-							className={classes.autocomplete}
-							popupIcon={""}
+							className={className}
+							popupIcon={popupIcon}
 							renderGroup={
 								groupBy &&
 								((params) => (
@@ -76,12 +84,18 @@ const AutocompleteInput = ({
 							renderInput={(params) => (
 								<TextField
 									{...params}
+									error={errors[name] !== undefined}
+									placeholder={placeholder}
 									InputProps={{
 										...params.InputProps,
 										startAdornment: (
-											<InputAdornment position="start">
-												{icon}
-											</InputAdornment>
+											<>
+												{icon && (
+													<InputAdornment position="start">
+														{icon}
+													</InputAdornment>
+												)}
+											</>
 										),
 									}}
 									inputRef={inputRef}
@@ -111,6 +125,7 @@ const AutocompleteInput = ({
 			options={options.map((option) => option)}
 			onChange={(event, option) => {
 				navigate(option.link);
+				onSelect(option.data);
 			}}
 			onInputChange={(_, value) => {
 				if (value.length === 0) {
@@ -122,8 +137,8 @@ const AutocompleteInput = ({
 			}}
 			onClose={() => setOpen(false)}
 			groupBy={groupBy && ((option) => option[groupBy])}
-			className={classes.autocomplete}
-			popupIcon={""}
+			className={className}
+			popupIcon={popupIcon}
 			renderGroup={
 				groupBy &&
 				((params) => (
@@ -138,13 +153,21 @@ const AutocompleteInput = ({
 			renderInput={(params) => (
 				<TextField
 					{...params}
-					placeholder={label}
+					placeholder={placeholder}
+					error={errors[name] !== undefined}
+					helperText={
+						errors[name] !== undefined && errors[name].message
+					}
 					InputProps={{
 						...params.InputProps,
 						startAdornment: (
-							<InputAdornment position="start">
-								{icon}
-							</InputAdornment>
+							<>
+								{icon && (
+									<InputAdornment position="start">
+										{icon}
+									</InputAdornment>
+								)}
+							</>
 						),
 					}}
 					inputRef={inputRef}
@@ -156,12 +179,14 @@ const AutocompleteInput = ({
 
 AutocompleteInput.defaultProps = {
 	groupBy: null,
+	icon: null,
 	onChangeHandler: () => {},
+	onSelect: () => {},
 	inForm: false,
 	name: "",
-	icon: <SearchIcon />,
 	fullWidth: false,
 	staticLabel: false,
+	required: false,
 	control: {},
 	errors: {},
 };
@@ -170,10 +195,12 @@ AutocompleteInput.propTypes = {
 	options: PropTypes.array.isRequired,
 	groupBy: PropTypes.string,
 	name: PropTypes.string,
-	label: PropTypes.string.isRequired,
+	label: PropTypes.string,
 	onChangeHandler: PropTypes.func,
+	onSelect: PropTypes.func,
 	inForm: PropTypes.bool,
 	fullWidth: PropTypes.bool,
+	required: PropTypes.bool,
 };
 
 export default AutocompleteInput;

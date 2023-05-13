@@ -66,6 +66,21 @@ const tableStyles = (theme) => ({
 			fontSize: "14px",
 		},
 	},
+	emptyTable: {
+		textAlign: "center",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		height: "100%",
+		h2: {},
+		p: {
+			fontSize: "15px",
+			marginTop: "5px",
+			marginBottom: "20px",
+			color: theme.palette.neutral.main,
+		},
+	},
 	highlightedRow: {
 		// backgroundColor: "#fff",
 		filter: "brightness(100%)",
