@@ -1,28 +1,24 @@
-import FlexContainer from "components/FlexContainer.jsx";
-import PageTitle from "components/PageTitle.jsx";
-import SidebarMenu from "components/SidebarMenu.jsx";
-import useClasses from "hooks/useClasses.js";
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import { useSelector } from "react-redux";
 
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Styles
 import dashboardStyles from "styles/pages/Dashboard.style.js";
-import { formatName } from "utils/helper.js";
+
+// Widgets
 import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 import DisplayStatWidget from "widgets/DisplayStatWidget.jsx";
 
-import moment from "moment";
-import { getTickets, getWeeklyTicketCount } from "services/ticket.service.js";
-import {
-	getPayments,
-	getWeeklyPaymentCount,
-} from "services/payment.service.js";
-import { ticketStatus } from "constants/client.constants.js";
-import { set } from "lodash";
-import {
-	getCustomers,
-	getWeeklyCustomerCount,
-} from "services/customer.service.js";
+// Services
+import { getWeeklyTicketCount } from "services/ticket.service.js";
+import { getWeeklyPaymentCount } from "services/payment.service.js";
+
+// Components
 import PageLayout from "components/PageLayout.jsx";
+import PageTitle from "components/PageTitle.jsx";
 
 const previousWeekOptions = {
 	filter: {

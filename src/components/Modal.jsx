@@ -1,5 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
+
+// Components
 import NewTicketDialog from "./NewTicketDialog.jsx";
+
+// Reducers
 import { closeModal } from "reducers/modal.js";
 
 const Modal = () => {

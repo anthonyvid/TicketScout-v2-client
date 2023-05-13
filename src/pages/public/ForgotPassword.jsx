@@ -1,18 +1,33 @@
-import { Button, InputLabel, TextField } from "@mui/material";
-import FlexContainer from "components/FlexContainer.jsx";
-
-import useClasses from "hooks/useClasses.js";
 import React, { useState } from "react";
 import Lottie from "react-lottie-player";
 import { useNavigate } from "react-router-dom";
+
+// Components
+import { Button, InputLabel, TextField } from "@mui/material";
+import FlexContainer from "components/FlexContainer.jsx";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Styles
 import forgotPasswordStyles from "styles/pages/ForgotPassword.style.js";
+
+// Lotties
 import lockLottie from "../../assets/lotties/lock.json";
+
+// Icons
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import EmailIcon from "@mui/icons-material/Email";
+
+// Utils
 import { createNotification } from "utils/notification.js";
 import { isEmail } from "utils/helper.js";
+
+// Services
 import { forgotPassword } from "services/auth.service.js";
+
+// Constants
 import { statusCodes } from "constants/client.constants.js";
-import EmailIcon from "@mui/icons-material/Email";
 
 const ForgotPassword = () => {
 	const classes = useClasses(forgotPasswordStyles);

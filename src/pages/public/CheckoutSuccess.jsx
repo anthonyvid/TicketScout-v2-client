@@ -1,18 +1,36 @@
-import FlexContainer from "components/FlexContainer.jsx";
-import { statusCodes } from "constants/client.constants.js";
-import useClasses from "hooks/useClasses.js";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import Lottie from "react-lottie-player";
+
+// Components
+import FlexContainer from "components/FlexContainer.jsx";
+import { Button, Skeleton } from "@mui/material";
+
+// Constants
+import { statusCodes } from "constants/client.constants.js";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Reducers
 import { setLogin } from "reducers/auth/index.js";
+
+// Services
 import { checkoutSuccess } from "services/stripe.service.js";
+
+// Styles
 import checkoutSuccessStyles from "styles/pages/CheckoutSuccess.style.js";
+
+// Utils
 import { createNotification } from "utils/notification.js";
+
+// Icons
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+
+// Lotties
 import checkoutSuccessLottie from "../../assets/lotties/checkoutSuccess.json";
 import checkoutErrorLottie from "../../assets/lotties/checkoutError.json";
-import Lottie from "react-lottie-player";
-import { Button, Skeleton } from "@mui/material";
 
 const CheckoutSuccess = () => {
 	const [user, setUser] = useState({});

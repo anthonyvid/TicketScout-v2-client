@@ -1,9 +1,14 @@
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Components
 import FlexContainer from "components/FlexContainer.jsx";
 import PhoneInput from "components/PhoneInput.jsx";
 import TextInput from "components/TextInput.jsx";
-import useClasses from "hooks/useClasses.js";
 
+// Styles
 import userStep1Styles from "styles/components/registerSteps/UserStep1.style.js";
+
 const UserStep1 = ({
 	control,
 	errors,

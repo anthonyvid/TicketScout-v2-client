@@ -1,6 +1,6 @@
-import React from "react";
 import PropTypes from "prop-types";
 
+// Components
 import {
 	Sparklines,
 	SparklinesBars,
@@ -9,7 +9,11 @@ import {
 	SparklinesReferenceLine,
 	SparklinesSpots,
 } from "react-sparklines";
+
+// Hooks
 import useClasses from "hooks/useClasses.js";
+
+// Styles
 import graphStyles from "styles/components/Graph.style.js";
 
 const Graph = ({

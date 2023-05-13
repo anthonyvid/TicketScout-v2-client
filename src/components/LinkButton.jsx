@@ -1,7 +1,8 @@
-import { Button } from "@mui/material";
 import PropTypes from "prop-types";
-
 import { Link } from "react-router-dom";
+
+// Components
+import { Button } from "@mui/material";
 
 const LinkButton = ({ to, onClick, elevate, submit, ...rest }) => {
 	return (

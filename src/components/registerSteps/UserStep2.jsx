@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import userStep2Styles from "styles/components/registerSteps/UserStep2.style.js";
+// Components
+import { Button, CircularProgress } from "@mui/material";
+import OtpInput from "components/OtpInput.jsx";
+
+// Hooks
 import useClasses from "hooks/useClasses.js";
 
-import OtpInput from "components/OtpInput.jsx";
-import { Button, CircularProgress } from "@mui/material";
+// Constants
 import { statusCodes } from "constants/client.constants.js";
+
+// Styles
+import userStep2Styles from "styles/components/registerSteps/UserStep2.style.js";
+
+// Utils
 import { createNotification } from "utils/notification.js";
+
+// Services
 import { verifySignUpCode } from "services/auth.service.js";
 
 const UserStep2 = ({ code, setCode, setVerified, setEmployerData }) => {

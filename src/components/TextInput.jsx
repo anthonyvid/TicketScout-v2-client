@@ -1,20 +1,28 @@
+import { useCallback, useState } from "react";
+import { Controller } from "react-hook-form";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+
+// Components
 import {
 	IconButton,
 	InputAdornment,
 	InputLabel,
 	TextField,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
-import { Controller } from "react-hook-form";
-import PropTypes from "prop-types";
+
+// Hooks
 import useClasses from "hooks/useClasses.js";
+
+// Icons
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import KeyboardCapslockIcon from "@mui/icons-material/KeyboardCapslock";
-import { Link } from "react-router-dom";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
+
+// Styles
 import { cx } from "@emotion/css";
 
 const PLACEHOLDER = {

@@ -1,5 +1,7 @@
+// Hooks
 import useClasses from "hooks/useClasses.js";
-import React from "react";
+
+// Styles
 import pageTitleStyles from "styles/components/PageTitle.style.js";
 
 const PageTitle = ({ title, subtitle }) => {

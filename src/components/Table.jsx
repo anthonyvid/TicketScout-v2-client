@@ -1,3 +1,9 @@
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useQueryClient } from "react-query";
+import { useDispatch } from "react-redux";
+
+// Components
 import {
 	DataGrid,
 	GridToolbarColumnsButton,
@@ -5,21 +11,35 @@ import {
 	GridToolbarDensitySelector,
 	GridToolbarExport,
 	GridToolbarFilterButton,
+	gridColumnPositionsSelector,
+	gridColumnsTotalWidthSelector,
+	useGridApiContext,
 } from "@mui/x-data-grid";
-import PropTypes from "prop-types";
-import useClasses from "hooks/useClasses.js";
-import React, { useEffect, useState } from "react";
-import tableStyles from "styles/components/Table.style.js";
-import { useQueryClient } from "react-query";
-import { Button, LinearProgress } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
+import { Box, Button, LinearProgress, Skeleton } from "@mui/material";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
 import { useHasRoles } from "hooks/useHasRoles.js";
-import { roles } from "constants/client.constants.js";
+
+// Styles
+import styled from "@emotion/styled";
+import tableStyles from "styles/components/Table.style.js";
+
+// Icons
+import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { openModal } from "reducers/modal.js";
-import { useDispatch } from "react-redux";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import CachedIcon from "@mui/icons-material/Cached";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+
+// Constants
+import { roles } from "constants/client.constants.js";
+
+// Reducers
+import { openModal } from "reducers/modal.js";
+
 const Table = ({
 	rows,
 	columns,
@@ -89,25 +109,170 @@ const Table = ({
 		);
 	}
 
+	const getNoRowsIcon = () => {
+		switch (queryKey[0]) {
+			case "tickets":
+				return (
+					<ConfirmationNumberIcon
+						color="primary"
+						sx={{ fontSize: "60px" }}
+					/>
+				);
+			default:
+				return (
+					<InfoOutlinedIcon
+						color="primary"
+						sx={{ fontSize: "60px" }}
+					/>
+				);
+		}
+	};
+
+	const getNoRowsTitle = () => {
+		switch (queryKey[0]) {
+			case "tickets":
+				return "No tickets - yet!";
+			default:
+				return "No data - yet!";
+		}
+	};
+
+	const getNoRowsSubtitle = () => {
+		switch (queryKey[0]) {
+			case "tickets":
+				return 'quick tip: you can create a ticket using the using the "Ctrl + T" shortcut.';
+			default:
+				return "quick tip: check out the shortcuts in settings.";
+		}
+	};
+
+	const getNoRowsButton = () => {
+		switch (queryKey[0]) {
+			case "tickets":
+				return (
+					<Button
+						size="small"
+						variant="outlined"
+						startIcon={<AddIcon />}
+						onClick={() => dispatch(openModal("CREATE_TICKET"))}
+					>
+						Create ticket
+					</Button>
+				);
+		}
+	};
+
 	function CustomNoRowsOverlay() {
 		return (
 			<div className={classes.emptyTable}>
-				<ConfirmationNumberIcon
-					color="primary"
-					sx={{ fontSize: "60px" }}
-				/>
-				<h2>No tickets yet</h2>
-				<p>
-					quick tip: you can create a ticket using the using the "Ctrl + T" shortcut.
-				</p>
+				{getNoRowsIcon()}
+				<h2>{getNoRowsTitle()}</h2>
+				<p>{getNoRowsSubtitle()}</p>
+				{getNoRowsButton()}
+			</div>
+		);
+	}
+
+	function CustomErrorOverlay() {
+		return (
+			<div className={classes.emptyTable}>
+				<ErrorOutlineIcon color="error" sx={{ fontSize: "60px" }} />
+				<h2>There was an issue loading this table</h2>
+				<p>Please refresh to try again.</p>
 				<Button
 					size="small"
-					variant="outlined"
-					startIcon={<AddIcon />}
-					onClick={() => dispatch(openModal("CREATE_TICKET"))}
+					color="neutral"
+					variant="text"
+					startIcon={<CachedIcon />}
+					onClick={() => window.location.reload()}
 				>
-					Create ticket
+					Refresh
 				</Button>
+			</div>
+		);
+	}
+
+	// Pseudo random number. See https://stackoverflow.com/a/47593316
+	const mulberry32 = (a) => {
+		return () => {
+			/* eslint-disable */
+			let t = (a += 0x6d2b79f5);
+			t = Math.imul(t ^ (t >>> 15), t | 1);
+			t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+			return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+			/* eslint-enable */
+		};
+	};
+
+	const randomBetween = (seed, min, max) => {
+		const random = mulberry32(seed);
+		return () => min + (max - min) * random();
+	};
+
+	const SkeletonCell = styled(Box)(({ theme }) => ({
+		display: "flex",
+		flexDirection: "row",
+		alignItems: "center",
+		borderBottom: `1px solid ${theme.palette.divider}`,
+	}));
+
+	function CustomLoadingOverlay() {
+		const apiRef = useGridApiContext();
+
+		const dimensions = apiRef.current?.getRootDimensions();
+		const viewportHeight = dimensions?.viewportInnerSize.height ?? 0;
+
+		// @ts-expect-error Function signature expects to be called with parameters, but the implementation suggests otherwise
+		const rowHeight = apiRef.current.unstable_getRowHeight();
+		const skeletonRowsCount = Math.ceil(viewportHeight / rowHeight);
+
+		const totalWidth = gridColumnsTotalWidthSelector(apiRef);
+		const positions = gridColumnPositionsSelector(apiRef);
+		const inViewportCount = React.useMemo(
+			() => positions.filter((value) => value <= totalWidth).length,
+			[totalWidth, positions]
+		);
+		const columns = apiRef.current
+			.getVisibleColumns()
+			.slice(0, inViewportCount);
+
+		const children = React.useMemo(() => {
+			// reseed random number generator to create stable lines betwen renders
+			const random = randomBetween(12345, 25, 75);
+			const array = [];
+
+			for (let i = 0; i < skeletonRowsCount; i += 1) {
+				for (const column of columns) {
+					const width = Math.round(random());
+					array.push(
+						<SkeletonCell
+							key={`column-${i}-${column.field}`}
+							sx={{ justifyContent: column.align }}
+						>
+							<Skeleton sx={{ mx: 1 }} width={`${width}%`} />
+						</SkeletonCell>
+					);
+				}
+				array.push(<SkeletonCell key={`fill-${i}`} />);
+			}
+			return array;
+		}, [skeletonRowsCount, columns]);
+
+		const rowsCount = apiRef.current.getRowsCount();
+
+		return rowsCount > 0 ? (
+			<LinearProgress />
+		) : (
+			<div
+				style={{
+					display: "grid",
+					gridTemplateColumns: `${columns
+						.map(({ computedWidth }) => `${computedWidth}px`)
+						.join(" ")} 1fr`,
+					gridAutoRows: rowHeight,
+				}}
+			>
+				{children}
 			</div>
 		);
 	}
@@ -170,7 +335,8 @@ const Table = ({
 			slots={{
 				toolbar: showToolbar ? CustomToolbar : null,
 				noRowsOverlay: CustomNoRowsOverlay,
-				loadingOverlay: LinearProgress,
+				loadingOverlay: CustomLoadingOverlay,
+				ErrorOverlay: CustomErrorOverlay,
 			}}
 			onEditCellPropsChange={onEditCellPropsChange}
 			onEditCellChange={onEditCellChange}

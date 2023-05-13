@@ -1,8 +1,9 @@
-import React from "react";
-
-import registerStepperStyles from "styles/components/RegisterStepper.style.js";
-import useClasses from "hooks/useClasses.js";
+// Styles
 import { cx } from "@emotion/css";
+import registerStepperStyles from "styles/components/RegisterStepper.style.js";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
 
 const RegisterStepper = ({ activeStep, steps }) => {
 	const classes = useClasses(registerStepperStyles);
@@ -26,9 +27,6 @@ const RegisterStepper = ({ activeStep, steps }) => {
 					);
 				})}
 			</div>
-			{/* <p className={classes.stepText}>{`Step ${
-				activeStep + 1
-			}/${steps}`}</p> */}
 		</div>
 	);
 };

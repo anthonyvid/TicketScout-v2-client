@@ -1,8 +1,10 @@
-import React from "react";
+// Icons
 import SmsOutlinedIcon from "@mui/icons-material/SmsOutlined";
-// import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
-import SmsIcon from "@mui/icons-material/Sms";
+
+// Hooks
 import useClasses from "hooks/useClasses.js";
+
+// Styles
 import messagePreviewStyles from "styles/components/MessagePreview.style.js";
 
 const MessagePreview = () => {

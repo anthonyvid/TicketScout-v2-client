@@ -1,7 +1,12 @@
-import { Container } from "@mui/material";
 import PropTypes from "prop-types";
+
+// Components
+import { Container } from "@mui/material";
+
+// Hooks
 import useClasses from "hooks/useClasses.js";
-import React from "react";
+
+// Styles
 import { cx } from "@emotion/css";
 import flexContainerStyles from "styles/components/FlexContainer.style.js";
 

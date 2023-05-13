@@ -1,17 +1,24 @@
-import Logo from "assets/svg/Logo.js";
-import useClasses from "hooks/useClasses.js";
-import React, { useReducer, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import sidebarMenuStyles from "styles/components/SidebarMenu.style.js";
+
+// Icons
+import Logo from "assets/svg/Logo.js";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import { cx } from "@emotion/css";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
-import { IconButton } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import { setMode, toggleSidebarState } from "reducers/auth/index.js";
-import MenuIcon from "@mui/icons-material/Menu";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Styles
+import { cx } from "@emotion/css";
+import sidebarMenuStyles from "styles/components/SidebarMenu.style.js";
+
+// Reducers
+import { toggleSidebarState } from "reducers/auth/index.js";
+
 const SidebarMenu = () => {
 	const classes = useClasses(sidebarMenuStyles);
 	const navigate = useNavigate();
@@ -22,7 +29,6 @@ const SidebarMenu = () => {
 
 	const dispatch = useDispatch();
 	const [activeItem, setActiveItem] = useState(currentPage);
-	const [mobileMenuState, setMobileMenuState] = useState(false);
 
 	const generalItems = [
 		{

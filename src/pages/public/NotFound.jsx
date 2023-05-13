@@ -1,18 +1,27 @@
-import { Button } from "@mui/material";
-import FlexContainer from "components/FlexContainer.jsx";
 import React from "react";
 import Lottie from "react-lottie-player";
-import notFoundLottie from "../../assets/lotties/notFound.json";
-import notFoundStyles from "styles/pages/NotFound.style.js";
-import useClasses from "hooks/useClasses.js";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+
+// Constants
+import { Button } from "@mui/material";
+import FlexContainer from "components/FlexContainer.jsx";
+
+// Lotties
+import notFoundLottie from "../../assets/lotties/notFound.json";
+
+// Styles
+import notFoundStyles from "styles/pages/NotFound.style.js";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
 const NotFound = () => {
 	const classes = useClasses(notFoundStyles);
 	const navigate = useNavigate();
 
 	let { token, user } = useSelector((state) => state.authReducer);
-	
+
 	return (
 		<FlexContainer col page justifyContentCenter alignItemsCenter>
 			<div className={classes.lottieWrap}>

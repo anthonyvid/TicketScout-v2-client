@@ -1,10 +1,14 @@
-import { InputLabel, MenuItem, Select } from "@mui/material";
-import useClasses from "hooks/useClasses.js";
-import React from "react";
-import selectInputStyles from "styles/components/SelectInput.style.js";
-
 import { Controller } from "react-hook-form";
 import PropTypes from "prop-types";
+
+// Components
+import { InputLabel, MenuItem, Select } from "@mui/material";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Styles
+import selectInputStyles from "styles/components/SelectInput.style.js";
 
 const SelectInput = ({
 	staticLabel,

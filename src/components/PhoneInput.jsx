@@ -1,14 +1,10 @@
-import {
-	IconButton,
-	InputAdornment,
-	InputLabel,
-	TextField,
-} from "@mui/material";
-
 import { Controller } from "react-hook-form";
-import PropTypes from "prop-types";
+
+// Components
+import { InputLabel, TextField } from "@mui/material";
+
+// Hooks
 import useClasses from "hooks/useClasses.js";
-import { isNumber } from "utils/helper.js";
 
 const PhoneInputStyles = (theme) => ({
 	errorText: {

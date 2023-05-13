@@ -1,7 +1,12 @@
+// Components
 import FlexContainer from "components/FlexContainer.jsx";
 import PhoneInput from "components/PhoneInput.jsx";
 import TextInput from "components/TextInput.jsx";
+
+// hooks
 import useClasses from "hooks/useClasses.js";
+
+// Styles
 import OrganizationStep1Styles from "styles/components/registerSteps/OrganizationStep1.style.js";
 
 const OrganizationStep1 = ({

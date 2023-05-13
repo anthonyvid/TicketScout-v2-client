@@ -1,24 +1,39 @@
-import { Button } from "@mui/material";
-import FlexContainer from "components/FlexContainer.jsx";
-import TextInput from "components/TextInput.jsx";
-import useClasses from "hooks/useClasses.js";
 import React, { useState } from "react";
 import Lottie from "react-lottie-player";
 import { useNavigate, useParams } from "react-router-dom";
-import resetPasswordStyles from "styles/pages/ResetPassword.style.js";
-import lockLottie from "../../assets/lotties/lock.json";
-import successLottie from "../../assets/lotties/checkoutSuccess.json";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { createNotification } from "utils/notification.js";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { resetPassword } from "services/user.service.js";
-import { statusCodes } from "constants/client.constants.js";
+import { useSelector } from "react-redux";
+
+// Components
+import { Button } from "@mui/material";
+import FlexContainer from "components/FlexContainer.jsx";
+import TextInput from "components/TextInput.jsx";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Styles
 import { cx } from "@emotion/css";
+import resetPasswordStyles from "styles/pages/ResetPassword.style.js";
+
+// Lotties
+import lockLottie from "../../assets/lotties/lock.json";
+import successLottie from "../../assets/lotties/checkoutSuccess.json";
+
+// Icons
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LockIcon from "@mui/icons-material/Lock";
 
-import { useSelector } from "react-redux";
+// Utils
+import { createNotification } from "utils/notification.js";
+
+// Services
+import { resetPassword } from "services/user.service.js";
+
+// Constants
+import { statusCodes } from "constants/client.constants.js";
 
 const ResetPassword = () => {
 	const classes = useClasses(resetPasswordStyles);

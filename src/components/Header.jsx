@@ -1,17 +1,10 @@
 import PropTypes from "prop-types";
 
-// Utils/Hooks/Reducers
+// Hooks
 import useClasses from "hooks/useClasses.js";
 
 // Components
 import FlexContainer from "./FlexContainer.jsx";
-import LinkButton from "./LinkButton.jsx";
-
-// Mui Components
-import { Grid } from "@mui/material";
-
-// Icons
-// import Logo from "assets/svg/logo.js";
 
 // Styles
 import headerStyles from "styles/components/Header.style.js";

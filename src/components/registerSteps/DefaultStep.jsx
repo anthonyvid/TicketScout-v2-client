@@ -1,10 +1,17 @@
-import { cx } from "@emotion/css";
+// hooks
 import useClasses from "hooks/useClasses.js";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import defaultStepStyles from "styles/components/registerSteps/DefaultStep.style.js";
+
+// Icons
 import StoreIcon from "@mui/icons-material/Store";
 import CheckIcon from "@mui/icons-material/Check";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+
+// Constants
 import { registerTypes } from "constants/client.constants.js";
+
+// Styles
+import { cx } from "@emotion/css";
+import defaultStepStyles from "styles/components/registerSteps/DefaultStep.style.js";
 
 const DefaultStep = ({ accountType, setAccountType }) => {
 	const userType = accountType === registerTypes.USER;

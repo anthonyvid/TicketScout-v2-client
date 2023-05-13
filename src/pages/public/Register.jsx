@@ -1,39 +1,51 @@
 import React, { useEffect, useState } from "react";
-
 import { debounce } from "lodash";
-import { Button } from "@mui/material";
-import FlexContainer from "components/FlexContainer.jsx";
-import useClasses from "hooks/useClasses.js";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import registerStyles from "styles/pages/Register.style.js";
+import { isEmpty } from "lodash";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
+// Components
+import { Button } from "@mui/material";
+import FlexContainer from "components/FlexContainer.jsx";
 import RegisterStepper from "components/RegisterStepper.jsx";
 import DefaultStep from "components/registerSteps/DefaultStep.jsx";
 import UserStep1 from "components/registerSteps/UserStep1.jsx";
 import UserStep2 from "components/registerSteps/UserStep2.jsx";
-
-import { isEmpty } from "lodash";
-import { createCheckoutSession } from "services/stripe.service.js";
-import { createNotification } from "utils/notification.js";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import {
-	statusCodes,
-	planTypes,
-	registerTypes,
-} from "constants/client.constants.js";
-import { createOrganization } from "services/organization.service.js";
 import OrganizationStep1 from "components/registerSteps/OrganizationStep1.jsx";
 import OrganizationStep2 from "components/registerSteps/OrganizationStep2.jsx";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Icons
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
+// Styles
+import registerStyles from "styles/pages/Register.style.js";
+
+// Services
+import { createCheckoutSession } from "services/stripe.service.js";
+import { createOrganization } from "services/organization.service.js";
 import {
 	register,
 	isUniqueEmail,
 	isUniqueStoreName,
 } from "services/auth.service.js";
 
-import { useDispatch } from "react-redux";
+// Utils
+import { createNotification } from "utils/notification.js";
+
+// Constants
+import {
+	statusCodes,
+	planTypes,
+	registerTypes,
+} from "constants/client.constants.js";
+
+// Reducers
 import { setLogin } from "reducers/auth/index.js";
 
 const USER_STEPS = 3;

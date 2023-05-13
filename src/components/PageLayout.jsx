@@ -1,5 +1,7 @@
+// Hooks
 import useClasses from "hooks/useClasses.js";
-import React from "react";
+
+// Styles
 import pageLayoutStyles from "styles/components/PageLayout.style.js";
 
 const PageLayout = ({ children }) => {

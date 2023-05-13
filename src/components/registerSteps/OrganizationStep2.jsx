@@ -1,11 +1,17 @@
-import { cx } from "@emotion/css";
+// Hooks
 import useClasses from "hooks/useClasses.js";
-import React from "react";
-import CheckIcon from "@mui/icons-material/Check";
+
+// Icons
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import OrganizationStep2Styles from "styles/components/registerSteps/OrganizationStep2.style.js";
+import CheckIcon from "@mui/icons-material/Check";
+
+// Constants
 import { planInfo, planTypes } from "constants/client.constants.js";
+
+// Styles
+import { cx } from "@emotion/css";
+import OrganizationStep2Styles from "styles/components/registerSteps/OrganizationStep2.style.js";
+
 const OrganizationStep2 = ({ setPlanType, planType }) => {
 	const classes = useClasses(OrganizationStep2Styles);
 	return (

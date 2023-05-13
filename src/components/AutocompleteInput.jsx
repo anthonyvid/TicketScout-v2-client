@@ -1,16 +1,21 @@
-import styled from "@emotion/styled";
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import { Controller } from "react-hook-form";
+
+// Components
 import {
 	Autocomplete,
 	InputAdornment,
 	InputLabel,
 	TextField,
 } from "@mui/material";
+
+// Hooks
 import useClasses from "hooks/useClasses.js";
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+// Styles
 import autocompleteInputStyles from "styles/components/AutocompleteInput.style.js";
-import PropTypes from "prop-types";
-import { Controller } from "react-hook-form";
 
 const AutocompleteInput = ({
 	options,

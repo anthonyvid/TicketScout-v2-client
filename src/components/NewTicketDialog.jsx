@@ -1,22 +1,33 @@
-import React, { useEffect, useState } from "react";
-import CustomDialog from "./CustomDialog.jsx";
-import TextInput from "./TextInput.jsx";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import useClasses from "hooks/useClasses.js";
-import newTicketDialogStyles from "styles/components/NewTicketDialog.style.js";
-import PersonIcon from "@mui/icons-material/Person";
-import SelectInput from "./SelectInput.jsx";
 import { useSelector } from "react-redux";
-import { deepDiff, formatPhone } from "utils/helper.js";
-import { statusCodes } from "constants/client.constants.js";
-import { createNotification } from "utils/notification.js";
-import AutocompleteInput from "./AutocompleteInput.jsx";
-import { search } from "services/search.service.js";
-import { Button } from "@mui/material";
-import { createTicket } from "services/ticket.service.js";
 import { useNavigate } from "react-router-dom";
+
+// Components
+import CustomDialog from "./CustomDialog.jsx";
+import TextInput from "./TextInput.jsx";
+import SelectInput from "./SelectInput.jsx";
+import AutocompleteInput from "./AutocompleteInput.jsx";
+import { Button } from "@mui/material";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Styles
+import newTicketDialogStyles from "styles/components/NewTicketDialog.style.js";
+
+// Utils
+import { formatPhone } from "utils/helper.js";
+import { createNotification } from "utils/notification.js";
+
+// Constants
+import { statusCodes } from "constants/client.constants.js";
+
+// Services
+import { search } from "services/search.service.js";
+import { createTicket } from "services/ticket.service.js";
 
 const TYPE = "CREATE_TICKET";
 
@@ -30,7 +41,6 @@ const defaultValues = {
 const NewTicketDialog = ({ isOpen, handleClose }) => {
 	const classes = useClasses(newTicketDialogStyles);
 	const navigate = useNavigate();
-	const { modalData } = useSelector((state) => state.modalReducer);
 	const { user } = useSelector((state) => state.authReducer);
 	const [options, setOptions] = useState([]);
 
@@ -38,7 +48,7 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 		title: yup.string().required("Ticket title is required"),
 		description: yup.string(),
 		status: yup.string().required("Ticket status is required"),
-		customer: yup.object().required("Customer is required"),
+		customer: yup.object().nullable().required("Customer is required"),
 	});
 
 	const {

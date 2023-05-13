@@ -2,25 +2,24 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // Services
 import { login } from "services/auth.service.js";
 
-// Utils/Hooks/Reducers
+// Utils
 import { createNotification } from "utils/notification.js";
+
+// Hooks
 import useClasses from "hooks/useClasses.js";
+
+// Reducers
 import { setLogin } from "reducers/auth/index.js";
 
 // Components
-import Footer from "components/Footer.jsx";
 import FlexContainer from "components/FlexContainer.jsx";
-
-import TextInput from "components/TextInput.jsx";
-
-// Mui Components
 import { Button, CircularProgress } from "@mui/material";
+import TextInput from "components/TextInput.jsx";
 
 // Icons
 import Logo from "assets/svg/Logo.js";

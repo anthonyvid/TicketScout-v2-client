@@ -1,9 +1,14 @@
-import { InputLabel } from "@mui/material";
-import useClasses from "hooks/useClasses.js";
-import React from "react";
 import { Link } from "react-router-dom";
-import footerStyles from "styles/components/Footer.style.js";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+
+// Components
+import { InputLabel } from "@mui/material";
 import FlexContainer from "./FlexContainer.jsx";
+
+// Styles
+import footerStyles from "styles/components/Footer.style.js";
 
 const Footer = () => {
 	const classes = useClasses(footerStyles);

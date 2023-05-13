@@ -1,40 +1,53 @@
-import PageTitle from "components/PageTitle.jsx";
-import useClasses from "hooks/useClasses.js";
 import React, { useCallback, useMemo, useState } from "react";
+import moment from "moment";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+// Components
+import PageTitle from "components/PageTitle.jsx";
+import Table from "components/Table.jsx";
+import PageLayout from "components/PageLayout.jsx";
+import { Chip } from "@mui/material";
+
+// Hooks
+import useClasses from "hooks/useClasses.js";
+import useTickets from "hooks/useTickets.js";
+
+// Styles
 import ticketsStyles from "styles/pages/Tickets.style.js";
+
+// Widgets
 import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 
-import moment from "moment";
+// Services
 import {
 	deleteTicket,
 	deleteTickets,
 	updateTicket,
 } from "services/ticket.service.js";
-import { deepDiff, formatName } from "utils/helper.js";
-import useTickets from "hooks/useTickets.js";
 
-import Table from "components/Table.jsx";
-import { Link } from "react-router-dom";
-import PageLayout from "components/PageLayout.jsx";
-import { useDispatch, useSelector } from "react-redux";
+// Utils
+import { deepDiff, formatName } from "utils/helper.js";
+import { createNotification } from "utils/notification.js";
+
+// Constants
 import {
 	defaultTicketStatuses,
 	statusCodes,
 } from "constants/client.constants.js";
-import { Chip } from "@mui/material";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { createNotification } from "utils/notification.js";
-import useSnackbar from "hooks/useSnackbar.js";
 
+// Icons
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+
+// Reducers
 import { openModal } from "reducers/modal.js";
+
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
 	const dispatch = useDispatch();
 
-	const createSnackbar = useSnackbar();
-
 	const [paginationModel, setPaginationModel] = useState({
-		pageSize: 25,
+		pageSize: 2,
 		page: 0,
 	});
 

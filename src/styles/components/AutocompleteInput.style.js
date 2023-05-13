@@ -18,6 +18,12 @@ const autocompleteInputStyles = (theme) => ({
 		marginBottom: "5px",
 		justifyContent: "space-between",
 	},
+	errorText: {
+		marginTop: "3px",
+		marginBottom: "-17px",
+		color: theme.palette.error.main,
+		textAlign: "left",
+	},
 	errorIcon: {
 		color: theme.palette.error.main,
 	},

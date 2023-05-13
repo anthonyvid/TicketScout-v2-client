@@ -1,6 +1,9 @@
+// Hooks
 import useClasses from "hooks/useClasses.js";
-import React from "react";
+
+// Styles
 import OtpCodeStyles from "styles/components/OtpCode.style.js";
+
 const OtpInput = ({ code, setCode }) => {
 	const classes = useClasses(OtpCodeStyles);
 	const handleChange = (element, index) => {

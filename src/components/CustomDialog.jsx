@@ -1,3 +1,8 @@
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+
+// Components
 import {
 	Box,
 	Button,
@@ -8,13 +13,15 @@ import {
 	DialogTitle,
 	IconButton,
 } from "@mui/material";
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import WarnDialog from "./WarnDialog.jsx";
+
+// Icons
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteSweepTwoToneIcon from "@mui/icons-material/DeleteSweepTwoTone";
-import { useDispatch } from "react-redux";
+
+// Reducers
 import { resetModalData, saveModalData } from "reducers/modal.js";
-import WarnDialog from "./WarnDialog.jsx";
+
 const CustomDialog = ({
 	isOpen,
 	handleClose,

@@ -1,3 +1,4 @@
+// Components
 import {
 	Box,
 	Button,
@@ -7,7 +8,6 @@ import {
 	DialogContentText,
 	DialogTitle,
 } from "@mui/material";
-import React from "react";
 
 const WarnDialog = ({
 	isOpen,
