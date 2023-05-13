@@ -15,6 +15,7 @@ import DisplayStatWidget from "widgets/DisplayStatWidget.jsx";
 // Services
 import { getWeeklyTicketCount } from "services/ticket.service.js";
 import { getWeeklyPaymentCount } from "services/payment.service.js";
+import { getWeeklyCustomerCount } from "services/customer.service.js";
 
 // Components
 import PageLayout from "components/PageLayout.jsx";
