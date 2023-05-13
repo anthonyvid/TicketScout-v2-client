@@ -47,7 +47,7 @@ const Tickets = () => {
 	const dispatch = useDispatch();
 
 	const [paginationModel, setPaginationModel] = useState({
-		pageSize: 2,
+		pageSize: 25,
 		page: 0,
 	});
 
@@ -109,7 +109,17 @@ const Tickets = () => {
 				getOptionValue: (params) => params.data,
 				editable: true,
 				renderCell: (params) => {
-					const [label, color] = params.value.split(",");
+					let [label, color] = params.value.split(",");
+
+					if (!color) {
+						const statuses =
+							organization?.settings?.ticketStatuses ||
+							defaultTicketStatuses;
+						const status = statuses.find(
+							(s) => s.split(",")[0] === label
+						);
+						color = status.split(",")[1];
+					}
 					return (
 						<Chip
 							size="small"

@@ -42,6 +42,7 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 	const classes = useClasses(newTicketDialogStyles);
 	const navigate = useNavigate();
 	const { user } = useSelector((state) => state.authReducer);
+	const { organization } = useSelector((state) => state.resourceReducer);
 	const [options, setOptions] = useState([]);
 
 	const ticketSchema = yup.object().shape({
@@ -175,7 +176,9 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 					staticLabel
 					fullWidth
 					required
-					options={["new", "reply"]}
+					options={organization.settings.ticketStatuses.map(
+						(s) => s.split(",")[0]
+					)}
 					name="status"
 					label="status"
 					control={control}
