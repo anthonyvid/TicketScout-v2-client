@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // Components
@@ -45,6 +45,7 @@ import { openModal } from "reducers/modal.js";
 const Tickets = () => {
 	const classes = useClasses(ticketsStyles);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const [paginationModel, setPaginationModel] = useState({
 		pageSize: 25,
@@ -64,9 +65,18 @@ const Tickets = () => {
 				field: "id",
 				headerName: "Ticket Id",
 				width: "80",
-				renderCell: (params) => (
-					<Link to={`/tickets/${params.value}`}>{params.value}</Link>
-				),
+				renderCell: (params) => {
+					return (
+						<Link
+							to={{
+								pathname: `/${organization.storeName}/tickets/${params.value}`,
+							}}
+							state={{ ticket: params.row, fromTickets: true }}
+						>
+							{params.value}
+						</Link>
+					);
+				},
 			},
 			{
 				field: "customer",
@@ -234,3 +244,5 @@ const Tickets = () => {
 };
 
 export default Tickets;
+
+//todo: actual Ticket Page design
