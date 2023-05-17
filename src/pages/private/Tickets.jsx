@@ -170,6 +170,7 @@ const Tickets = () => {
 		return tickets.map((t) => {
 			return {
 				id: t.ticketId || t.id,
+				ticketId: t.ticketId || t.id,
 				customer: t.customer,
 				title: t.title,
 				status: t.status,
