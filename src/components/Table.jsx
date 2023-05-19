@@ -16,7 +16,7 @@ import {
 	useGridApiContext,
 } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
-import { Box, Button, LinearProgress, Skeleton } from "@mui/material";
+import { Box, Button, LinearProgress, Skeleton, Tooltip } from "@mui/material";
 
 // Hooks
 import useClasses from "hooks/useClasses.js";
@@ -96,13 +96,15 @@ const Table = ({
 					<GridToolbarDensitySelector />
 					<GridToolbarExport />
 					{isAdmin && selectedRows.length > 0 && (
-						<IconButton
-							aria-label="delete"
-							color="error"
-							onClick={() => handleDeleteRow(selectedRows)}
-						>
-							<DeleteIcon />
-						</IconButton>
+						<Tooltip position="top" title="Delete" arrow>
+							<IconButton
+								aria-label="delete"
+								color="error"
+								onClick={() => handleDeleteRow(selectedRows)}
+							>
+								<DeleteIcon />
+							</IconButton>
+						</Tooltip>
 					)}
 				</div>
 			</GridToolbarContainer>

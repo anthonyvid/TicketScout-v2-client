@@ -12,6 +12,7 @@ import {
 	DialogContentText,
 	DialogTitle,
 	IconButton,
+    Tooltip,
 } from "@mui/material";
 import WarnDialog from "./WarnDialog.jsx";
 
@@ -85,11 +86,13 @@ const CustomDialog = ({
 							{title}
 						</Box>
 						<Box>
-							<IconButton
-								onClick={(e) => onClose(e, warnOnClose)}
-							>
-								<CloseIcon />
-							</IconButton>
+							<Tooltip title="Close" placement="bottom" arrow>
+								<IconButton
+									onClick={(e) => onClose(e, warnOnClose)}
+								>
+									<CloseIcon />
+								</IconButton>
+							</Tooltip>
 						</Box>
 					</Box>
 				</DialogTitle>

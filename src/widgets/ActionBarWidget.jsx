@@ -1,4 +1,4 @@
-import { Avatar, Badge, Divider } from "@mui/material";
+import { Avatar, Badge, Divider, Tooltip } from "@mui/material";
 import AutocompleteInput from "components/AutocompleteInput.jsx";
 import CalendarPreview from "components/CalendarPreview.jsx";
 import MessagePreview from "components/MessagePreview.jsx";

@@ -9,6 +9,9 @@ const pageLayoutStyles = (theme) => ({
 		gap: "20px",
 		backgroundColor: theme.palette.background.default1,
 	},
+	row: {
+		flexDirection: "row",
+	},
 });
 
 export default pageLayoutStyles;

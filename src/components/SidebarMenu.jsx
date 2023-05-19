@@ -18,6 +18,7 @@ import sidebarMenuStyles from "styles/components/SidebarMenu.style.js";
 
 // Reducers
 import { toggleSidebarState } from "reducers/auth/index.js";
+import { Tooltip } from "@mui/material";
 
 const SidebarMenu = () => {
 	const classes = useClasses(sidebarMenuStyles);
@@ -60,13 +61,17 @@ const SidebarMenu = () => {
 						}}
 					>
 						{!sidebarState ? (
-							<KeyboardArrowRightIcon
-								className={classes.arrowIcon}
-							/>
+							<Tooltip position="left" arrow title="expand">
+								<KeyboardArrowRightIcon
+									className={classes.arrowIcon}
+								/>
+							</Tooltip>
 						) : (
-							<KeyboardArrowLeftIcon
-								className={classes.arrowIcon}
-							/>
+							<Tooltip position="left" arrow title="contract">
+								<KeyboardArrowLeftIcon
+									className={classes.arrowIcon}
+								/>
+							</Tooltip>
 						)}
 					</div>
 				</div>
@@ -81,25 +86,35 @@ const SidebarMenu = () => {
 				<div className={classes.generalWrap}>
 					{generalItems.map(({ name, icon, link, key }) => {
 						return (
-							<div
+							<Tooltip
+								title={!sidebarState ? name : ""}
+								position="left"
+								arrow
 								key={key}
-								className={cx(classes.menuItem, {
-									[classes.menuItemSmall]: !sidebarState,
-									[classes.activeItem]: activeItem === key,
-								})}
-								onClick={() => {
-									if (activeItem !== key) {
-										setActiveItem(key);
-										navigate(link);
-									}
-								}}
 							>
-								{activeItem === key && (
-									<div className={classes.activeIndicator} />
-								)}
-								{icon}
-								{sidebarState && name}
-							</div>
+								<div
+									key={key}
+									className={cx(classes.menuItem, {
+										[classes.menuItemSmall]: !sidebarState,
+										[classes.activeItem]:
+											activeItem === key,
+									})}
+									onClick={() => {
+										if (activeItem !== key) {
+											setActiveItem(key);
+											navigate(link);
+										}
+									}}
+								>
+									{activeItem === key && (
+										<div
+											className={classes.activeIndicator}
+										/>
+									)}
+									{icon}
+									{sidebarState && name}
+								</div>
+							</Tooltip>
 						);
 					})}
 				</div>
