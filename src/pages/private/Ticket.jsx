@@ -3,7 +3,7 @@ import PageLayout from "components/PageLayout.jsx";
 import PageTitle from "components/PageTitle.jsx";
 import { statusCodes } from "constants/client.constants.js";
 import useClasses from "hooks/useClasses.js";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { getTicketById } from "services/ticket.service.js";
 import ticketStyles from "styles/pages/Ticket.style.js";
@@ -13,15 +13,19 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
+import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
+import { useSelector } from "react-redux";
 
 const Ticket = () => {
 	const classes = useClasses(ticketStyles);
 	const location = useLocation();
+	const { mode } = useSelector((state) => state.authReducer);
 	const ticketId = location?.pathname.match(/\d+$/)[0];
 	const [message, setMessage] = useState("");
-	const [emoji, setEmoji] = useState(false);
+	const [emojiPicker, setEmojiPicker] = useState(false);
 	const [ticket, setTicket] = useState(location?.state?.ticket);
-
+	console.log(ticket);
 	const fetchTicket = async () => {
 		try {
 			const response = await getTicketById(ticketId);
@@ -41,7 +45,7 @@ const Ticket = () => {
 	}
 
 	const handleSendMessage = (e) => {};
-	const toggleEmoji = (e) => setEmoji((prev) => !prev);
+	const toggleEmoji = (e) => setEmojiPicker((prev) => !prev);
 	const handleAddAttachment = (e) => {};
 	const handleAddPhoto = (e) => {};
 
@@ -56,15 +60,16 @@ const Ticket = () => {
 					</div>
 					<div className={classes.chatBody}></div>
 					<div className={classes.chatMessageActions}>
-						{emoji && (
+						{emojiPicker && (
 							<div className={classes.emojiPicker}>
-								{/* <Picker
+								<Picker
 									data={data}
+									autoFocus
 									onEmojiSelect={(e) =>
-										setMessage((prev) => (prev += e.emoji))
+										setMessage((prev) => (prev += e.native))
 									}
-									onClickOutside={toggleEmoji}
-								/> */}
+									theme={mode}
+								/>
 							</div>
 						)}
 						<TextareaAutosize

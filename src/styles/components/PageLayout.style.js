@@ -5,8 +5,8 @@ const pageLayoutStyles = (theme) => ({
 		width: "100%",
 		overflowX: "hidden",
 		height: "100vh",
-		padding: "20px",
-		gap: "20px",
+		padding: "15px 15px 15px 20px",
+		gap: "15px",
 		backgroundColor: theme.palette.background.default1,
 	},
 	row: {

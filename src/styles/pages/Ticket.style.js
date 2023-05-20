@@ -25,7 +25,7 @@ const ticketStyles = (theme) => ({
 	},
 	ticketPageWrap: {
 		display: "flex",
-		gap: "25px",
+		gap: "15px",
 		width: "100%",
 		height: "100%",
 	},
@@ -81,7 +81,7 @@ const ticketStyles = (theme) => ({
 	},
 	emojiPicker: {
 		position: "absolute",
-		bottom: 300,
+		bottom: 100,
 	},
 });
 
