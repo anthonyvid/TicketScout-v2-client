@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 
-// Components
-import NewTicketDialog from "./NewTicketDialog.jsx";
-
 // Reducers
 import { closeModal } from "reducers/modal.js";
+
+// Components
+import NewTicketDialog from "./NewTicketDialog.jsx";
+import UploadFileDialog from "./UploadFileDialog.jsx";
 
 const Modal = () => {
 	const { modalType, isOpen } = useSelector((state) => state.modalReducer);
@@ -23,7 +24,10 @@ const Modal = () => {
 				<NewTicketDialog isOpen={isOpen} handleClose={handleClose} />
 			);
 			break;
-		case "ANOTHER_MODAL":
+		case "UPLOAD_FILE":
+			modalContent = (
+				<UploadFileDialog isOpen={isOpen} handleClose={handleClose} />
+			);
 			break;
 		default:
 			modalContent = null;

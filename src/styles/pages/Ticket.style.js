@@ -83,6 +83,7 @@ const ticketStyles = (theme) => ({
 		position: "absolute",
 		bottom: 100,
 	},
+	
 });
 
 export default ticketStyles;

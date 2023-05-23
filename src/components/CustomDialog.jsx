@@ -12,7 +12,7 @@ import {
 	DialogContentText,
 	DialogTitle,
 	IconButton,
-    Tooltip,
+	Tooltip,
 } from "@mui/material";
 import WarnDialog from "./WarnDialog.jsx";
 
@@ -150,7 +150,7 @@ CustomDialog.propTypes = {
 	warnCloseText: PropTypes.string,
 	warnSubmitText: PropTypes.string,
 	width: PropTypes.string,
-	warnTitle: PropTypes.string.isRequired,
+	warnTitle: PropTypes.string,
 	warnSubtitle: PropTypes.string,
 	form: PropTypes.object,
 };

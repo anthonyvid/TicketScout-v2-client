@@ -10,7 +10,8 @@ const useClasses = (stylesElement) => {
 				? stylesElement(theme)
 				: stylesElement;
 		const prepared = {};
-
+        
+        
 		Object.entries(rawClasses).forEach(([key, value = {}]) => {
 			prepared[key] = css(value);
 		});
@@ -18,5 +19,7 @@ const useClasses = (stylesElement) => {
 		return prepared;
 	}, [stylesElement, theme]);
 };
+
+
 
 export default useClasses;
