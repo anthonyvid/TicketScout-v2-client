@@ -63,11 +63,8 @@ const PrivateRoutes = () => {
 			fetchTickets();
 			fetchCustomers();
 			fetchPayments();
-
-	
 		} catch (error) {
 			createNotification("error", error.message);
-			console.log(error);
 			console.error(error.message);
 		}
 	};

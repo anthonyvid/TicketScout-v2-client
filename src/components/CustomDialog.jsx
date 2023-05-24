@@ -81,7 +81,11 @@ const CustomDialog = ({
 					<Box display="flex" alignItems="center">
 						<Box
 							flexGrow={1}
-							sx={{ fontSize: "20px", fontWeight: 700 }}
+							sx={{
+								fontSize: "20px",
+								fontWeight: 700,
+								color: "neutral.dark",
+							}}
 						>
 							{title}
 						</Box>

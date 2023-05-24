@@ -34,6 +34,7 @@ const ticketStyles = (theme) => ({
 		height: "75px",
 		borderBottom: `1px solid ${theme.palette.neutral.light}`,
 		padding: "13px 15px",
+		color: theme.palette.neutral.dark,
 		h5: {
 			color: theme.palette.neutral.main,
 		},
@@ -83,7 +84,6 @@ const ticketStyles = (theme) => ({
 		position: "absolute",
 		bottom: 100,
 	},
-	
 });
 
 export default ticketStyles;
