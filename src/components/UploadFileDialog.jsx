@@ -37,6 +37,8 @@ import PhotoIcon from "assets/svg/PhotoIcon.js";
 import PdfIcon from "assets/svg/PdfIcon.js";
 import SvgIcon from "assets/svg/SvgIcon.js";
 import ExcelIcon from "assets/svg/ExcelIcon.js";
+import VideoIcon from "assets/svg/VideoIcon.js";
+import PowerpointIcon from "assets/svg/PowerpointIcon.js";
 
 const UploadFileDialog = ({ isOpen, handleClose }) => {
 	const classes = useClasses(uploadFileDialogStyles);
@@ -62,16 +64,24 @@ const UploadFileDialog = ({ isOpen, handleClose }) => {
 			// word doc
 			case "word":
 				return <WordIcon />;
+			case "excel":
+				return <ExcelIcon />;
+			case "powerpoint":
+				return <PowerpointIcon />;
 			case "jpeg":
 				return <PhotoIcon />;
 			case "png":
 				return <PhotoIcon />;
 			case "svg":
-				return <SvgIcon />;
+				return <PhotoIcon />;
 			case "pdf":
-				return <PdfIcon />;
-			case "excel":
-				return <ExcelIcon />;
+				return <PhotoIcon />;
+			case "mp3":
+				return <VideoIcon />;
+			case "mp4":
+				return <VideoIcon />;
+			case "mov":
+				return <VideoIcon />;
 			default:
 				return <InsertDriveFileIcon style={{ fontSize: "46px" }} />;
 		}
@@ -85,6 +95,8 @@ const UploadFileDialog = ({ isOpen, handleClose }) => {
 				return "svg";
 			case "vnd.openxmlformats-officedocument.spreadsheetml.sheet":
 				return "excel";
+			case "vnd.openxmlformats-officedocument.presentationml.presentation":
+				return "powerpoint";
 			default:
 				return type;
 		}
@@ -116,9 +128,8 @@ const UploadFileDialog = ({ isOpen, handleClose }) => {
 					<p>No files uploaded.</p>
 				) : (
 					files.map(({ name, size, type }, i) => {
-						console.log(type);
 						type = formatFileNameType(type.split("/")[1]);
-						console.log(type);
+
 						return (
 							<Fragment key={i}>
 								<div className={classes.filePreview}>
@@ -148,6 +159,9 @@ const UploadFileDialog = ({ isOpen, handleClose }) => {
 						);
 					})
 				)}
+				<Button fullWidth variant="contained">
+					Add
+				</Button>
 			</form>
 		</CustomDialog>
 	);
