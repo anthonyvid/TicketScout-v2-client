@@ -121,6 +121,7 @@ const CustomDialog = ({
 				closeText={warnCloseText || "Cancel"}
 				submitText={warnSubmitText || "Delete"}
 				onSubmit={() => {
+					console.log(form.type);
 					setIsWarnOpen(false);
 					dispatch(resetModalData(form.type));
 					onClose();

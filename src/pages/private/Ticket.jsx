@@ -12,7 +12,6 @@ import ActionBarWidget from "widgets/ActionBarWidget.jsx";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
-import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +22,7 @@ const Ticket = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const { mode } = useSelector((state) => state.authReducer);
+	const { files } = useSelector((state) => state.modalReducer);
 	const ticketId = location?.pathname.match(/\d+$/)[0];
 	const [message, setMessage] = useState("");
 	const [emojiPicker, setEmojiPicker] = useState(false);
@@ -38,6 +38,7 @@ const Ticket = () => {
 			console.error(error.message);
 		}
 	};
+	console.log(files);
 
 	if (!ticket) {
 		fetchTicket();
@@ -47,9 +48,8 @@ const Ticket = () => {
 
 	const handleSendMessage = (e) => {};
 	const toggleEmoji = (e) => setEmojiPicker((prev) => !prev);
-	const handleAddAttachment = (e) => {
-		dispatch(openModal("UPLOAD_FILE"));
-	};
+	const handleAddAttachment = (e) => dispatch(openModal("UPLOAD_FILE"));
+
 	const handleAddPhoto = (e) => {};
 
 	return (
@@ -94,15 +94,6 @@ const Ticket = () => {
 										<EmojiEmotionsOutlinedIcon />
 									</IconButton>
 								</Tooltip>
-								{/* <Tooltip
-									title="Add photo"
-									placement="top"
-									arrow
-								>
-									<IconButton>
-										<InsertPhotoOutlinedIcon />
-									</IconButton>
-								</Tooltip> */}
 								<Tooltip
 									title="Add attachment"
 									placement="top"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -44,6 +44,7 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 	const { user } = useSelector((state) => state.authReducer);
 	const { organization } = useSelector((state) => state.resourceReducer);
 	const [options, setOptions] = useState([]);
+	const { modalData } = useSelector((state) => state.modalReducer);
 
 	const ticketSchema = yup.object().shape({
 		title: yup.string().required("Ticket title is required"),
@@ -60,12 +61,19 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 		setValue,
 		formState: { errors, isDirty },
 	} = useForm({
-		defaultValues: defaultValues,
+		defaultValues: useMemo(() => defaultValues),
 		mode: "onChange",
 		resolver: yupResolver(ticketSchema),
 	});
 
 	const currentForm = watch();
+
+	useEffect(() => {
+		console.log(modalData);
+		if (modalData?.CREATE_TICKET) {
+			reset(modalData.CREATE_TICKET);
+		}
+	}, [modalData, reset]);
 
 	const fetchCustomerOnSearch = async (value) => {
 		const options = {

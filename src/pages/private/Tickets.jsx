@@ -247,3 +247,5 @@ const Tickets = () => {
 export default Tickets;
 
 //todo: actual Ticket Page design
+//todo: saving data in store when closing create ticket modal not working properly
+//todo: 

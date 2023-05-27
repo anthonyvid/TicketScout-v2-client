@@ -2,7 +2,7 @@ import { Fragment, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 // Components
@@ -39,10 +39,12 @@ import SvgIcon from "assets/svg/SvgIcon.js";
 import ExcelIcon from "assets/svg/ExcelIcon.js";
 import VideoIcon from "assets/svg/VideoIcon.js";
 import PowerpointIcon from "assets/svg/PowerpointIcon.js";
+import { saveModalData } from "reducers/modal.js";
 
 const UploadFileDialog = ({ isOpen, handleClose }) => {
 	const classes = useClasses(uploadFileDialogStyles);
 	const [files, setFiles] = useState([]);
+	const dispatch = useDispatch();
 
 	const handleFileDropped = useCallback((files) => {
 		if (files?.length) {
@@ -107,16 +109,6 @@ const UploadFileDialog = ({ isOpen, handleClose }) => {
 			isOpen={isOpen}
 			handleClose={handleClose}
 			title={"Upload Files"}
-			// form={{
-			// 	type: TYPE,
-			// 	data: isDirty ? currentForm : {},
-			// }}
-			// warnOnClose
-			// warnTitle={
-			// 	"Are you sure you want to delete this new ticket session?"
-			// }
-			// warnSubtitle={"All progress will be lost"}
-			// onWarnSubmit={() => reset()}
 		>
 			<form
 				onSubmit={(e) => e.preventDefault()}
@@ -159,7 +151,13 @@ const UploadFileDialog = ({ isOpen, handleClose }) => {
 						);
 					})
 				)}
-				<Button fullWidth variant="contained">
+				<Button
+					onClick={() => {
+						dispatch(saveModalData(files));
+					}}
+					fullWidth
+					variant="contained"
+				>
 					Add
 				</Button>
 			</form>
