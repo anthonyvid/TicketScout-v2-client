@@ -38,7 +38,6 @@ const Ticket = () => {
 			console.error(error.message);
 		}
 	};
-	console.log(files);
 
 	if (!ticket) {
 		fetchTicket();

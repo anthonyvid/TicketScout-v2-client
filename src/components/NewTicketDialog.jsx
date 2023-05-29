@@ -44,7 +44,7 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 	const { user } = useSelector((state) => state.authReducer);
 	const { organization } = useSelector((state) => state.resourceReducer);
 	const [options, setOptions] = useState([]);
-	const { modalData } = useSelector((state) => state.modalReducer);
+	const modal = useSelector((state) => state.modalReducer);
 
 	const ticketSchema = yup.object().shape({
 		title: yup.string().required("Ticket title is required"),
@@ -58,22 +58,33 @@ const NewTicketDialog = ({ isOpen, handleClose }) => {
 		handleSubmit,
 		reset,
 		watch,
+		getValues,
 		setValue,
 		formState: { errors, isDirty },
 	} = useForm({
-		defaultValues: useMemo(() => defaultValues),
+		defaultValues: useMemo(() => {
+			if (modal?.CREATE_TICKET) {
+				return modal.CREATE_TICKET;
+			}
+			return defaultValues;
+		}, [modal?.CREATE_TICKET]),
 		mode: "onChange",
 		resolver: yupResolver(ticketSchema),
 	});
 
 	const currentForm = watch();
+	console.log(currentForm);
 
 	useEffect(() => {
-		console.log(modalData);
-		if (modalData?.CREATE_TICKET) {
-			reset(modalData.CREATE_TICKET);
+		console.log(modal?.CREATE_TICKET);
+		if (modal?.CREATE_TICKET) {
+			// reset(modal.CREATE_TICKET);
+			reset((formValues) => ({
+				...formValues,
+				...modal.CREATE_TICKET,
+			}));
 		}
-	}, [modalData, reset]);
+	}, [modal?.CREATE_TICKET, reset]);
 
 	const fetchCustomerOnSearch = async (value) => {
 		const options = {

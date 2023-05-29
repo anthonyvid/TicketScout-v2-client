@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
@@ -45,8 +45,6 @@ const CustomDialog = ({
 	const onWarnClose = () => setIsWarnOpen(false);
 	const dispatch = useDispatch();
 
-	const isFormEdited = () => Object.keys(form.data).length > 0;
-
 	const onClose = (event, reason) => {
 		if (
 			reason &&
@@ -55,16 +53,17 @@ const CustomDialog = ({
 		) {
 			setIsWarnOpen(true);
 		} else {
-			saveFormData();
+			isFormEdited() && saveFormData();
 			handleClose();
 		}
 	};
 
-	const saveFormData = () => {
-		if (isFormEdited()) {
-			dispatch(saveModalData(form));
-		}
+	useEffect(() => console.log(form.data), [form]);
+
+	const isFormEdited = () => {
+		return Object.keys(form.data).length > 0;
 	};
+	const saveFormData = () => dispatch(saveModalData(form));
 
 	return (
 		<>
@@ -121,10 +120,9 @@ const CustomDialog = ({
 				closeText={warnCloseText || "Cancel"}
 				submitText={warnSubmitText || "Delete"}
 				onSubmit={() => {
-					console.log(form.type);
 					setIsWarnOpen(false);
 					dispatch(resetModalData(form.type));
-					onClose();
+					handleClose();
 					onWarnSubmit();
 				}}
 				onCancel={() => setIsWarnOpen(false)}
