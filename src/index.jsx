@@ -22,6 +22,7 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { PersistGate } from 'redux-persist/integration/react';
+import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 
 Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -33,6 +34,8 @@ Sentry.init({
     ],
     tracesSampleRate: 1.0 //lower the value in production
 });
+
+if (import.meta.env.NODE_END === 'production') disableReactDevTools();
 
 // Store all of my reducers here
 const rootReducer = combineReducers({
