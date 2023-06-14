@@ -1,81 +1,81 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // Components
-import { Button, CircularProgress } from "@mui/material";
-import OtpInput from "components/OtpInput.jsx";
+import { Button, CircularProgress } from '@mui/material';
+import OtpInput from '~/components/OtpInput.jsx';
 
 // Hooks
-import useClasses from "hooks/useClasses.js";
+import useClasses from '~/hooks/useClasses.js';
 
 // Constants
-import { statusCodes } from "constants/client.constants.js";
+import { statusCodes } from '~/constants/client.constants.js';
 
 // Styles
-import userStep2Styles from "styles/components/registerSteps/UserStep2.style.js";
+import userStep2Styles from '~/styles/components/registerSteps/UserStep2.style.js';
 
 // Utils
-import { createNotification } from "utils/notification.js";
+import { createNotification } from '~/utils/notification.js';
 
 // Services
-import { verifySignUpCode } from "services/auth.service.js";
+import { verifySignUpCode } from '~/services/auth.service.js';
 
 const UserStep2 = ({ code, setCode, setVerified, setEmployerData }) => {
-	const classes = useClasses(userStep2Styles);
-	const [disabled, setDisabled] = useState(true);
-	const [loading, setLoading] = useState(false);
+    const classes = useClasses(userStep2Styles);
+    const [disabled, setDisabled] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-	useEffect(() => {
-		setDisabled(code.includes(""));
-	}, [code]);
+    useEffect(() => {
+        setDisabled(code.includes(''));
+    }, [code]);
 
-	const onVerify = async () => {
-		if (loading) return;
-		setLoading(true);
-		try {
-			const response = await verifySignUpCode(code.join(""));
+    const onVerify = async () => {
+        if (loading) return;
+        setLoading(true);
+        try {
+            const response = await verifySignUpCode(code.join(''));
 
-			if (response.status !== statusCodes.OK) {
-				setCode(new Array(6).fill(""));
-				throw new Error(response.data.message || response.statusText);
-			}
+            if (response.status !== statusCodes.OK) {
+                setCode(new Array(6).fill(''));
+                throw new Error(response.data.message || response.statusText);
+            }
 
-			createNotification(
-				"success",
-				"Successfully verified sign up code."
-			);
-			setVerified(true);
-			setEmployerData(response.data);
-		} catch (error) {
-			createNotification("error", error.message);
-			console.error(error.message);
-		} finally {
-			setLoading(false);
-		}
-	};
+            createNotification(
+                'success',
+                'Successfully verified sign up code.'
+            );
+            setVerified(true);
+            setEmployerData(response.data);
+        } catch (error) {
+            createNotification('error', error.message);
+            console.error(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-	return (
-		<>
-			<div className={classes.titleWrap}>
-				<h1 className={classes.title}>Enter your sign up code</h1>
-				<p className={classes.subtitle}>
-					Dont have a sign up code? Find out more
-				</p>
-			</div>
-			<div className={classes.contentWrap}>
-				<div className={classes.otpWrap}>
-					<OtpInput code={code} setCode={setCode} />
-				</div>
-				<Button
-					onClick={() => onVerify()}
-					variant="contained"
-					disabled={disabled}
-					style={{ marginBottom: "15px" }}
-				>
-					{loading ? <CircularProgress /> : "Verify Code"}
-				</Button>
-			</div>
-		</>
-	);
+    return (
+        <>
+            <div className={classes.titleWrap}>
+                <h1 className={classes.title}>Enter your sign up code</h1>
+                <p className={classes.subtitle}>
+                    Dont have a sign up code? Find out more
+                </p>
+            </div>
+            <div className={classes.contentWrap}>
+                <div className={classes.otpWrap}>
+                    <OtpInput code={code} setCode={setCode} />
+                </div>
+                <Button
+                    onClick={() => onVerify()}
+                    variant="contained"
+                    disabled={disabled}
+                    style={{ marginBottom: '15px' }}
+                >
+                    {loading ? <CircularProgress /> : 'Verify Code'}
+                </Button>
+            </div>
+        </>
+    );
 };
 
 export default UserStep2;

@@ -1,17 +1,17 @@
 // Hooks
-import { cx } from "@emotion/css";
-import useClasses from "hooks/useClasses.js";
+import { cx } from '@emotion/css';
+import useClasses from '~/hooks/useClasses.js';
 
 // Styles
-import pageLayoutStyles from "styles/components/PageLayout.style.js";
+import pageLayoutStyles from '~/styles/components/PageLayout.style.js';
 
 const PageLayout = ({ children, row }) => {
-	const classes = useClasses(pageLayoutStyles);
-	return (
-		<div className={cx(classes.page, { [classes.row]: row })}>
-			{children}
-		</div>
-	);
+    const classes = useClasses(pageLayoutStyles);
+    return (
+        <div className={cx(classes.page, { [classes.row]: row })}>
+            {children}
+        </div>
+    );
 };
 
 export default PageLayout;

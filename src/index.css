@@ -1,35 +1,35 @@
-@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Nunito:wght@200;300;400;500;600;700;800;900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Nunito:wght@200;300;400;500;600;700;800;900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 html,
 body,
 #root,
 .app {
-	height: 100%;
-	width: 100%;
-	font-family: "Nunito", sans-serif;
+    height: 100%;
+    width: 100%;
+    font-family: 'Nunito', sans-serif;
 }
 
 a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 a:active {
-	color: inherit;
+    color: inherit;
 }
 
 a:hover,
 a:hover > *:first-child {
-	cursor: pointer !important;
-	text-decoration: underline;
+    cursor: pointer !important;
+    text-decoration: underline;
 }
 
 a > *:first-child {
-	color: #317adc;
+    color: #317adc;
 }
 
 .css-vnkopk-MuiStepLabel-iconContainer.MuiStepLabelalternativeLabel {
-	width: 60px;
-	height: 60px;
+    width: 60px;
+    height: 60px;
 }
 
 h1,
@@ -39,26 +39,26 @@ h4,
 h5,
 h6,
 p {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .Toastify__toast--info {
-	background: #3498db;
+    background: #3498db;
 }
 .Toastify__toast--success {
-	/* background: #07bc0c; */
-	background: red;
+    /* background: #07bc0c; */
+    background: red;
 }
 .Toastify__toast--warning {
-	/* background: #f1c40f; */
-	background: #ffb13b;
+    /* background: #f1c40f; */
+    background: #ffb13b;
 }
 .Toastify__toast--error {
-	background: #ed4337;
-	/* background: #e74c3c; */
+    background: #ed4337;
+    /* background: #e74c3c; */
 }
 
 .Button {
-	border-radius: 15px;
+    border-radius: 15px;
 }

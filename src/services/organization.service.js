@@ -1,38 +1,38 @@
-import { getRequest, postRequest } from "config/axiosConfig.js";
+import { getRequest, postRequest } from '~/config/axiosConfig.js';
 
-import { isEmpty } from "lodash";
-import { addSortAndFilters } from "utils/helper.js";
+import { isEmpty } from 'lodash';
+import { addSortAndFilters } from '~/utils/helper.js';
 
 export const createOrganization = async (data) => {
-	if (isEmpty(data)) return new Error("Invalid Entry.");
+    if (isEmpty(data)) return new Error('Invalid Entry.');
 
-	try {
-		const response = await postRequest("organizations", data);
-		return response;
-	} catch (error) {
-		return error.response;
-	}
+    try {
+        const response = await postRequest('organizations', data);
+        return response;
+    } catch (error) {
+        return error.response;
+    }
 };
 
 export const getOrganizations = async (options) => {
-	const { page, limit, sort, filter } = options;
+    const { page, limit, sort, filter } = options;
 
-	let url = `organizations?page=${page}&limit=${limit}`;
-	url += addSortAndFilters(sort, filter);
+    let url = `organizations?page=${page}&limit=${limit}`;
+    url += addSortAndFilters(sort, filter);
 
-	try {
-		const response = await getRequest(url);
-		return response;
-	} catch (error) {
-		return error.response;
-	}
+    try {
+        const response = await getRequest(url);
+        return response;
+    } catch (error) {
+        return error.response;
+    }
 };
 
 export const getOrganizationById = async (id) => {
-	try {
-		const response = await getRequest(`organizations/${id}`);
-		return response;
-	} catch (error) {
-		return error.response;
-	}
+    try {
+        const response = await getRequest(`organizations/${id}`);
+        return response;
+    } catch (error) {
+        return error.response;
+    }
 };

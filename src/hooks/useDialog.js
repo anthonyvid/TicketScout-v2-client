@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const useDialog = () => {
-	const [isOpen, setisOpen] = useState(false);
+    const [isOpen, setisOpen] = useState(false);
 
-	function toggle() {
-		setisOpen(!isOpen);
-	}
+    function toggle() {
+        setisOpen(!isOpen);
+    }
 
-	return {
-		isOpen,
-		toggle,
-	};
+    return {
+        isOpen,
+        toggle
+    };
 };
 
 export default useDialog;

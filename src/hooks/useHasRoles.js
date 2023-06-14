@@ -1,15 +1,15 @@
-const { useSelector } = require("react-redux");
+import { useSelector } from 'react-redux';
 
 export const useHasRoles = (roleNames) => {
-	const { user } = useSelector((state) => state.authReducer);
-	const role = user.permission;
+    const { user } = useSelector((state) => state.authReducer);
+    const role = user.permission;
 
-	const isArray = Array.isArray(roleNames);
+    const isArray = Array.isArray(roleNames);
 
-	if (!isArray) {
-		return role == roleNames;
-	} else if (isArray) {
-		return false;
-	}
-	return false;
+    if (!isArray) {
+        return role == roleNames;
+    } else if (isArray) {
+        return false;
+    }
+    return false;
 };
