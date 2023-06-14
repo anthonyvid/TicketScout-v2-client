@@ -33,7 +33,7 @@ const fileInputStyles = (theme) => ({
 const FileInput = ({ onDropHandler }) => {
     const classes = useClasses(fileInputStyles);
     const onDrop = (files) => onDropHandler(files);
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    const { getRootProps, getInputProps } = useDropzone({
         onDrop
     });
 
