@@ -41,15 +41,20 @@ const ticketStyles = (theme) => ({
     },
     chatBody: {
         width: '100%',
-        height: '100%'
+        height: '100%',
+        padding: '15px 30px 0px 15px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '25px',
+        justifyContent: 'space-between',
+        overflowY: 'auto'
     },
     chatMessageActions: {
         display: 'flex',
         flexDirection: 'column',
         width: '97%',
         minHeight: '150px',
-        border: '1px solid blue',
-        margin: '13px',
+        margin: '13px 13px 13px 13px',
         padding: '10px 10px 5px 10px',
         borderRadius: '10px',
         backgroundColor: 'white',
@@ -83,6 +88,43 @@ const ticketStyles = (theme) => ({
     emojiPicker: {
         position: 'absolute',
         bottom: 100
+    },
+    messageWrap: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '7px',
+        height: 'auto',
+        width: '100%'
+    },
+    outgoingMessageWrap: {
+        alignItems: 'flex-end'
+    },
+    incomingMessageWrap: {},
+    message: {
+        padding: '9px 14px',
+        borderRadius: '7px',
+        maxWidth: '450px',
+        width: 'auto',
+        boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px'
+    },
+    incomingMessage: {
+        backgroundColor: theme.palette.neutral.medium,
+        color: 'black',
+        borderTopLeftRadius: '1px'
+    },
+    outgoingMessage: {
+        backgroundColor: theme.palette.primary.main,
+        color: 'white',
+        borderTopRightRadius: '1px'
+    },
+    msgInfoWrap: { display: 'flex', gap: '7px' },
+    msgDate: {
+        fontWeight: 400,
+        color: theme.palette.neutral.mediumMain
+    },
+    msgName: {
+        fontWeight: 700,
+        color: theme.palette.neutral.dark
     }
 });
 

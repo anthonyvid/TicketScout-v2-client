@@ -74,3 +74,13 @@ export const updateTicket = async (id, data) => {
         return error.response;
     }
 };
+
+export const sendMessage = async (id, data) => {
+    const url = `tickets/${id}/chat/message`;
+    try {
+        const response = await postRequest(url, data);
+        return response;
+    } catch (error) {
+        return error.response;
+    }
+};
