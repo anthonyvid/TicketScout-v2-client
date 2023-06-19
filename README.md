@@ -1,6 +1,15 @@
-# Getting Started with Create React App
+## TicketScout-v2-client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repo is still a work in progress. Check out [Ticketscout-v1](https://github.com/anthonyvid/TicketScout) for a fully finished legacy version of this project. 
+
+<img width="1508" alt="Screenshot 2023-06-19 at 9 28 23 AM" src="https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/c612e982-0bae-4c05-9fcd-f800760e8297">
+<img width="1508" alt="Screenshot 2023-06-19 at 9 28 27 AM" src="https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/fb8c9306-2095-4daa-88cf-f7b611d057d5">
+<img width="1508" alt="Screenshot 2023-06-19 at 9 28 35 AM" src="https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/017db058-fc3d-4ee2-90a6-a8f9b534c04c">
+<img width="1508" alt="Screenshot 2023-06-19 at 9 28 58 AM" src="https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/b3d4980d-42c3-42a8-a816-b167b84fae90">
+<img width="1508" alt="Screenshot 2023-06-19 at 9 29 02 AM" src="https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/46d45075-a1fb-4262-94fd-77263d099a7f">
+<img width="1508" alt="Screenshot 2023-06-19 at 9 29 10 AM" src="https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/a3d6da29-518c-4d53-964f-5dc957a4b222">
+
+
 
 ## Available Scripts
 
@@ -28,43 +37,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
