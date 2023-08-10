@@ -39,6 +39,20 @@ After working as a computer technician for over a year and using similar softwar
 
 <img width="1508" alt="Screenshot 2023-06-19 at 9 29 10 AM" src="https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/a3d6da29-518c-4d53-964f-5dc957a4b222">
 
+## Legacy version
+
+![image](https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/da4ccd0c-6f48-44a6-b811-9b9d59e9bccc)
+![image](https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/f208ccc0-f4c9-4739-84cf-b183c9dcaa4b)
+![image](https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/9c8d583a-1a38-4bc9-8966-1ee1545c2695)
+![image](https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/322dd23e-96cd-4b09-b57f-e8e4c58b4c4a)
+![image](https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/ab19717e-7781-463a-a654-3bbab066d2a9)
+![image](https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/91a47aff-1fe4-458e-ad2b-83002d9083b0)
+![image](https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/15e790ff-0957-49e9-8d0b-ff5738fac40d)
+![image](https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/f60beb39-79aa-4064-92c8-7c4e481bc3d5)
+![image](https://github.com/anthonyvid/TicketScout-v2-client/assets/81189890/4422dc26-a185-451c-a17a-f4c5c3654f4e)
+
+
+
 ## Tech Stack
 
 **Client:** React, Redux, Javascript
